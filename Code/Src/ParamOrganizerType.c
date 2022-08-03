@@ -1,13 +1,12 @@
 /**
- * @file lv_disp.c
+ * @file ParamOrganizerType.c
  *
  */
 
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_disp.h"
-#include "../lv_misc/lv_math.h"
+#include "ParamOrganizerType.h"
 
 /*********************
  *      DEFINES

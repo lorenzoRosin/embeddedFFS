@@ -1,14 +1,19 @@
 /**
- * @file lv_disp.h
+ * @file ParamOrganizerType.h
  *
  */
 
-#ifndef LV_DISP_H
-#define LV_DISP_H
+#ifndef PARAMORGANIZER_TYPE_H
+#define PARAMORGANIZER_TYPE_H
+
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
+
 
 /*********************
  *      INCLUDES
@@ -154,8 +159,12 @@ static inline void lv_scr_load(lv_obj_t * scr)
  */
 #define LV_DPX(n)   LV_MATH_MAX((( lv_disp_get_dpi(NULL) * (n) + 80) / 160), 1) /*+80 for rounding*/
 
+
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /*LV_TEMPL_H*/
+
+
+#endif /* PARAMORGANIZER_TYPE_H */
