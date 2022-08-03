@@ -651,7 +651,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>192</hasPrio>
+                <hasPrio>1</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>
@@ -2095,6 +2095,21 @@
             <data />
         </settings>
     </configuration>
+    <group>
+        <name>Inc</name>
+        <file>
+            <name>$PROJ_DIR$\..\Code\Inc\ParamOrganizer.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</name>
+        </file>
+    </group>
+    <group>
+        <name>Src</name>
+        <file>
+            <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
+        </file>
+    </group>
     <file>
         <name>$PROJ_DIR$\main.c</name>
     </file>

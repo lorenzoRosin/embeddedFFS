@@ -1,5 +1,117 @@
 [
   {
+    "ID": "c:@F@lv_disp_get_scr_act",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "int * lv_disp_get_scr_act(int *)",
+    "location": {
+      "column": "12",
+      "line": "41",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_get_scr_act",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@lv_disp_load_scr",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "void lv_disp_load_scr(int *)",
+    "location": {
+      "column": "6",
+      "line": "56",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_load_scr",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@lv_disp_get_layer_top",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "int * lv_disp_get_layer_top(int *)",
+    "location": {
+      "column": "12",
+      "line": "70",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_get_layer_top",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@lv_disp_get_layer_sys",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "int * lv_disp_get_layer_sys(int *)",
+    "location": {
+      "column": "12",
+      "line": "87",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_get_layer_sys",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@lv_disp_assign_screen",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "void lv_disp_assign_screen(int *, int *)",
+    "location": {
+      "column": "6",
+      "line": "103",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_assign_screen",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@lv_disp_get_inactive_time",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "int lv_disp_get_inactive_time(const int *)",
+    "location": {
+      "column": "10",
+      "line": "122",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_get_inactive_time",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@lv_disp_trig_activity",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "void lv_disp_trig_activity(int *)",
+    "location": {
+      "column": "6",
+      "line": "148",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "lv_disp_trig_activity",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@_lv_disp_get_refr_task",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "int * _lv_disp_get_refr_task(int *)",
+    "location": {
+      "column": "13",
+      "line": "166",
+      "path": "C:\\Project\\ParamOrganizer\\Code\\Src\\ParamOrganizer.c"
+    },
+    "name": "_lv_disp_get_refr_task",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
     "ID": "c:@F@main",
     "What": "Function",
     "defdec": "Def",
