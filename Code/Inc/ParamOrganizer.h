@@ -18,6 +18,7 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
+#include "ParamOrganizerType.h"
 
 /*********************
  *      DEFINES
@@ -37,8 +38,11 @@ extern "C" {
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult initializeParamSettings();
+e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pageSize, const uint32_t nOfPages,
+                                   const uint32_t pageId, const uint32_t paramHandlerFlag);
 
+
+#if 0
 
 /**
  * Return with a pointer to the active screen
@@ -95,7 +99,7 @@ e_paramOrgResult readRawParamFromMemory();
  *      MACROS
  **********************/
 
-
+#endif
 
 
 #ifdef __cplusplus

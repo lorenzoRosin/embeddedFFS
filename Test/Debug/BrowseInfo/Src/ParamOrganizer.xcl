@@ -11,11 +11,19 @@ C:\Project\ParamOrganizer\Test\Debug\BrowseInfo\Src\ParamOrganizer.pbi
 -I
 C:\Project\ParamOrganizer\Code\Src
 -I
+C:\Project\ParamOrganizer\Test\..\Code\Inc
+-I
+C:\Project\ParamOrganizer\Test\..\Code\Src
+-I
 C:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\inc\c\aarch32
 -I
 C:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\inc
 -I
 C:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\inc\c
+-I
+C:\Project\ParamOrganizer\Code\Inc
+-I
+C:\Project\ParamOrganizer\Code\Src
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0

@@ -18,7 +18,9 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
-
+#include <stdint.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 /*********************
  *      DEFINES
@@ -26,11 +28,13 @@ extern "C" {
 #define PARAMORGAN_BKPPAGE_EN                       ( (1u) << (0u) )
 #define PARAMORGAN_RAW_MODE                         ( (1u) << (1u) )
 
+#define PARAMORGAN_MIN_PAGE_SIZE                    (256u)
+#define PARAMORGAN_MAX_PAGE_SIZE                    (16384u)
 
-#define PARAM_8_MAGIC_NUMBER                   (0xa5)
-#define PARAM_16_MAGIC_NUMBER                  (0xa5a5)
-#define PARAM_32_MAGIC_NUMBER                  (0xa5a5a5a5)
-#define PARAM_64_MAGIC_NUMBER                  (0xa5a5a5a5a5a5a5a5)
+#define PARAM_8_MAGIC_NUMBER                        (0xa5)
+#define PARAM_16_MAGIC_NUMBER                       (0xa5a5)
+#define PARAM_32_MAGIC_NUMBER                       (0xa5a5a5a5)
+#define PARAM_64_MAGIC_NUMBER                       (0xa5a5a5a5a5a5a5a5)
 
 /**********************
  *      TYPEDEFS
@@ -67,8 +71,8 @@ typedef struct t_paramOrgContext
     void* pToCrcFunc;
 
     /* Init information */
-    bool_t isPageInfoInitialized;
-    bool_t isCallBackInitialized;
+    bool isPageInfoInitialized;
+    bool isCallBackInitialized;
 }s_paramOrgContext;
 
 typedef enum t_paramOrgType
