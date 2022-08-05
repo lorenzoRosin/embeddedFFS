@@ -19,7 +19,6 @@
             <file>$PROJ_DIR$\Debug\Obj\main.o</file>
             <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
             <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
             <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
             <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
@@ -38,7 +37,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 20 19 17 13 16 18 15 0 4</file>
+                    <file> 19 18 16 13 15 17 14 0 4</file>
                 </tool>
             </inputs>
         </file>
@@ -50,6 +49,12 @@
                     <file> 11</file>
                 </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 19 18 16 13 15 17 14 0 4</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\Debug\Exe\ParamOrganizerTest.out</name>
@@ -75,14 +80,6 @@
                 </tool>
             </outputs>
         </file>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
-            <tool>C-STAT</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>$PROJ_DIR$\main.c</name>
-            <tool>C-STAT</tool>
-        </forcedrebuild>
     </configuration>
     <configuration>
         <name>Release</name>

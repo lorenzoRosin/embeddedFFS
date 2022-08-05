@@ -61,6 +61,12 @@ typedef enum t_paramOrgResult
 }e_paramOrgResult;
 
 
+typedef bool_t (*fc_readPage)      ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToRead );
+typedef bool_t (*fc_writePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToWrite );
+typedef bool_t (*fc_erasePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize );
+typedef bool_t (*fc_calculateCrc32)( uint32_t* calculatedCrc, const uint32_t seed );
+
+
 typedef struct t_paramOrgContext
 {
     /* Page information */

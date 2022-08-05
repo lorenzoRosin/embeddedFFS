@@ -39,10 +39,10 @@ extern "C" {
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
 e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pageSize, const uint32_t nOfPages,
-                                   const uint32_t pageId, const uint32_t paramHandlerFlag);
+                                   const uint32_t startPageId, const uint32_t paramHandlerFlag);
 
 
-#if 0
+
 
 /**
  * Return with a pointer to the active screen
@@ -50,7 +50,10 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pa
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult initializeParamCallBack();
+e_paramOrgResult initializeParamCallBack(s_paramOrgContext* prmCntx, fc_readPage rpClb, fc_writePage wpClb,
+                                         fc_erasePage epClb, fc_calculateCrc32 cc32Clb);
+
+#if 0
 
 /**
  * Return with a pointer to the active screen
