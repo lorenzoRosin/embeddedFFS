@@ -9,7 +9,6 @@
             <file>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</file>
             <file>$PROJ_DIR$\Debug\Obj\Src\ParamOrganizer.o</file>
             <file>$PROJ_DIR$\main.c</file>
-            <file>$PROJ_DIR$\..\..\KapiMainPrj\KapiPio\FW\PIO_COMMON_FW_PROJECT\StorageUtils\Inc\DataAndPartitionType.h</file>
             <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</file>
             <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
             <file>$TOOLKIT_DIR$\config\generic_cortex.icf</file>
@@ -24,7 +23,6 @@
             <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
             <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
             <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
@@ -40,7 +38,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 22 21 18 14 17 15 20 19 16 0 5</file>
+                    <file> 20 19 17 13 16 18 15 0 4</file>
                 </tool>
             </inputs>
         </file>
@@ -49,7 +47,7 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 12</file>
+                    <file> 11</file>
                 </tool>
             </outputs>
         </file>
@@ -58,13 +56,13 @@
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 10</file>
+                    <file> 9</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 7 13 9 11 6 2 12</file>
+                    <file> 6 12 8 10 5 2 11</file>
                 </tool>
             </inputs>
         </file>
@@ -73,21 +71,17 @@
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 8 10</file>
+                    <file> 7 9</file>
                 </tool>
             </outputs>
         </file>
         <forcedrebuild>
-            <name>[MULTI_TOOL]</name>
-            <tool>ILINK</tool>
-        </forcedrebuild>
-        <forcedrebuild>
             <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
-            <tool>ICCARM</tool>
+            <tool>C-STAT</tool>
         </forcedrebuild>
         <forcedrebuild>
             <name>$PROJ_DIR$\main.c</name>
-            <tool>ICCARM</tool>
+            <tool>C-STAT</tool>
         </forcedrebuild>
     </configuration>
     <configuration>

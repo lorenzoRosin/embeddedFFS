@@ -19,12 +19,19 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include <stdint.h>
-#include <stdio.h>
 #include <stdbool.h>
 
 /*********************
  *      DEFINES
  *********************/
+#ifndef NULL
+  #define NULL          _NULL
+#endif
+
+#ifndef bool_t
+  #define bool_t          bool
+#endif
+
 #define PARAMORGAN_BKPPAGE_EN                       ( (1u) << (0u) )
 #define PARAMORGAN_RAW_MODE                         ( (1u) << (1u) )
 
@@ -71,8 +78,8 @@ typedef struct t_paramOrgContext
     void* pToCrcFunc;
 
     /* Init information */
-    bool isPageInfoInitialized;
-    bool isCallBackInitialized;
+    bool_t isPageInfoInitialized;
+    bool_t isCallBackInitialized;
 }s_paramOrgContext;
 
 typedef enum t_paramOrgType

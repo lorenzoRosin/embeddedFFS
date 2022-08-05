@@ -41,7 +41,7 @@
 e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pageSize, const uint32_t nOfPages,
                                    const uint32_t pageId, const uint32_t paramHandlerFlag)
 {
-    e_paramOrgResult returnVal = PARAMRES_BADPARAM;
+    e_paramOrgResult returnVal;
 
 
     if( NULL == prmCntx )

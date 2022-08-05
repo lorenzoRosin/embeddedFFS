@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V9.10.2.313/W64 for ARM                  05/Aug/2022  19:38:53
+# IAR ELF Linker V9.10.2.313/W64 for ARM                  05/Aug/2022  19:53:52
 # Copyright 2007-2021 IAR Systems AB.
 #
 #    Output file  =
@@ -8,8 +8,7 @@
 #    Map file     =
 #        C:\Project\ParamOrganizer\Test\Debug\List\ParamOrganizerTest.map
 #    Command line =
-#        -f
-#        C:\Project\ParamOrganizer\Test\Debug\List\ParamOrganizerTest.map.rsp
+#        -f C:\Project\ParamOrganizer\Test\Debug\Exe\ParamOrganizerTest.out.rsp
 #        (C:\Project\ParamOrganizer\Test\Debug\Obj\main.o
 #        C:\Project\ParamOrganizer\Test\Debug\Obj\Src\ParamOrganizer.o
 #        --no_out_extension -o
