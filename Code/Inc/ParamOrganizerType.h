@@ -35,8 +35,12 @@ extern "C" {
 #define PARAMORGAN_BKPPAGE_EN                       ( (1u) << (0u) )
 #define PARAMORGAN_RAW_MODE                         ( (1u) << (1u) )
 
-#define PARAMORGAN_MIN_PAGE_SIZE                    (256u)
-#define PARAMORGAN_MAX_PAGE_SIZE                    (16384u)
+#define PARAMORGAN_DIVISOR_PAGE_BACKUP             (2u)
+#define PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE          (16u)
+#define PARAMORGAN_MIN_PAGE_SIZE_BYTE              (256u)
+#define PARAMORGAN_MAX_PAGE_SIZE_BYTE              (16384u)
+
+#define CRC_BASE_SEED                               (0xffffffff)
 
 #define PARAM_8_MAGIC_NUMBER                        (0xa5)
 #define PARAM_16_MAGIC_NUMBER                       (0xa5a5)
@@ -55,6 +59,7 @@ typedef enum t_paramOrgResult
     PARAMRES_BADPARAM,
     PARAMRES_BADPOINTER,
     PARAMRES_BADTYPE,
+    PARAMRES_NOT_INIT,
     PARAMRES_ERRORREAD,
     PARAMRES_ERRORWRITE,
     PARAMRES_ERRORERASE,
@@ -64,8 +69,29 @@ typedef enum t_paramOrgResult
 typedef bool_t (*cb_readPage)      ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToRead );
 typedef bool_t (*cb_writePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToWrite );
 typedef bool_t (*cb_erasePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize );
-typedef bool_t (*cb_calculateCrc32)( uint32_t* calculatedCrc, const uint32_t seed );
+typedef bool_t (*cb_calculateCrc32)( uint32_t* calculatedCrc, const uint32_t calcSize, const uint32_t seed );
 
+
+typedef struct t_paramOrgInitParameter
+{
+    /* Page information */
+    uint32_t pageSize;
+    uint32_t nOfPages;
+    uint32_t pageId;
+
+    /* Param Handler behaviour */
+    uint32_t paramHandlerFlag;
+
+    /* CallBack Pointer */
+    cb_readPage pToReadFunc;
+    cb_writePage pToWriteFunc;
+    cb_erasePage pToEraseFunc;
+    cb_calculateCrc32 pToCrcFunc;
+
+    /* MemPool information */
+    uint8_t* memPoolPointer;
+    uint32_t memPoolSize;
+}s_paramOrgInitParameter;
 
 typedef struct t_paramOrgContext
 {
@@ -83,10 +109,12 @@ typedef struct t_paramOrgContext
     cb_erasePage pToEraseFunc;
     cb_calculateCrc32 pToCrcFunc;
 
+    /* MemPool information */
+    uint8_t* memPoolPointer;
+    uint32_t memPoolSize;
+
     /* Init information */
-    bool_t isPageInfoInitialized;
-    bool_t isCallBackInitialized;
-    bool_t isMemPoolInitialized;
+    bool_t isInitialized;
 }s_paramOrgContext;
 
 typedef enum t_paramOrgType

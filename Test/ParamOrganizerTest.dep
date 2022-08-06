@@ -52,6 +52,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 3</file>
+                </tool>
+            </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>

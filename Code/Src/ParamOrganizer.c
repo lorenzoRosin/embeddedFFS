@@ -26,8 +26,8 @@ typedef struct t_paramOrgPageParam
 /**********************
  *   PRIVATE STATIC FUNCTIONS PROTOTYPES
  **********************/
-e_paramOrgResult getPrgPageParam(s_paramOrgContext* prmCntx, uint32_t pageOffset, t_paramOrgPageParam* prmPage);
-e_paramOrgResult isValidPageData(s_paramOrgContext* prmCntx, uint32_t pageOffset);
+e_paramOrgResult getPrgPageParam(s_paramOrgContext* prmCntx, uint8_t* page, t_paramOrgPageParam* prmPage);
+e_paramOrgResult calcPrgPageParamCrc(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated);
 
 /**********************
  *  STATIC VARIABLES
@@ -41,37 +41,89 @@ e_paramOrgResult isValidPageData(s_paramOrgContext* prmCntx, uint32_t pageOffset
  *   GLOBAL FUNCTIONS
  **********************/
 
-e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pageSize, const uint32_t nOfPages,
-                                   const uint32_t pageId, const uint32_t paramHandlerFlag)
+e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgInitParameter* prmInitVal)
 {
-    e_paramOrgResult returnVal;
+    e_paramOrgResult returnVal = PARAMRES_ALLOK;
 
-    if( NULL == prmCntx )
+    if( ( NULL == prmCntx ) || ( NULL == prmInitVal ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
-        if( true == prmCntx->isPageInfoInitialized )
+        if( true == prmCntx->isInitialized )
         {
             returnVal = PARAMRES_BADPARAM;
         }
         else
         {
-            if( ( pageSize < PARAMORGAN_MIN_PAGE_SIZE ) || ( pageSize > PARAMORGAN_MAX_PAGE_SIZE ) || ( 0u == nOfPages ) )
+            if( PARAMRES_ALLOK == returnVal )
             {
-                returnVal = PARAMRES_BADPARAM;
-                prmCntx->isPageInfoInitialized = false;
+                if( ( prmInitVal->pageSize < PARAMORGAN_MIN_PAGE_SIZE_BYTE ) ||
+                    ( prmInitVal->pageSize > PARAMORGAN_MAX_PAGE_SIZE_BYTE ) || ( 0u == prmInitVal->nOfPages ) )
+                {
+                    returnVal = PARAMRES_BADPARAM;
+                    prmCntx->isInitialized = false;
+                }
             }
-            else
+
+            if( PARAMRES_ALLOK == returnVal )
             {
-                prmCntx->pageSize = pageSize;
-                prmCntx->nOfPages = nOfPages;
-                prmCntx->pageId = pageId;
-                prmCntx->paramHandlerFlag = paramHandlerFlag;
-                prmCntx->isPageInfoInitialized = true;
+                if( 0u != ( prmInitVal->paramHandlerFlag & ( PARAMORGAN_BKPPAGE_EN | PARAMORGAN_RAW_MODE ) )  )
+                {
+                    returnVal = PARAMRES_BADPARAM;
+                    prmCntx->isInitialized = false;
+                }
+            }
 
-                returnVal = PARAMRES_ALLOK;
+            if( PARAMRES_ALLOK == returnVal )
+            {
+                if( PARAMORGAN_BKPPAGE_EN == ( prmInitVal->paramHandlerFlag & PARAMORGAN_BKPPAGE_EN )  )
+                {
+                    if( 0u != ( prmInitVal->nOfPages % PARAMORGAN_DIVISOR_PAGE_BACKUP ) )
+                    {
+                        returnVal = PARAMRES_BADPARAM;
+                        prmCntx->isInitialized = false;
+                    }
+                }
+            }
+
+            if( PARAMRES_ALLOK == returnVal )
+            {
+                if( ( NULL == prmInitVal->pToReadFunc  ) || ( NULL == prmInitVal->pToWriteFunc ) ||
+                    ( NULL == prmInitVal->pToEraseFunc ) || ( NULL == prmInitVal->pToCrcFunc   ) )
+                {
+                    returnVal = PARAMRES_BADPARAM;
+                    prmCntx->isInitialized = false;
+                }
+            }
+
+            if( PARAMRES_ALLOK == returnVal )
+            {
+                if( ( NULL == prmInitVal->memPoolPointer  ) || ( prmInitVal->memPoolSize < prmInitVal->pageSize ) )
+                {
+                    returnVal = PARAMRES_BADPARAM;
+                    prmCntx->isInitialized = false;
+                }
+            }
+
+            if( PARAMRES_ALLOK == returnVal )
+            {
+                prmCntx->pageSize = prmInitVal->pageSize;
+                prmCntx->nOfPages = prmInitVal->nOfPages;
+                prmCntx->pageId = prmInitVal->pageId;
+
+                prmCntx->paramHandlerFlag = prmInitVal->paramHandlerFlag;
+
+                prmCntx->pToReadFunc = prmInitVal->pToReadFunc;
+                prmCntx->pToWriteFunc = prmInitVal->pToWriteFunc;
+                prmCntx->pToEraseFunc = prmInitVal->pToEraseFunc;
+                prmCntx->pToCrcFunc = prmInitVal->pToCrcFunc;
+
+                prmCntx->memPoolPointer = prmInitVal->memPoolPointer;
+                prmCntx->memPoolSize = prmInitVal->memPoolSize;
+
+                prmCntx->isInitialized = true;
             }
         }
     }
@@ -79,100 +131,57 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pa
     return returnVal;
 }
 
-e_paramOrgResult initParamCallBack(s_paramOrgContext* prmCntx, cb_readPage rpClb, cb_writePage wpClb,
-                                         cb_erasePage epClb, cb_calculateCrc32 cc32Clb)
-{
-    e_paramOrgResult returnVal;
 
-    if( ( NULL == prmCntx ) || ( NULL == rpClb ) || ( NULL == wpClb ) || ( NULL == epClb ) || ( NULL == cc32Clb ) )
-    {
-        returnVal = PARAMRES_BADPOINTER;
-    }
-    else
-    {
-        if( true == prmCntx->isCallBackInitialized )
-        {
-            returnVal = PARAMRES_BADPARAM;
-        }
-        else
-        {
-            prmCntx->pToReadFunc = rpClb;
-            prmCntx->pToWriteFunc = wpClb;
-            prmCntx->pToEraseFunc = epClb;
-            prmCntx->pToCrcFunc = cc32Clb;
-            prmCntx->isCallBackInitialized = true;
-
-            returnVal = PARAMRES_ALLOK;
-        }
-    }
-
-    return returnVal;
-}
-
-e_paramOrgResult initLibMemory(s_paramOrgContext* prmCntx, uint8_t* memPool, uint32_t memPoolSize)
-{
-    e_paramOrgResult returnVal;
-
-    if( ( NULL == prmCntx ) || ( NULL == memPool ) || ( NULL == wpClb ) || ( NULL == epClb ) || ( NULL == cc32Clb ) )
-    {
-        returnVal = PARAMRES_BADPOINTER;
-    }
-    else
-    {
-        if( true == prmCntx->isMemPoolInitialized )
-        {
-            returnVal = PARAMRES_BADPARAM;
-        }
-        else
-        {
-            prmCntx->pToReadFunc = rpClb;
-            prmCntx->pToWriteFunc = wpClb;
-            prmCntx->pToEraseFunc = epClb;
-            prmCntx->pToCrcFunc = cc32Clb;
-            prmCntx->isCallBackInitialized = true;
-
-            returnVal = PARAMRES_ALLOK;
-        }
-    }
-
-    return returnVal;
-}
 
 
 
 /**********************
  *   PRIVATE STATIC FUNCTIONS
  **********************/
-e_paramOrgResult getPrgPageParam(uint8_t* page, t_paramOrgPageParam* prmPage)
+e_paramOrgResult getPrgPageParam(s_paramOrgContext* prmCntx, uint8_t* page, t_paramOrgPageParam* prmPage)
 {
     e_paramOrgResult returnVal;
 
-    if( ( NULL == prmCntx ) || ( NULL == prmPage) )
+    if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == prmPage ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
-        if( (false == prmCntx->isCallBackInitialized) || (false == prmCntx->isPageInfoInitialized) )
+        uint32_t offset1 = sizeof(t_paramOrgPageParam);
+        uint32_t offset2 = sizeof(t_paramOrgPageParam) - sizeof(uint32_t);
+        uint32_t offset3 = sizeof(t_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
+        uint32_t offset4 = sizeof(t_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+
+        memcpy(&prmPage->pageTimeSetted,  page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
+        memcpy(&prmPage->pageType,        page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
+        memcpy(&prmPage->pageMagicNumber, page[prmCntx->pageSize - offset3], sizeof(uint32_t) );
+        memcpy(&prmPage->pageCrc,         page[prmCntx->pageSize - offset4], sizeof(uint32_t) );
+
+        returnVal = PARAMRES_ALLOK;
+    }
+
+    return returnVal;
+}
+
+
+e_paramOrgResult calcPrgPageParamCrc(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated)
+{
+    e_paramOrgResult returnVal;
+
+    if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == prmPage ) )
+    {
+        returnVal = PARAMRES_BADPOINTER;
+    }
+    else
+    {
+        if( false == (*cb_calculateCrc32)( crcCalculated, prmCntx->pageSize - sizeof(uint32_t), CRC_BASE_SEED) )
         {
             returnVal = PARAMRES_BADPARAM;
         }
         else
         {
-            if( pageOffset >= prmCntx->nOfPages )
-            {
-                returnVal = PARAMRES_BADPARAM;
-            }
-            else
-            {
-                prmCntx->pToReadFunc = rpClb;
-                prmCntx->pToWriteFunc = wpClb;
-                prmCntx->pToEraseFunc = epClb;
-                prmCntx->pToCrcFunc = cc32Clb;
-                prmCntx->isCallBackInitialized = true;
-
-                returnVal = PARAMRES_ALLOK;
-            }
+            returnVal = PARAMRES_ALLOK;
         }
     }
 
@@ -189,105 +198,6 @@ e_paramOrgResult getPrgPageParam(uint8_t* page, t_paramOrgPageParam* prmPage)
 
 
 
-e_paramOrgResult isValidPageData(s_paramOrgContext* prmCntx, uint32_t pageOffset)
-{
-    e_paramOrgResult returnVal;
-
-    if( NULL == prmCntx )
-    {
-        returnVal = PARAMRES_BADPOINTER;
-    }
-    else
-    {
-        if( (false == prmCntx->isCallBackInitialized) || (false == prmCntx->isPageInfoInitialized) )
-        {
-            returnVal = PARAMRES_BADPARAM;
-        }
-        else
-        {
-            if( pageOffset >= nOfPages )
-            {
-                returnVal = PARAMRES_BADPARAM;
-            }
-            else
-            {
-                prmCntx->pToReadFunc = rpClb;
-                prmCntx->pToWriteFunc = wpClb;
-                prmCntx->pToEraseFunc = epClb;
-                prmCntx->pToCrcFunc = cc32Clb;
-                prmCntx->isCallBackInitialized = true;
-
-                returnVal = PARAMRES_ALLOK;
-            }
-        }
-    }
-
-    return returnVal;
-}
 
 
 
-
-{
-   bool isPageValid = false;
-
-   DEVICE_SCHEDJOB_FLASH* presentJob = (DEVICE_SCHEDJOB_FLASH*) m_SupportPage;
-   memset(presentJob, 0, sizeof(DEVICE_SCHEDJOB_FLASH));
-
-   uint64_t calculatedCrc = 0;
-
-   /* Calculate CRC */
-   if(isMainPage)
-   {
-	   calculatedCrc = UtilsFlashManager::getFlashParameterAreaCrc(PARTITION_TYPE_DEVICE_JOB, 0, sizeof(DEVICE_SCHEDJOB_FLASH));
-   }
-   else
-   {
-	   calculatedCrc = UtilsFlashManager::getFlashParameterAreaCrc(PARTITION_TYPE_DEVICE_JOB_BKUP, 0, sizeof(DEVICE_SCHEDJOB_FLASH));
-   }
-
-   /* Get stored CRC */
-   bool readed = false;
-
-   if(isMainPage)
-   {
-	   readed = UtilsFlashManager::getFlashArea(PARTITION_TYPE_DEVICE_JOB, 0, (uint8_t*)presentJob, sizeof(DEVICE_SCHEDJOB_FLASH));
-   }
-   else
-   {
-	   readed = UtilsFlashManager::getFlashArea(PARTITION_TYPE_DEVICE_JOB_BKUP, 0, (uint8_t*)presentJob, sizeof(DEVICE_SCHEDJOB_FLASH));
-   }
-
-   if(readed == true)
-   {
-	   if(presentJob->crc.crc != calculatedCrc)
-	   {
-	        /* Crc are different... */
-		    ERROR_LOG("Different crc in ScheJob page");
-			isPageValid = false;
-	   }
-		else
-	   {
-	      /* Crc are valid, check padding magic number */
-	      if(presentJob->crc.magicNumber == UINT64_MAGIC_NUMBER)
-	      {
-	         /* Even magic number are ok*/
-	         isPageValid = true;
-	      }
-	      else
-	      {
-	         /* Magic number not OK */
-	    	 ERROR_LOG("Different magic number in ScheJob page");
-	         isPageValid = false;
-	      }
-	   }
-   }
-   else
-   {
-	   ERROR_LOG("Error reading ScheJob partition");
-	   isPageValid = false;
-   }
-
-
-   return isPageValid;
-}

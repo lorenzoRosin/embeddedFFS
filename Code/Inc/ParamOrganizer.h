@@ -38,29 +38,9 @@ extern "C" {
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const uint32_t pageSize, const uint32_t nOfPages,
-                                   const uint32_t pageId, const uint32_t paramHandlerFlag);
+e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgInitParameter* prmInitVal);
 
 
-
-
-/**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
- */
-e_paramOrgResult initParamCallBack(s_paramOrgContext* prmCntx, cb_readPage rpClb, cb_writePage wpClb,
-                                         cb_erasePage epClb, cb_calculateCrc32 cc32Clb);
-
-
-/**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
- */
-e_paramOrgResult initLibMemory(s_paramOrgContext* prmCntx, uint8_t* memPool, uint32_t memPoolSize);
 
 #if 0
 

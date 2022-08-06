@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V9.10.2.313/W64 for ARM                  06/Aug/2022  11:10:14
+# IAR ELF Linker V9.10.2.313/W64 for ARM                  06/Aug/2022  13:30:51
 # Copyright 2007-2021 IAR Systems AB.
 #
 #    Output file  =
@@ -8,8 +8,7 @@
 #    Map file     =
 #        C:\Project\ParamOrganizer\Test\Debug\List\ParamOrganizerTest.map
 #    Command line =
-#        -f
-#        C:\Project\ParamOrganizer\Test\Debug\List\ParamOrganizerTest.map.rsp
+#        -f C:\Project\ParamOrganizer\Test\Debug\Exe\ParamOrganizerTest.out.rsp
 #        (C:\Project\ParamOrganizer\Test\Debug\Obj\main.o
 #        C:\Project\ParamOrganizer\Test\Debug\Obj\Src\ParamOrganizer.o
 #        --no_out_extension -o
@@ -64,17 +63,17 @@ No sections matched the following patterns:
   .intvec   ro code          0x0   0x40  vector_table_M.o [4]
                           - 0x40   0x40
 
-"P1":                              0xcc
-  .text     ro code         0x40   0x4a  ParamOrganizer.o [2]
-  .text     ro code         0x8a    0x2  vectortrap_M.o [4]
-  .text     ro code         0x8c   0x1e  cmain.o [4]
-  .text     ro code         0xaa    0x4  low_level_init.o [3]
-  .text     ro code         0xae   0x1c  main.o [1]
-  .text     ro code         0xca    0x4  exit.o [3]
-  .text     ro code         0xd0    0xa  cexit.o [4]
-  .text     ro code         0xdc   0x14  exit.o [5]
-  .text     ro code         0xf0   0x1c  cstartup_M.o [4]
-                         - 0x10c   0xcc
+"P1":                             0x16c
+  .text     ro code         0x40   0xf8  ParamOrganizer.o [2]
+  .text     ro code        0x138   0x1e  cmain.o [4]
+  .text     ro code        0x156    0x4  low_level_init.o [3]
+  .text     ro code        0x15a   0x12  main.o [1]
+  .text     ro code        0x16c    0x4  exit.o [3]
+  .text     ro code        0x170    0xa  cexit.o [4]
+  .text     ro code        0x17a    0x2  vectortrap_M.o [4]
+  .text     ro code        0x17c   0x14  exit.o [5]
+  .text     ro code        0x190   0x1c  cstartup_M.o [4]
+                         - 0x1ac  0x16c
 
 "P2":                             0x400
   CSTACK             0x2000'0000  0x400  <Block>
@@ -85,7 +84,7 @@ Unused ranges:
 
          From           To      Size
          ----           --      ----
-        0x10c     0x7'ffff  0x7'fef4
+        0x1ac     0x7'ffff  0x7'fe54
   0x2000'0400  0x2000'ffff    0xfc00
 
 
@@ -101,14 +100,14 @@ command line/config:
     Total:
 
 C:\Project\ParamOrganizer\Test\Debug\Obj: [1]
-    main.o                 28
+    main.o                 18
     ----------------------------------
-    Total:                 28
+    Total:                 18
 
 C:\Project\ParamOrganizer\Test\Debug\Obj\Src: [2]
-    ParamOrganizer.o       74
+    ParamOrganizer.o      248
     ----------------------------------
-    Total:                 74
+    Total:                248
 
 dl7M_tln.a: [3]
     exit.o                  4
@@ -130,10 +129,9 @@ shb_l.a: [5]
     ----------------------------------
     Total:                 20
 
-    Gaps                    4
     Linker created               1'024
 --------------------------------------
-    Grand Total:          268    1'024
+    Grand Total:          428    1'024
 
 
 *******************************************************************************
@@ -142,30 +140,30 @@ shb_l.a: [5]
 
 Entry                     Address  Size  Type      Object
 -----                     -------  ----  ----      ------
-?main                        0x8d        Code  Gb  cmain.o [4]
-BusFault_Handler             0x8b        Code  Wk  vectortrap_M.o [4]
+?main                       0x139        Code  Gb  cmain.o [4]
+BusFault_Handler            0x17b        Code  Wk  vectortrap_M.o [4]
 CSTACK$$Base          0x2000'0000         --   Gb  - Linker created -
 CSTACK$$Limit         0x2000'0400         --   Gb  - Linker created -
-DebugMon_Handler             0x8b        Code  Wk  vectortrap_M.o [4]
-HardFault_Handler            0x8b        Code  Wk  vectortrap_M.o [4]
-MemManage_Handler            0x8b        Code  Wk  vectortrap_M.o [4]
-NMI_Handler                  0x8b        Code  Wk  vectortrap_M.o [4]
-PendSV_Handler               0x8b        Code  Wk  vectortrap_M.o [4]
+DebugMon_Handler            0x17b        Code  Wk  vectortrap_M.o [4]
+HardFault_Handler           0x17b        Code  Wk  vectortrap_M.o [4]
+MemManage_Handler           0x17b        Code  Wk  vectortrap_M.o [4]
+NMI_Handler                 0x17b        Code  Wk  vectortrap_M.o [4]
+PendSV_Handler              0x17b        Code  Wk  vectortrap_M.o [4]
 Region$$Table$$Base           0x0         --   Gb  - Linker created -
 Region$$Table$$Limit          0x0         --   Gb  - Linker created -
-SVC_Handler                  0x8b        Code  Wk  vectortrap_M.o [4]
-SysTick_Handler              0x8b        Code  Wk  vectortrap_M.o [4]
-UsageFault_Handler           0x8b        Code  Wk  vectortrap_M.o [4]
-__cmain                      0x8d        Code  Gb  cmain.o [4]
-__exit                       0xdd  0x14  Code  Gb  exit.o [5]
-__iar_program_start          0xf1        Code  Gb  cstartup_M.o [4]
-__low_level_init             0xab   0x4  Code  Gb  low_level_init.o [3]
+SVC_Handler                 0x17b        Code  Wk  vectortrap_M.o [4]
+SysTick_Handler             0x17b        Code  Wk  vectortrap_M.o [4]
+UsageFault_Handler          0x17b        Code  Wk  vectortrap_M.o [4]
+__cmain                     0x139        Code  Gb  cmain.o [4]
+__exit                      0x17d  0x14  Code  Gb  exit.o [5]
+__iar_program_start         0x191        Code  Gb  cstartup_M.o [4]
+__low_level_init            0x157   0x4  Code  Gb  low_level_init.o [3]
 __vector_table                0x0        Data  Gb  vector_table_M.o [4]
-_call_main                   0x99        Code  Gb  cmain.o [4]
-_exit                        0xd1        Code  Gb  cexit.o [4]
-exit                         0xcb   0x4  Code  Gb  exit.o [3]
-initParamSettings            0x41  0x4a  Code  Gb  ParamOrganizer.o [2]
-main                         0xaf  0x1c  Code  Gb  main.o [1]
+_call_main                  0x145        Code  Gb  cmain.o [4]
+_exit                       0x171        Code  Gb  cexit.o [4]
+exit                        0x16d   0x4  Code  Gb  exit.o [3]
+initParamSettings            0x41  0xf8  Code  Gb  ParamOrganizer.o [2]
+main                        0x15b  0x12  Code  Gb  main.o [1]
 
 
 [1] = C:\Project\ParamOrganizer\Test\Debug\Obj
@@ -174,7 +172,7 @@ main                         0xaf  0x1c  Code  Gb  main.o [1]
 [4] = rt7M_tl.a
 [5] = shb_l.a
 
-    268 bytes of readonly  code memory
+    428 bytes of readonly  code memory
   1'024 bytes of readwrite data memory
 
 Errors: none

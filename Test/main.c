@@ -5,7 +5,8 @@ int main(void);
 int main(void)
 {
     s_paramOrgContext prmCntx;
+    s_paramOrgInitParameter prmInitVal;
     e_paramOrgResult result;
-    result = initParamSettings(&prmCntx, 256u, 2u, 0u, PARAMORGAN_BKPPAGE_EN | PARAMORGAN_RAW_MODE);
+    result = initParamSettings(&prmCntx, &prmInitVal);
     return 0;
 }
