@@ -1,4 +1,0 @@
-# ignore 
-*.ninja_deps
-*.ninja_log
-BrowseInfo/*
