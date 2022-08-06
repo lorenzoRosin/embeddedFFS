@@ -45,49 +45,48 @@ typedef enum t_prv_paramOrgPageType
  **********************************************************************************************************************/
 
 /**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
+ * Get s_prv_paramOrgPageParam from a page already loaded in RAM
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param prmPage Readed data (s_prv_paramOrgPageParam)
+ * @return e_paramOrgResult result
  */
 e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
 
-
 /**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
+ * Set s_prv_paramOrgPageParam in a page already loaded in RAM
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param prmPage To set data (s_prv_paramOrgPageParam)
+ * @return e_paramOrgResult result
  */
 e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
 
-
 /**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
+ * Set CRC in a page already loaded in RAM
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param crcToSet CRC we need to set
+ * @return e_paramOrgResult result
  */
 e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet);
 
-
 /**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
+ * Calculate the CRC of an already loaded Page in RAM, excluding the CRC itself from the calc
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param crcCalculated CRC calculated
+ * @return e_paramOrgResult result
  */
 e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated);
 
-
-
 /**
- * Return with a pointer to the active screen
- * @param disp pointer to display which active screen should be get. (NULL to use the default
- * screen)
- * @return pointer to the active screen object (loaded by 'lv_scr_load()')
+ * Verify if the data present in a loaded RAM page has CRC and magic numbers coherent with all the calculated value
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @return e_paramOrgResult result
  */
-e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId);
+e_paramOrgResult isValidDataInPageRam(s_paramOrgContext* prmCntx, uint8_t* page);
 
 
 

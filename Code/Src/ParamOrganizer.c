@@ -166,7 +166,12 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
         {
             while( ( iterator < prmCntx->nOfPages ) && ( true == canContinueToIterate ) )
             {
-                returnValValidPage = isValidDataInPage(prmCntx, iterator);
+                if( false == (*(prmCntx->pToReadFunc))(prmCntx->pageId, pageOffsetFromId, prmCntx->pageSize, prmCntx->memPoolPointer) )
+                {
+                    returnVal = PARAMRES_ERRORREAD;
+                }
+
+                returnValValidPage = isValidDataInPageRam(prmCntx, prmCntx->memPoolPointer);
                 switch(returnValValidPage)
                 {
                     case(PARAMRES_ALLOK):
@@ -344,7 +349,12 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
         {
             while( ( iterator < prmCntx->nOfPages ) && ( true == canContinueToIterate ) )
             {
-                returnValValidPage = isValidDataInPage(prmCntx, iterator);
+                if( false == (*(prmCntx->pToReadFunc))(prmCntx->pageId, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
+                {
+                    returnVal = PARAMRES_ERRORREAD;
+                }
+
+                returnValValidPage = isValidDataInPageRam(prmCntx, prmCntx->memPoolPointer);
                 switch(returnValValidPage)
                 {
                     case(PARAMRES_ALLOK):

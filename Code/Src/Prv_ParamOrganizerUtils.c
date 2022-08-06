@@ -3,63 +3,40 @@
  *
  */
 
-/*********************
+/***********************************************************************************************************************
  *      INCLUDES
- *********************/
+ **********************************************************************************************************************/
 #include "Prv_ParamOrganizerUtils.h"
 
-/*********************
- *      DEFINES
- *********************/
-
-/**********************
- *      PRIVATE TYPEDEFS
- **********************/
 
 
-/**********************
- *   PRIVATE STATIC FUNCTIONS PROTOTYPES
- **********************/
-
-/**********************
- *  STATIC VARIABLES
- **********************/
-
-/**********************
- *      MACROS
- **********************/
-
-/**********************
+/***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
- **********************/
-
-
-
-
-
-/**********************
- *   PRIVATE STATIC FUNCTIONS
- **********************/
+ **********************************************************************************************************************/
 e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage)
 {
+    /* Local variable */
     e_paramOrgResult returnVal;
 
+    /* Check for NULL pointer */
     if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == prmPage ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
+        /* Check if initialized */
         if( false == prmCntx->isInitialized )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
         else
         {
-            uint32_t offset1 = sizeof(s_prv_paramOrgPageParam);
-            uint32_t offset2 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t);
-            uint32_t offset3 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
-            uint32_t offset4 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+            /* Copy data in ram buffer in to the structure */
+            uint32_t offset1 = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
+            uint32_t offset2 = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
+            uint32_t offset3 = sizeof(uint32_t) + sizeof(uint32_t);
+            uint32_t offset4 = sizeof(uint32_t);
 
             (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,  &page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&prmPage->pageType,        &page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
@@ -75,29 +52,33 @@ e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page
 
 e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage)
 {
+    /* Local variable */
     e_paramOrgResult returnVal;
 
+    /* Check for NULL pointer */
     if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == prmPage ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
+        /* Check if initialized */
         if( false == prmCntx->isInitialized )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
         else
         {
-            uint32_t offset1 = sizeof(s_prv_paramOrgPageParam);
-            uint32_t offset2 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t);
-            uint32_t offset3 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
-            uint32_t offset4 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+            /* Copy data in structure in to the ram buffer */
+            uint32_t offset1 = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
+            uint32_t offset2 = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
+            uint32_t offset3 = sizeof(uint32_t) + sizeof(uint32_t);
+            uint32_t offset4 = sizeof(uint32_t);
 
-            (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,  &page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
-            (void)memcpy( (uint8_t*)&prmPage->pageType,        &page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
-            (void)memcpy( (uint8_t*)&prmPage->pageMagicNumber, &page[prmCntx->pageSize - offset3], sizeof(uint32_t) );
-            (void)memcpy( (uint8_t*)&prmPage->pageCrc,         &page[prmCntx->pageSize - offset4], sizeof(uint32_t) );
+            (void)memcpy( &page[prmCntx->pageSize - offset1], (uint8_t*)&prmPage->pageTimeSetted,  sizeof(uint32_t) );
+            (void)memcpy( &page[prmCntx->pageSize - offset2], (uint8_t*)&prmPage->pageType,        sizeof(uint32_t) );
+            (void)memcpy( &page[prmCntx->pageSize - offset3], (uint8_t*)&prmPage->pageMagicNumber, sizeof(uint32_t) );
+            (void)memcpy( &page[prmCntx->pageSize - offset4], (uint8_t*)&prmPage->pageCrc,         sizeof(uint32_t) );
 
             returnVal = PARAMRES_ALLOK;
         }
@@ -108,21 +89,26 @@ e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, 
 
 e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet)
 {
+    /* Local variable */
     e_paramOrgResult returnVal;
 
+    /* Check for NULL pointer */
     if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == crcToSet ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
+        /* Check if initialized */
         if( false == prmCntx->isInitialized )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
         else
         {
-            (void)memcpy( &page[prmCntx->pageSize - sizeof(uint32_t)], crcToSet, sizeof(uint32_t) );
+            /* Copy CRC passed in to the ram buffer */
+            uint32_t offset4 = sizeof(uint32_t);
+            (void)memcpy( &page[prmCntx->pageSize - offset4], (uint8_t*)crcToSet, sizeof(uint32_t) );
             returnVal = PARAMRES_ALLOK;
         }
     }
@@ -132,24 +118,29 @@ e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* pag
 
 e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated)
 {
+    /* Local variable */
     e_paramOrgResult returnVal;
     uint32_t pageCrcSizeToCalc;
 
+    /* Check for NULL pointer */
     if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == crcCalculated ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
+        /* Check if initialized */
         if( false == prmCntx->isInitialized )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
         else
         {
+            /* Esclude from the calculation the CRC, that is placed in the last 4 byte */
             pageCrcSizeToCalc = prmCntx->pageSize - sizeof(uint32_t);
             if( false == (*(prmCntx->pToCrcFunc))(crcCalculated, pageCrcSizeToCalc, CRC_BASE_SEED) )
             {
+                /* Generic CRC calculation Fail */
                 returnVal = PARAMRES_BADPARAM;
             }
             else
@@ -162,53 +153,46 @@ e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pa
     return returnVal;
 }
 
-e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
+e_paramOrgResult isValidDataInPageRam(s_paramOrgContext* prmCntx, uint8_t* page)
 {
+    /* Local variable */
     e_paramOrgResult returnVal;
     s_prv_paramOrgPageParam prmPage;
     uint32_t crcCalculated;
 
-    if( NULL == prmCntx )
+    /* Check for NULL pointer */
+    if( ( NULL == prmCntx ) || ( NULL == page ) )
     {
         returnVal = PARAMRES_BADPOINTER;
     }
     else
     {
+        /* Check if initialized */
         if( false == prmCntx->isInitialized )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
         else
         {
-            if( pageOffsetFromId >= prmCntx->nOfPages )
-            {
-                returnVal = PARAMRES_BADPARAM;
-            }
-            else
-            {
-                if( false == (*(prmCntx->pToReadFunc))(prmCntx->pageId, pageOffsetFromId, prmCntx->pageSize, prmCntx->memPoolPointer) )
-                {
-                    returnVal = PARAMRES_ERRORREAD;
-                }
-                else
-                {
-                    returnVal = getPagePrmFromRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
+            /* Get page param from the ram page */
+            returnVal = getPagePrmFromRamBuff(prmCntx, page, &prmPage);
 
-                    if( PARAMRES_ALLOK == returnVal )
+            if( PARAMRES_ALLOK == returnVal )
+            {
+                /* Calculate the page param CRC */
+                returnVal = calcPagePrmCrcInRamBuff(prmCntx, page, &crcCalculated);
+
+                if( PARAMRES_ALLOK == returnVal )
+                {
+                    /* Verify if calculated CRC is equal to the stored one, check if magic number is equal to the
+                     * setted one also */
+                    if( (crcCalculated == prmPage.pageCrc) && ( PARAM_32_MAGIC_NUMBER == prmPage.pageMagicNumber ) )
                     {
-                        returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
-
-                        if( PARAMRES_ALLOK == returnVal )
-                        {
-                            if( (crcCalculated == prmPage.pageCrc) && ( PARAM_32_MAGIC_NUMBER == prmPage.pageMagicNumber ) )
-                            {
-                                returnVal = PARAMRES_ALLOK;
-                            }
-                            else
-                            {
-                                returnVal = PARAMRES_NOTVALIDPAGE;
-                            }
-                        }
+                        returnVal = PARAMRES_ALLOK;
+                    }
+                    else
+                    {
+                        returnVal = PARAMRES_NOTVALIDPAGE;
                     }
                 }
             }
