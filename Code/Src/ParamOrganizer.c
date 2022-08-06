@@ -144,7 +144,7 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
 {
     e_paramOrgResult returnVal;
     e_paramOrgResult returnValValidPage;
-    s_paramOrgPageParam prmPage;
+    s_prv_paramOrgPageParam prmPage;
 
     uint32_t iterator = 0u;
     uint32_t howManyReInit = 0u;
@@ -181,18 +181,18 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
                         memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
                         prmPage.pageTimeSetted = 1u;
-                        prmPage.pageType = PARAMRES_TYPE_RAW;
+                        prmPage.pageType = PARAMRES_PAGETYPE_RAW;
                         prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
                         prmPage.pageCrc = 0u;
 
-                        returnVal = setPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                        returnVal = setPagePrmInRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
 
                         if( PARAMRES_ALLOK == returnVal)
                         {
-                            returnVal = calcPrgPageParamCrc(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                            returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
                             if( PARAMRES_ALLOK == returnVal)
                             {
-                                setCrcPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
                                 if( PARAMRES_ALLOK == returnVal)
                                 {
                                     if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
@@ -322,7 +322,7 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
 {
     e_paramOrgResult returnVal;
     e_paramOrgResult returnValValidPage;
-    s_paramOrgPageParam prmPage;
+    s_prv_paramOrgPageParam prmPage;
 
     uint32_t iterator = 0u;
     uint32_t howManyReInit = 0u;
@@ -359,18 +359,18 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
                         memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
                         prmPage.pageTimeSetted = 1u;
-                        prmPage.pageType = PARAMRES_TYPE_RAW;
+                        prmPage.pageType = PARAMRES_PAGETYPE_RAW;
                         prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
                         prmPage.pageCrc = 0u;
 
-                        returnVal = setPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                        returnVal = setPagePrmInRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
 
                         if( PARAMRES_ALLOK == returnVal)
                         {
-                            returnVal = calcPrgPageParamCrc(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                            returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
                             if( PARAMRES_ALLOK == returnVal)
                             {
-                                setCrcPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
                                 if( PARAMRES_ALLOK == returnVal)
                                 {
                                     if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,

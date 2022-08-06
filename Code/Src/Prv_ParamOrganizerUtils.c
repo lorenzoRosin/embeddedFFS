@@ -40,7 +40,7 @@
 /**********************
  *   PRIVATE STATIC FUNCTIONS
  **********************/
-e_paramOrgResult getPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s_paramOrgPageParam* prmPage)
+e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage)
 {
     e_paramOrgResult returnVal;
 
@@ -56,10 +56,10 @@ e_paramOrgResult getPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s
         }
         else
         {
-            uint32_t offset1 = sizeof(s_paramOrgPageParam);
-            uint32_t offset2 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t);
-            uint32_t offset3 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
-            uint32_t offset4 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+            uint32_t offset1 = sizeof(s_prv_paramOrgPageParam);
+            uint32_t offset2 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t);
+            uint32_t offset3 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
+            uint32_t offset4 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
 
             (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,  &page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&prmPage->pageType,        &page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
@@ -73,7 +73,7 @@ e_paramOrgResult getPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s
     return returnVal;
 }
 
-e_paramOrgResult setPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s_paramOrgPageParam* prmPage)
+e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage)
 {
     e_paramOrgResult returnVal;
 
@@ -89,10 +89,10 @@ e_paramOrgResult setPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s
         }
         else
         {
-            uint32_t offset1 = sizeof(s_paramOrgPageParam);
-            uint32_t offset2 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t);
-            uint32_t offset3 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
-            uint32_t offset4 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+            uint32_t offset1 = sizeof(s_prv_paramOrgPageParam);
+            uint32_t offset2 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t);
+            uint32_t offset3 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
+            uint32_t offset4 = sizeof(s_prv_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
 
             (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,  &page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&prmPage->pageType,        &page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
@@ -106,7 +106,7 @@ e_paramOrgResult setPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s
     return returnVal;
 }
 
-e_paramOrgResult setCrcPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet)
+e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet)
 {
     e_paramOrgResult returnVal;
 
@@ -130,7 +130,7 @@ e_paramOrgResult setCrcPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page
     return returnVal;
 }
 
-e_paramOrgResult calcPrgPageParamCrc(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated)
+e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated)
 {
     e_paramOrgResult returnVal;
     uint32_t pageCrcSizeToCalc;
@@ -165,7 +165,7 @@ e_paramOrgResult calcPrgPageParamCrc(s_paramOrgContext* prmCntx, uint8_t* page, 
 e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
 {
     e_paramOrgResult returnVal;
-    s_paramOrgPageParam prmPage;
+    s_prv_paramOrgPageParam prmPage;
     uint32_t crcCalculated;
 
     if( NULL == prmCntx )
@@ -192,11 +192,11 @@ e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffs
                 }
                 else
                 {
-                    returnVal = getPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                    returnVal = getPagePrmFromRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
 
                     if( PARAMRES_ALLOK == returnVal )
                     {
-                        returnVal = calcPrgPageParamCrc(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                        returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
 
                         if( PARAMRES_ALLOK == returnVal )
                         {

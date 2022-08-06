@@ -5,12 +5,12 @@
     <configuration>
         <name>Debug</name>
         <outputs>
-            <file>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</file>
-            <file>$PROJ_DIR$\main.c</file>
-            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizer.h</file>
-            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</file>
-            <file>$PROJ_DIR$\..\Code\Inc\Prv_ParamOrganizerUtils.h</file>
             <file>$PROJ_DIR$\..\Code\Src\Prv_ParamOrganizerUtils.c</file>
+            <file>$PROJ_DIR$\main.c</file>
+            <file>$PROJ_DIR$\..\Code\Inc\Prv_ParamOrganizerUtils.h</file>
+            <file>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</file>
+            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</file>
+            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizer.h</file>
         </outputs>
     </configuration>
     <configuration>

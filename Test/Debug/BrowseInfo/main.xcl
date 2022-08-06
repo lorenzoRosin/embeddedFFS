@@ -1,4 +1,4 @@
-"c:\Project\ParamOrganizer\Test\main.c"
+"C:\Project\ParamOrganizer\Test\main.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
@@ -9,7 +9,7 @@ C:\Project\ParamOrganizer\Test\Debug\BrowseInfo\main.pbi.dep
 -o
 C:\Project\ParamOrganizer\Test\Debug\BrowseInfo\main.pbi
 -I
-c:\Project\ParamOrganizer\Test
+C:\Project\ParamOrganizer\Test
 -I
 C:\Project\ParamOrganizer\Test\..\Code\Inc
 -I
