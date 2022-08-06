@@ -21,14 +21,30 @@ typedef struct t_paramOrgPageParam
     uint32_t    pageType;
     uint32_t    pageMagicNumber;
     uint32_t    pageCrc;
-}t_paramOrgPageParam;
+}s_paramOrgPageParam;
+
+typedef enum t_paramOrgPageType
+{
+    PARAMRES_TYPE_PARAM = 0,
+    PARAMRES_TYPE_RAW,
+}e_paramOrgPageType;
 
 /**********************
  *   PRIVATE STATIC FUNCTIONS PROTOTYPES
  **********************/
-e_paramOrgResult getPrgPageParam(s_paramOrgContext* prmCntx, uint8_t* page, t_paramOrgPageParam* prmPage);
+e_paramOrgResult getPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s_paramOrgPageParam* prmPage);
+e_paramOrgResult setPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s_paramOrgPageParam* prmPage);
+e_paramOrgResult setCrcPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet);
 e_paramOrgResult calcPrgPageParamCrc(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated);
 e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId);
+
+e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId);
+e_paramOrgResult verifyAndGeneratePageIntegrityBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId);
+
+
+
+
+
 e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx);
 
 /**********************
@@ -146,7 +162,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
 /**********************
  *   PRIVATE STATIC FUNCTIONS
  **********************/
-e_paramOrgResult getPrgPageParam(s_paramOrgContext* prmCntx, uint8_t* page, t_paramOrgPageParam* prmPage)
+e_paramOrgResult getPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s_paramOrgPageParam* prmPage)
 {
     e_paramOrgResult returnVal;
 
@@ -162,16 +178,73 @@ e_paramOrgResult getPrgPageParam(s_paramOrgContext* prmCntx, uint8_t* page, t_pa
         }
         else
         {
-            uint32_t offset1 = sizeof(t_paramOrgPageParam);
-            uint32_t offset2 = sizeof(t_paramOrgPageParam) - sizeof(uint32_t);
-            uint32_t offset3 = sizeof(t_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
-            uint32_t offset4 = sizeof(t_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+            uint32_t offset1 = sizeof(s_paramOrgPageParam);
+            uint32_t offset2 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t);
+            uint32_t offset3 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
+            uint32_t offset4 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
 
             (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,  &page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&prmPage->pageType,        &page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&prmPage->pageMagicNumber, &page[prmCntx->pageSize - offset3], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&prmPage->pageCrc,         &page[prmCntx->pageSize - offset4], sizeof(uint32_t) );
 
+            returnVal = PARAMRES_ALLOK;
+        }
+    }
+
+    return returnVal;
+}
+
+e_paramOrgResult setPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, s_paramOrgPageParam* prmPage)
+{
+    e_paramOrgResult returnVal;
+
+    if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == prmPage ) )
+    {
+        returnVal = PARAMRES_BADPOINTER;
+    }
+    else
+    {
+        if( false == prmCntx->isInitialized )
+        {
+            returnVal = PARAMRES_NOT_INIT;
+        }
+        else
+        {
+            uint32_t offset1 = sizeof(s_paramOrgPageParam);
+            uint32_t offset2 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t);
+            uint32_t offset3 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t);
+            uint32_t offset4 = sizeof(s_paramOrgPageParam) - sizeof(uint32_t)  - sizeof(uint32_t) - sizeof(uint32_t);
+
+            (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,  &page[prmCntx->pageSize - offset1], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&prmPage->pageType,        &page[prmCntx->pageSize - offset2], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&prmPage->pageMagicNumber, &page[prmCntx->pageSize - offset3], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&prmPage->pageCrc,         &page[prmCntx->pageSize - offset4], sizeof(uint32_t) );
+
+            returnVal = PARAMRES_ALLOK;
+        }
+    }
+
+    return returnVal;
+}
+
+e_paramOrgResult setCrcPrgRamPageParam(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet)
+{
+    e_paramOrgResult returnVal;
+
+    if( ( NULL == prmCntx ) || ( NULL == page ) || ( NULL == crcToSet ) )
+    {
+        returnVal = PARAMRES_BADPOINTER;
+    }
+    else
+    {
+        if( false == prmCntx->isInitialized )
+        {
+            returnVal = PARAMRES_NOT_INIT;
+        }
+        else
+        {
+            (void)memcpy( &page[prmCntx->pageSize - sizeof(uint32_t)], crcToSet, sizeof(uint32_t) );
             returnVal = PARAMRES_ALLOK;
         }
     }
@@ -219,7 +292,7 @@ e_paramOrgResult calcPrgPageParamCrc(s_paramOrgContext* prmCntx, uint8_t* page, 
 e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
 {
     e_paramOrgResult returnVal;
-    t_paramOrgPageParam prmPage;
+    s_paramOrgPageParam prmPage;
     uint32_t crcCalculated;
 
     if( NULL == prmCntx )
@@ -246,7 +319,7 @@ e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffs
                 }
                 else
                 {
-                    returnVal = getPrgPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                    returnVal = getPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
 
                     if( PARAMRES_ALLOK == returnVal )
                     {
@@ -272,14 +345,16 @@ e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, uint32_t pageOffs
     return returnVal;
 }
 
-
-
-
-e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx)
+e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
 {
     e_paramOrgResult returnVal;
     e_paramOrgResult returnValValidPage;
-    uint32_t iterator = 0;
+    s_paramOrgPageParam prmPage;
+
+    uint32_t iterator = 0u;
+    uint32_t howManyReInit = 0u;
+    uint32_t crcCalculated = 0u;
+
     bool_t canContinueToIterate = true;
 
     if( NULL == prmCntx )
@@ -306,12 +381,227 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
 
                     case(PARAMRES_NOTVALIDPAGE):
                     {
-                        if( false == (*(prmCntx->cb_writePage))(prmCntx->pageId, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
+                        howManyReInit++;
+
+                        memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
+
+                        prmPage.pageTimeSetted = 1u;
+                        prmPage.pageType = PARAMRES_TYPE_RAW;
+                        prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+                        prmPage.pageCrc = 0u;
+
+                        returnVal = setPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
+
+                        if( PARAMRES_ALLOK == returnVal)
                         {
-                            returnVal = PARAMRES_ERRORREAD;
+                            returnVal = calcPrgPageParamCrc(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                            if( PARAMRES_ALLOK == returnVal)
+                            {
+                                setCrcPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                                if( PARAMRES_ALLOK == returnVal)
+                                {
+                                    if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
+                                                                            prmCntx->pageSize, prmCntx->memPoolPointer) )
+                                    {
+                                        returnVal = PARAMRES_ERRORREAD;
+                                        canContinueToIterate = true;
+                                    }
+                                    else
+                                    {
+                                        returnVal = PARAMRES_ALLOK;
+                                    }
+                                }
+                                else
+                                {
+                                    canContinueToIterate = false;
+                                }
+                            }
+                            else
+                            {
+                                canContinueToIterate = false;
+                            }
                         }
                         else
                         {
+                            canContinueToIterate = false;
+                        }
+                    }break;
+
+                    default:
+                    {
+                        canContinueToIterate = false;
+                    }
+                }
+
+                iterator++;
+            }
+        }
+    }
+
+    return returnVal;
+}
+
+
+e_paramOrgResult verifyAndGeneratePageIntegrityBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
+{
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx)
+{
+    e_paramOrgResult returnVal;
+    e_paramOrgResult returnValValidPage;
+    s_paramOrgPageParam prmPage;
+
+    uint32_t iterator = 0u;
+    uint32_t howManyReInit = 0u;
+    uint32_t crcCalculated = 0u;
+
+    bool_t canContinueToIterate = true;
+
+    if( NULL == prmCntx )
+    {
+        returnVal = PARAMRES_BADPOINTER;
+    }
+    else
+    {
+        if( false == prmCntx->isInitialized )
+        {
+            returnVal = PARAMRES_NOT_INIT;
+        }
+        else
+        {
+            while( ( iterator < prmCntx->nOfPages ) && ( true == canContinueToIterate ) )
+            {
+                returnValValidPage = isValidDataInPage(prmCntx, iterator);
+                switch(returnValValidPage)
+                {
+                    case(PARAMRES_ALLOK):
+                    {
+                        canContinueToIterate = true;
+                    }break;
+
+                    case(PARAMRES_NOTVALIDPAGE):
+                    {
+                        howManyReInit++;
+
+                        memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
+
+                        prmPage.pageTimeSetted = 1u;
+                        prmPage.pageType = PARAMRES_TYPE_RAW;
+                        prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+                        prmPage.pageCrc = 0u;
+
+                        returnVal = setPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &prmPage);
+
+                        if( PARAMRES_ALLOK == returnVal)
+                        {
+                            returnVal = calcPrgPageParamCrc(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                            if( PARAMRES_ALLOK == returnVal)
+                            {
+                                setCrcPrgRamPageParam(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                                if( PARAMRES_ALLOK == returnVal)
+                                {
+                                    if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
+                                                                            prmCntx->pageSize, prmCntx->memPoolPointer) )
+                                    {
+                                        returnVal = PARAMRES_ERRORREAD;
+                                        canContinueToIterate = true;
+                                    }
+                                    else
+                                    {
+                                        returnVal = PARAMRES_ALLOK;
+                                    }
+                                }
+                                else
+                                {
+                                    canContinueToIterate = false;
+                                }
+                            }
+                            else
+                            {
+                                canContinueToIterate = false;
+                            }
+                        }
+                        else
+                        {
+                            canContinueToIterate = false;
                         }
                     }break;
 

@@ -5,51 +5,57 @@
     <configuration>
         <name>Debug</name>
         <outputs>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-            <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
-            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
-            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizer.h</file>
-            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\Src\ParamOrganizer.o</file>
             <file>$TOOLKIT_DIR$\config\generic_cortex.icf</file>
+            <file>$PROJ_DIR$\Debug\Obj\Src\ParamOrganizer.o</file>
             <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
+            <file>$PROJ_DIR$\Debug\Exe\ParamOrganizerTest.out</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+            <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
             <file>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</file>
             <file>$PROJ_DIR$\main.c</file>
-            <file>$PROJ_DIR$\Debug\Exe\ParamOrganizerTest.out</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
             <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizer.h</file>
+            <file>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$PROJ_DIR$\Debug\List\ParamOrganizerTest.map</file>
             <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
             <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
-            <file>$PROJ_DIR$\Debug\List\ParamOrganizerTest.map</file>
         </outputs>
         <file>
-            <name>[ROOT_NODE]</name>
+            <name>$PROJ_DIR$\Debug\Exe\ParamOrganizerTest.out</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 18 22</file>
+                    <file> 20</file>
                 </tool>
             </outputs>
+            <inputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 0 8 22 14 21 1 2</file>
+                </tool>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 13</file>
+                    <file> 1</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 1 2 0 4 6 10 5 7 3 9 11 12</file>
+                    <file> 18 9 17 13 6 3 10 5 19 7 15 16</file>
                 </tool>
             </inputs>
         </file>
@@ -58,30 +64,24 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 15</file>
+                    <file> 2</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 1 2 0 4 6 10 5 7 3 9 11 12</file>
+                    <file> 18 9 17 13 6 3 10 5 19 7 15 16</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\Debug\Exe\ParamOrganizerTest.out</name>
+            <name>[ROOT_NODE]</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 22</file>
+                    <file> 4 20</file>
                 </tool>
             </outputs>
-            <inputs>
-                <tool>
-                    <name>ILINK</name>
-                    <file> 14 8 21 19 20 13 15</file>
-                </tool>
-            </inputs>
         </file>
     </configuration>
     <configuration>
