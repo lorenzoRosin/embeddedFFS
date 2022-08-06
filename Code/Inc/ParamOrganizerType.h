@@ -20,6 +20,7 @@ extern "C" {
  *********************/
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
 /*********************
  *      DEFINES
@@ -40,12 +41,9 @@ extern "C" {
 #define PARAMORGAN_MIN_PAGE_SIZE_BYTE              (256u)
 #define PARAMORGAN_MAX_PAGE_SIZE_BYTE              (16384u)
 
-#define CRC_BASE_SEED                               (0xffffffff)
+#define CRC_BASE_SEED                               ( 0xffffffffu )
 
-#define PARAM_8_MAGIC_NUMBER                        (0xa5)
-#define PARAM_16_MAGIC_NUMBER                       (0xa5a5)
-#define PARAM_32_MAGIC_NUMBER                       (0xa5a5a5a5)
-#define PARAM_64_MAGIC_NUMBER                       (0xa5a5a5a5a5a5a5a5)
+#define PARAM_32_MAGIC_NUMBER                       (0xa5a5a5a5u)
 
 /**********************
  *      TYPEDEFS
@@ -56,6 +54,8 @@ typedef enum t_paramOrgResult
     PARAMRES_ALLOK_BKP_RCVRD,
     PARAMRES_ALLOK_NEWVER_UPDT,
     PARAMRES_ALLOK_FIRSTINIT,
+    PARAMRES_ALLOK_BUTREINIT,
+    PARAMRES_NOTVALIDPAGE,
     PARAMRES_BADPARAM,
     PARAMRES_BADPOINTER,
     PARAMRES_BADTYPE,
