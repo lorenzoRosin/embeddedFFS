@@ -3015,13 +3015,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@445@macro@bool_t",
+    "ID": "c:ParamOrganizerType.h@837@macro@bool_t",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "bool_t",
     "location": {
       "column": "11",
-      "line": "33",
+      "line": "34",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "bool_t",
@@ -3029,13 +3029,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@485@macro@PARAMORGAN_BKPPAGE_EN",
+    "ID": "c:ParamOrganizerType.h@877@macro@PARAMORGAN_BKPPAGE_EN",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAMORGAN_BKPPAGE_EN",
     "location": {
       "column": "9",
-      "line": "36",
+      "line": "37",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAMORGAN_BKPPAGE_EN",
@@ -3043,13 +3043,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@555@macro@PARAMORGAN_RAW_MODE",
+    "ID": "c:ParamOrganizerType.h@947@macro@PARAMORGAN_RAW_MODE",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAMORGAN_RAW_MODE",
     "location": {
       "column": "9",
-      "line": "37",
+      "line": "38",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAMORGAN_RAW_MODE",
@@ -3057,13 +3057,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@627@macro@PARAMORGAN_DIVISOR_PAGE_BACKUP",
+    "ID": "c:ParamOrganizerType.h@1019@macro@PARAMORGAN_DIVISOR_PAGE_BACKUP",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAMORGAN_DIVISOR_PAGE_BACKUP",
     "location": {
       "column": "9",
-      "line": "39",
+      "line": "40",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAMORGAN_DIVISOR_PAGE_BACKUP",
@@ -3071,13 +3071,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@684@macro@PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE",
+    "ID": "c:ParamOrganizerType.h@1076@macro@PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE",
     "location": {
       "column": "9",
-      "line": "40",
+      "line": "41",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE",
@@ -3085,13 +3085,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@742@macro@PARAMORGAN_MIN_PAGE_SIZE_BYTE",
+    "ID": "c:ParamOrganizerType.h@1134@macro@PARAMORGAN_MIN_PAGE_SIZE_BYTE",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAMORGAN_MIN_PAGE_SIZE_BYTE",
     "location": {
       "column": "9",
-      "line": "41",
+      "line": "42",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAMORGAN_MIN_PAGE_SIZE_BYTE",
@@ -3099,13 +3099,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@801@macro@PARAMORGAN_MAX_PAGE_SIZE_BYTE",
+    "ID": "c:ParamOrganizerType.h@1193@macro@PARAMORGAN_MAX_PAGE_SIZE_BYTE",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAMORGAN_MAX_PAGE_SIZE_BYTE",
     "location": {
       "column": "9",
-      "line": "42",
+      "line": "43",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAMORGAN_MAX_PAGE_SIZE_BYTE",
@@ -3113,13 +3113,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@864@macro@CRC_BASE_SEED",
+    "ID": "c:ParamOrganizerType.h@1256@macro@CRC_BASE_SEED",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "CRC_BASE_SEED",
     "location": {
       "column": "9",
-      "line": "44",
+      "line": "45",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "CRC_BASE_SEED",
@@ -3127,13 +3127,13 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizerType.h@935@macro@PARAM_32_MAGIC_NUMBER",
+    "ID": "c:ParamOrganizerType.h@1327@macro@PARAM_32_MAGIC_NUMBER",
     "What": "MacroDef",
     "defdec": "Def",
     "display": "PARAM_32_MAGIC_NUMBER",
     "location": {
       "column": "9",
-      "line": "46",
+      "line": "47",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "PARAM_32_MAGIC_NUMBER",
@@ -3153,7 +3153,7 @@
         "display": "PARAMRES_ALLOK",
         "location": {
           "column": "5",
-          "line": "53",
+          "line": "56",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ALLOK",
@@ -3167,7 +3167,7 @@
         "display": "PARAMRES_ALLOK_BKP_RCVRD",
         "location": {
           "column": "5",
-          "line": "54",
+          "line": "57",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ALLOK_BKP_RCVRD",
@@ -3181,7 +3181,7 @@
         "display": "PARAMRES_ALLOK_NEWVER_UPDT",
         "location": {
           "column": "5",
-          "line": "55",
+          "line": "58",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ALLOK_NEWVER_UPDT",
@@ -3195,7 +3195,7 @@
         "display": "PARAMRES_ALLOK_FIRSTINIT",
         "location": {
           "column": "5",
-          "line": "56",
+          "line": "59",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ALLOK_FIRSTINIT",
@@ -3209,7 +3209,7 @@
         "display": "PARAMRES_ALLOK_BUTNOTFIRSTINIT",
         "location": {
           "column": "5",
-          "line": "57",
+          "line": "60",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ALLOK_BUTNOTFIRSTINIT",
@@ -3223,7 +3223,7 @@
         "display": "PARAMRES_NOTVALIDPAGE",
         "location": {
           "column": "5",
-          "line": "58",
+          "line": "61",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_NOTVALIDPAGE",
@@ -3237,7 +3237,7 @@
         "display": "PARAMRES_BADPARAM",
         "location": {
           "column": "5",
-          "line": "59",
+          "line": "62",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_BADPARAM",
@@ -3251,7 +3251,7 @@
         "display": "PARAMRES_BADPOINTER",
         "location": {
           "column": "5",
-          "line": "60",
+          "line": "63",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_BADPOINTER",
@@ -3265,7 +3265,7 @@
         "display": "PARAMRES_BADTYPE",
         "location": {
           "column": "5",
-          "line": "61",
+          "line": "64",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_BADTYPE",
@@ -3279,7 +3279,7 @@
         "display": "PARAMRES_NOT_INIT",
         "location": {
           "column": "5",
-          "line": "62",
+          "line": "65",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_NOT_INIT",
@@ -3293,7 +3293,7 @@
         "display": "PARAMRES_ERRORREAD",
         "location": {
           "column": "5",
-          "line": "63",
+          "line": "66",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ERRORREAD",
@@ -3307,7 +3307,7 @@
         "display": "PARAMRES_ERRORWRITE",
         "location": {
           "column": "5",
-          "line": "64",
+          "line": "67",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ERRORWRITE",
@@ -3321,7 +3321,7 @@
         "display": "PARAMRES_ERRORERASE",
         "location": {
           "column": "5",
-          "line": "65",
+          "line": "68",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMRES_ERRORERASE",
@@ -3331,7 +3331,7 @@
     ],
     "location": {
       "column": "14",
-      "line": "51",
+      "line": "54",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "t_paramOrgResult",
@@ -3345,7 +3345,7 @@
     "display": "bool (*)(const uint32_t, const uint32_t, const uint32_t, uint8_t *)",
     "location": {
       "column": "18",
-      "line": "69",
+      "line": "72",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "cb_readPage",
@@ -3359,7 +3359,7 @@
     "display": "bool (*)(const uint32_t, const uint32_t, const uint32_t, uint8_t *)",
     "location": {
       "column": "18",
-      "line": "70",
+      "line": "73",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "cb_writePage",
@@ -3373,7 +3373,7 @@
     "display": "bool (*)(const uint32_t, const uint32_t, const uint32_t)",
     "location": {
       "column": "18",
-      "line": "71",
+      "line": "74",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "cb_erasePage",
@@ -3387,7 +3387,7 @@
     "display": "bool (*)(uint32_t *, const uint32_t, const uint32_t)",
     "location": {
       "column": "18",
-      "line": "72",
+      "line": "75",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "cb_calculateCrc32",
@@ -3401,7 +3401,7 @@
     "display": "t_paramOrgInitParameter",
     "location": {
       "column": "16",
-      "line": "75",
+      "line": "78",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "members": [
@@ -3412,7 +3412,7 @@
         "display": "pageSize",
         "location": {
           "column": "14",
-          "line": "78",
+          "line": "81",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pageSize",
@@ -3426,7 +3426,7 @@
         "display": "nOfPages",
         "location": {
           "column": "14",
-          "line": "79",
+          "line": "82",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "nOfPages",
@@ -3440,7 +3440,7 @@
         "display": "pageId",
         "location": {
           "column": "14",
-          "line": "80",
+          "line": "83",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pageId",
@@ -3454,7 +3454,7 @@
         "display": "paramHandlerFlag",
         "location": {
           "column": "14",
-          "line": "83",
+          "line": "86",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "paramHandlerFlag",
@@ -3468,7 +3468,7 @@
         "display": "pToReadFunc",
         "location": {
           "column": "17",
-          "line": "86",
+          "line": "89",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToReadFunc",
@@ -3482,7 +3482,7 @@
         "display": "pToWriteFunc",
         "location": {
           "column": "18",
-          "line": "87",
+          "line": "90",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToWriteFunc",
@@ -3496,7 +3496,7 @@
         "display": "pToEraseFunc",
         "location": {
           "column": "18",
-          "line": "88",
+          "line": "91",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToEraseFunc",
@@ -3510,7 +3510,7 @@
         "display": "pToCrcFunc",
         "location": {
           "column": "23",
-          "line": "89",
+          "line": "92",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToCrcFunc",
@@ -3524,7 +3524,7 @@
         "display": "memPoolPointer",
         "location": {
           "column": "14",
-          "line": "92",
+          "line": "95",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "memPoolPointer",
@@ -3538,7 +3538,7 @@
         "display": "memPoolSize",
         "location": {
           "column": "14",
-          "line": "93",
+          "line": "96",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "memPoolSize",
@@ -3552,7 +3552,7 @@
         "display": "struct t_paramOrgInitParameter",
         "location": {
           "column": "2",
-          "line": "94",
+          "line": "97",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "s_paramOrgInitParameter",
@@ -3571,7 +3571,7 @@
     "display": "t_paramOrgContext",
     "location": {
       "column": "16",
-      "line": "96",
+      "line": "99",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "members": [
@@ -3582,7 +3582,7 @@
         "display": "pageSize",
         "location": {
           "column": "14",
-          "line": "99",
+          "line": "102",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pageSize",
@@ -3596,7 +3596,7 @@
         "display": "nOfPages",
         "location": {
           "column": "14",
-          "line": "100",
+          "line": "103",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "nOfPages",
@@ -3610,7 +3610,7 @@
         "display": "pageId",
         "location": {
           "column": "14",
-          "line": "101",
+          "line": "104",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pageId",
@@ -3624,7 +3624,7 @@
         "display": "paramHandlerFlag",
         "location": {
           "column": "14",
-          "line": "104",
+          "line": "107",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "paramHandlerFlag",
@@ -3638,7 +3638,7 @@
         "display": "pToReadFunc",
         "location": {
           "column": "17",
-          "line": "107",
+          "line": "110",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToReadFunc",
@@ -3652,7 +3652,7 @@
         "display": "pToWriteFunc",
         "location": {
           "column": "18",
-          "line": "108",
+          "line": "111",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToWriteFunc",
@@ -3666,7 +3666,7 @@
         "display": "pToEraseFunc",
         "location": {
           "column": "18",
-          "line": "109",
+          "line": "112",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToEraseFunc",
@@ -3680,7 +3680,7 @@
         "display": "pToCrcFunc",
         "location": {
           "column": "23",
-          "line": "110",
+          "line": "113",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "pToCrcFunc",
@@ -3694,7 +3694,7 @@
         "display": "memPoolPointer",
         "location": {
           "column": "14",
-          "line": "113",
+          "line": "116",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "memPoolPointer",
@@ -3708,7 +3708,7 @@
         "display": "memPoolSize",
         "location": {
           "column": "14",
-          "line": "114",
+          "line": "117",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "memPoolSize",
@@ -3722,7 +3722,7 @@
         "display": "isInitialized",
         "location": {
           "column": "12",
-          "line": "117",
+          "line": "120",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "isInitialized",
@@ -3736,7 +3736,7 @@
         "display": "struct t_paramOrgContext",
         "location": {
           "column": "2",
-          "line": "118",
+          "line": "121",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "s_paramOrgContext",
@@ -3761,7 +3761,7 @@
         "display": "PARAMTYPE_INT8",
         "location": {
           "column": "5",
-          "line": "122",
+          "line": "125",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_INT8",
@@ -3775,7 +3775,7 @@
         "display": "PARAMTYPE_UINT8",
         "location": {
           "column": "5",
-          "line": "123",
+          "line": "126",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_UINT8",
@@ -3789,7 +3789,7 @@
         "display": "PARAMTYPE_INT16",
         "location": {
           "column": "5",
-          "line": "124",
+          "line": "127",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_INT16",
@@ -3803,7 +3803,7 @@
         "display": "PARAMTYPE_UINT16",
         "location": {
           "column": "5",
-          "line": "125",
+          "line": "128",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_UINT16",
@@ -3817,7 +3817,7 @@
         "display": "PARAMTYPE_INT32",
         "location": {
           "column": "5",
-          "line": "126",
+          "line": "129",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_INT32",
@@ -3831,7 +3831,7 @@
         "display": "PARAMTYPE_UINT32",
         "location": {
           "column": "5",
-          "line": "127",
+          "line": "130",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_UINT32",
@@ -3845,7 +3845,7 @@
         "display": "PARAMTYPE_FLOAT",
         "location": {
           "column": "5",
-          "line": "128",
+          "line": "131",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_FLOAT",
@@ -3859,7 +3859,7 @@
         "display": "PARAMTYPE_UINT64",
         "location": {
           "column": "5",
-          "line": "129",
+          "line": "132",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "PARAMTYPE_UINT64",
@@ -3869,7 +3869,7 @@
     ],
     "location": {
       "column": "14",
-      "line": "120",
+      "line": "123",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "name": "t_paramOrgType",
@@ -3883,7 +3883,7 @@
     "display": "t_paramOrgSingleParam",
     "location": {
       "column": "16",
-      "line": "132",
+      "line": "135",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
     },
     "members": [
@@ -3894,7 +3894,7 @@
         "display": "parameter",
         "location": {
           "column": "17",
-          "line": "134",
+          "line": "137",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "parameter",
@@ -3908,7 +3908,7 @@
         "display": "parameterID",
         "location": {
           "column": "17",
-          "line": "135",
+          "line": "138",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "parameterID",
@@ -3922,7 +3922,7 @@
         "display": "parameterType",
         "location": {
           "column": "17",
-          "line": "136",
+          "line": "139",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "parameterType",
@@ -3936,7 +3936,7 @@
         "display": "parameterTimeSetted",
         "location": {
           "column": "17",
-          "line": "137",
+          "line": "140",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "parameterTimeSetted",
@@ -3950,7 +3950,7 @@
         "display": "parameterMagicNumber",
         "location": {
           "column": "17",
-          "line": "138",
+          "line": "141",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "parameterMagicNumber",
@@ -3964,7 +3964,7 @@
         "display": "parameterVersion",
         "location": {
           "column": "17",
-          "line": "139",
+          "line": "142",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "parameterVersion",
@@ -3978,7 +3978,7 @@
         "display": "struct t_paramOrgSingleParam",
         "location": {
           "column": "2",
-          "line": "140",
+          "line": "143",
           "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizerType.h"
         },
         "name": "s_paramOrgSingleParam",
@@ -4831,7 +4831,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@1061@F@initParamSettings@returnVal",
+    "ID": "c:ParamOrganizer.c@2320@F@initParamSettings@returnVal",
     "What": "Variable",
     "defdec": "Def",
     "display": "returnVal",
@@ -4859,7 +4859,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4609@F@verifyAndGeneratePageIntegrityNoBkup@returnVal",
+    "ID": "c:ParamOrganizer.c@6061@F@verifyAndGeneratePageIntegrityNoBkup@returnVal",
     "What": "Variable",
     "defdec": "Def",
     "display": "returnVal",
@@ -4873,7 +4873,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4642@F@verifyAndGeneratePageIntegrityNoBkup@returnValValidPage",
+    "ID": "c:ParamOrganizer.c@6094@F@verifyAndGeneratePageIntegrityNoBkup@returnValValidPage",
     "What": "Variable",
     "defdec": "Def",
     "display": "returnValValidPage",
@@ -4887,7 +4887,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4684@F@verifyAndGeneratePageIntegrityNoBkup@prmPage",
+    "ID": "c:ParamOrganizer.c@6136@F@verifyAndGeneratePageIntegrityNoBkup@prmPage",
     "What": "Variable",
     "defdec": "Def",
     "display": "prmPage",
@@ -4901,7 +4901,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4724@F@verifyAndGeneratePageIntegrityNoBkup@iterator",
+    "ID": "c:ParamOrganizer.c@6176@F@verifyAndGeneratePageIntegrityNoBkup@iterator",
     "What": "Variable",
     "defdec": "Def",
     "display": "iterator",
@@ -4915,7 +4915,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4753@F@verifyAndGeneratePageIntegrityNoBkup@howManyReInit",
+    "ID": "c:ParamOrganizer.c@6205@F@verifyAndGeneratePageIntegrityNoBkup@howManyReInit",
     "What": "Variable",
     "defdec": "Def",
     "display": "howManyReInit",
@@ -4929,7 +4929,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4787@F@verifyAndGeneratePageIntegrityNoBkup@crcCalculated",
+    "ID": "c:ParamOrganizer.c@6239@F@verifyAndGeneratePageIntegrityNoBkup@crcCalculated",
     "What": "Variable",
     "defdec": "Def",
     "display": "crcCalculated",
@@ -4943,7 +4943,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@4823@F@verifyAndGeneratePageIntegrityNoBkup@canContinueToIterate",
+    "ID": "c:ParamOrganizer.c@6275@F@verifyAndGeneratePageIntegrityNoBkup@canContinueToIterate",
     "What": "Variable",
     "defdec": "Def",
     "display": "canContinueToIterate",
@@ -4985,7 +4985,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8637@F@verifyAndGenerateAllPageIntegrityRaw@returnVal",
+    "ID": "c:ParamOrganizer.c@10089@F@verifyAndGenerateAllPageIntegrityRaw@returnVal",
     "What": "Variable",
     "defdec": "Def",
     "display": "returnVal",
@@ -4999,7 +4999,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8670@F@verifyAndGenerateAllPageIntegrityRaw@returnValValidPage",
+    "ID": "c:ParamOrganizer.c@10122@F@verifyAndGenerateAllPageIntegrityRaw@returnValValidPage",
     "What": "Variable",
     "defdec": "Def",
     "display": "returnValValidPage",
@@ -5013,7 +5013,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8712@F@verifyAndGenerateAllPageIntegrityRaw@prmPage",
+    "ID": "c:ParamOrganizer.c@10164@F@verifyAndGenerateAllPageIntegrityRaw@prmPage",
     "What": "Variable",
     "defdec": "Def",
     "display": "prmPage",
@@ -5027,7 +5027,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8752@F@verifyAndGenerateAllPageIntegrityRaw@iterator",
+    "ID": "c:ParamOrganizer.c@10204@F@verifyAndGenerateAllPageIntegrityRaw@iterator",
     "What": "Variable",
     "defdec": "Def",
     "display": "iterator",
@@ -5041,7 +5041,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8781@F@verifyAndGenerateAllPageIntegrityRaw@howManyReInit",
+    "ID": "c:ParamOrganizer.c@10233@F@verifyAndGenerateAllPageIntegrityRaw@howManyReInit",
     "What": "Variable",
     "defdec": "Def",
     "display": "howManyReInit",
@@ -5055,7 +5055,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8815@F@verifyAndGenerateAllPageIntegrityRaw@crcCalculated",
+    "ID": "c:ParamOrganizer.c@10267@F@verifyAndGenerateAllPageIntegrityRaw@crcCalculated",
     "What": "Variable",
     "defdec": "Def",
     "display": "crcCalculated",
@@ -5069,7 +5069,7 @@
     "scope": null
   },
   {
-    "ID": "c:ParamOrganizer.c@8851@F@verifyAndGenerateAllPageIntegrityRaw@canContinueToIterate",
+    "ID": "c:ParamOrganizer.c@10303@F@verifyAndGenerateAllPageIntegrityRaw@canContinueToIterate",
     "What": "Variable",
     "defdec": "Def",
     "display": "canContinueToIterate",
@@ -5453,7 +5453,7 @@
     "display": "e_paramOrgResult initParamSettings(s_paramOrgContext *, const s_paramOrgInitParameter *)",
     "location": {
       "column": "18",
-      "line": "41",
+      "line": "46",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizer.h"
     },
     "name": "initParamSettings",
@@ -5467,7 +5467,7 @@
     "display": "e_paramOrgResult initParamSettings(s_paramOrgContext *, const s_paramOrgInitParameter *)",
     "location": {
       "column": "18",
-      "line": "41",
+      "line": "46",
       "path": "C:\\Project\\ParamOrganizer\\Code\\Inc\\ParamOrganizer.h"
     },
     "name": "initParamSettings",
