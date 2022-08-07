@@ -47,7 +47,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
     }
     else
     {
-        if( true == prmCntx->isInitialized )
+        if( true == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_BADPARAM;
         }
@@ -57,7 +57,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
                 ( prmInitVal->pageSize > PARAMORGAN_MAX_PAGE_SIZE_BYTE ) || ( 0u == prmInitVal->nOfPages ) )
             {
                 returnVal = PARAMRES_BADPARAM;
-                prmCntx->isInitialized = false;
+                prmCntx->isInitializedParams = false;
             }
 
             if( PARAMRES_ALLOK == returnVal )
@@ -65,18 +65,18 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
                 if( 0u != ( prmInitVal->pageSize % PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE )  )
                 {
                     returnVal = PARAMRES_BADPARAM;
-                    prmCntx->isInitialized = false;
+                    prmCntx->isInitializedParams = false;
                 }
             }
 
-            if( PARAMRES_ALLOK == returnVal )
-            {
-                if( 0u != ( prmInitVal->paramHandlerFlag & ( PARAMORGAN_BKPPAGE_EN | PARAMORGAN_RAW_MODE ) )  )
-                {
-                    returnVal = PARAMRES_BADPARAM;
-                    prmCntx->isInitialized = false;
-                }
-            }
+            // if( PARAMRES_ALLOK == returnVal )
+            // {
+            //     if( 0u != ( prmInitVal->paramHandlerFlag & ( PARAMORGAN_BKPPAGE_EN | PARAMORGAN_RAW_MODE ) )  )
+            //     {
+            //         returnVal = PARAMRES_BADPARAM;
+            //         prmCntx->isInitializedParams = false;
+            //     }
+            // }
 
             if( PARAMRES_ALLOK == returnVal )
             {
@@ -85,7 +85,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
                     if( 0u != ( prmInitVal->nOfPages % PARAMORGAN_DIVISOR_PAGE_BACKUP ) )
                     {
                         returnVal = PARAMRES_BADPARAM;
-                        prmCntx->isInitialized = false;
+                        prmCntx->isInitializedParams = false;
                     }
                 }
             }
@@ -96,7 +96,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
                     ( NULL == prmInitVal->pToEraseFunc ) || ( NULL == prmInitVal->pToCrcFunc   ) )
                 {
                     returnVal = PARAMRES_BADPARAM;
-                    prmCntx->isInitialized = false;
+                    prmCntx->isInitializedParams = false;
                 }
             }
 
@@ -105,7 +105,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
                 if( ( NULL == prmInitVal->memPoolPointer  ) || ( prmInitVal->memPoolSize < prmInitVal->pageSize ) )
                 {
                     returnVal = PARAMRES_BADPARAM;
-                    prmCntx->isInitialized = false;
+                    prmCntx->isInitializedParams = false;
                 }
             }
 
@@ -125,7 +125,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
                 prmCntx->memPoolPointer = prmInitVal->memPoolPointer;
                 prmCntx->memPoolSize = prmInitVal->memPoolSize;
 
-                prmCntx->isInitialized = true;
+                prmCntx->isInitializedParams = true;
             }
         }
     }
@@ -158,7 +158,7 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
     }
     else
     {
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
@@ -341,7 +341,7 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
     }
     else
     {
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }

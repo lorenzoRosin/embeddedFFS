@@ -32,12 +32,6 @@ typedef struct t_prv_paramOrgPageParam
     uint32_t    pageCrc;
 }s_prv_paramOrgPageParam;
 
-typedef enum t_prv_paramOrgPageType
-{
-    PARAMRES_PAGETYPE_PARAM = 0,
-    PARAMRES_PAGETYPE_RAW,
-}e_prv_paramOrgPageType;
-
 
 
 /***********************************************************************************************************************

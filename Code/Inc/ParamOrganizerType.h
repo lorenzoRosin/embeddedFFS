@@ -35,7 +35,6 @@ extern "C" {
 #endif
 
 #define PARAMORGAN_BKPPAGE_EN                       ( (1u) << (0u) )
-#define PARAMORGAN_RAW_MODE                         ( (1u) << (1u) )
 
 #define PARAMORGAN_DIVISOR_PAGE_BACKUP             (2u)
 #define PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE          (16u)
@@ -75,6 +74,14 @@ typedef bool_t (*cb_erasePage)     ( const uint32_t startPageId, const uint32_t 
 typedef bool_t (*cb_calculateCrc32)( uint32_t* calculatedCrc, const uint32_t calcSize, const uint32_t seed );
 
 
+typedef enum t_paramOrgPageType
+{
+    PARAMRES_PAGETYPE_PARAM = 0,
+    PARAMRES_PAGETYPE_LOG,
+    PARAMRES_PAGETYPE_RAW,
+}e_paramOrgPageType;
+
+
 typedef struct t_paramOrgInitParameter
 {
     /* Page information */
@@ -84,6 +91,7 @@ typedef struct t_paramOrgInitParameter
 
     /* Param Handler behaviour */
     uint32_t paramHandlerFlag;
+    e_paramOrgPageType organizationType;
 
     /* CallBack Pointer */
     cb_readPage pToReadFunc;
@@ -105,6 +113,7 @@ typedef struct t_paramOrgContext
 
     /* Param Handler behaviour */
     uint32_t paramHandlerFlag;
+    e_paramOrgPageType organizationType;
 
     /* CallBack Pointer */
     cb_readPage pToReadFunc;
@@ -117,7 +126,8 @@ typedef struct t_paramOrgContext
     uint32_t memPoolSize;
 
     /* Init information */
-    bool_t isInitialized;
+    bool_t isInitializedParams;
+    bool_t isInitializedMemory;
 }s_paramOrgContext;
 
 typedef enum t_paramOrgType

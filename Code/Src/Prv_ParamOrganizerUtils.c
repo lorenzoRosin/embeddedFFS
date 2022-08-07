@@ -26,7 +26,7 @@ e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page
     else
     {
         /* Check if initialized */
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
@@ -63,7 +63,7 @@ e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, 
     else
     {
         /* Check if initialized */
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
@@ -100,7 +100,7 @@ e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* pag
     else
     {
         /* Check if initialized */
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
@@ -130,7 +130,7 @@ e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pa
     else
     {
         /* Check if initialized */
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
@@ -168,7 +168,7 @@ e_paramOrgResult isValidDataInPageRam(s_paramOrgContext* prmCntx, uint8_t* page)
     else
     {
         /* Check if initialized */
-        if( false == prmCntx->isInitialized )
+        if( false == prmCntx->isInitializedParams )
         {
             returnVal = PARAMRES_NOT_INIT;
         }
