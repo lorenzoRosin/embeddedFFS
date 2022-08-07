@@ -171,7 +171,7 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
                     returnVal = PARAMRES_ERRORREAD;
                 }
 
-                returnValValidPage = isValidDataInPageRam(prmCntx, prmCntx->memPoolPointer);
+                returnValValidPage = isValidDataInPageRamBuff(prmCntx, prmCntx->memPoolPointer);
                 switch(returnValValidPage)
                 {
                     case(PARAMRES_ALLOK):
@@ -197,7 +197,7 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
                             returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
                             if( PARAMRES_ALLOK == returnVal)
                             {
-                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, crcCalculated);
                                 if( PARAMRES_ALLOK == returnVal)
                                 {
                                     if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
@@ -354,7 +354,7 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
                     returnVal = PARAMRES_ERRORREAD;
                 }
 
-                returnValValidPage = isValidDataInPageRam(prmCntx, prmCntx->memPoolPointer);
+                returnValValidPage = isValidDataInPageRamBuff(prmCntx, prmCntx->memPoolPointer);
                 switch(returnValValidPage)
                 {
                     case(PARAMRES_ALLOK):
@@ -380,7 +380,7 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
                             returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
                             if( PARAMRES_ALLOK == returnVal)
                             {
-                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, crcCalculated);
                                 if( PARAMRES_ALLOK == returnVal)
                                 {
                                     if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,

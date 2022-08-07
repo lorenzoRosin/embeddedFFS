@@ -62,7 +62,7 @@ e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
             }
             else
             {
-                returnValintermedie = isValidDataInPageRam(prmCntx, prmCntx->memPoolPointer);
+                returnValintermedie = isValidDataInPageRamBuff(prmCntx, prmCntx->memPoolPointer);
 
                 if( PARAMRES_NOTVALIDPAGE == returnValintermedie )
                 {
@@ -123,7 +123,7 @@ e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
                 while( (iterator < prmCntx->nOfPages) && ( PARAMRES_ALLOK_FIRSTINIT == returnVal) )
                 {
                     /* Write a page in memory */
-                    if( false == writePageFlashNUpdateCrc(prmCntx, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
+                    if( false == writePageNPrmNUpdateCrc(prmCntx, iterator, prmCntx->memPoolPointer, &prmPage ) )
                     {
                         returnVal = PARAMRES_ERRORREAD;
                     }

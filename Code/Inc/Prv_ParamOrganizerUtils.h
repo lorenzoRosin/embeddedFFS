@@ -47,7 +47,7 @@ typedef struct t_prv_paramOrgPageParam
  * @param prmPage Readed data (s_prv_paramOrgPageParam)
  * @return e_paramOrgResult result
  */
-e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
+e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
 
 /**
  * Set s_prv_paramOrgPageParam in a page already loaded in RAM
@@ -56,16 +56,7 @@ e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page
  * @param prmPage To set data (s_prv_paramOrgPageParam)
  * @return e_paramOrgResult result
  */
-e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
-
-/**
- * Set s_prv_paramOrgPageParam in a page already loaded in RAM, and set a fresh n' recalculated CRC
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
- * @param prmPage To set data (s_prv_paramOrgPageParam)
- * @return e_paramOrgResult result
- */
-e_paramOrgResult setPagePrmInRamBuffNCrcUp(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
+e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
 
 /**
  * Set CRC in a page already loaded in RAM
@@ -74,7 +65,7 @@ e_paramOrgResult setPagePrmInRamBuffNCrcUp(s_paramOrgContext* prmCntx, uint8_t* 
  * @param crcToSet CRC we need to set
  * @return e_paramOrgResult result
  */
-e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcToSet);
+e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, uint32_t crcToSet);
 
 /**
  * Calculate the CRC of an already loaded Page in RAM, excluding the CRC itself from the calc
@@ -83,15 +74,32 @@ e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* pag
  * @param crcCalculated CRC calculated
  * @return e_paramOrgResult result
  */
-e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, uint32_t* crcCalculated);
+e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, uint32_t* crcCalculated);
 
 /**
- * Verify if the data present in a loaded RAM page has CRC and magic numbers coherent with all the calculated value
+ * Set s_prv_paramOrgPageParam in a page already loaded in RAM, and set a fresh n' recalculated CRC
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param prmPage To set data (s_prv_paramOrgPageParam)
+ * @return e_paramOrgResult result
+ */
+e_paramOrgResult setPagePrmInRamBuffNCrcUp(s_paramOrgContext* prmCntx, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
+
+/**
+ * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value
  * @param prmCntx Context of the module
  * @param page Pointer of a page loaded in RAM
  * @return e_paramOrgResult result
  */
-e_paramOrgResult isValidDataInPageRam(s_paramOrgContext* prmCntx, uint8_t* page);
+e_paramOrgResult isValidDataInPageRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff);
+
+/**
+ * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @return e_paramOrgResult result
+ */
+e_paramOrgResult isValidDataInPage(s_paramOrgContext* prmCntx, const uint32_t pageOffset);
 
 /**
  * Erase and write a page passed, but before automatically calculate the crc to write in the s_prv_paramOrgPageParam
@@ -100,7 +108,17 @@ e_paramOrgResult isValidDataInPageRam(s_paramOrgContext* prmCntx, uint8_t* page)
  * @param prmPage To set data (s_prv_paramOrgPageParam)
  * @return e_paramOrgResult result
  */
-e_paramOrgResult writePageFlashNUpdateCrc(s_paramOrgContext* prmCntx, const uint32_t pageOffset, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
+e_paramOrgResult writePageNPrmNUpdateCrc(s_paramOrgContext* prmCntx, const uint32_t pageOffset, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
+
+/**
+ * Read a page, but before automatically calculate the crc to write in the s_prv_paramOrgPageParam
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param prmPage To set data (s_prv_paramOrgPageParam)
+ * @return e_paramOrgResult result
+ */
+e_paramOrgResult readPageNPrm(s_paramOrgContext* prmCntx, const uint32_t pageOffset, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
+
 
 #ifdef __cplusplus
 } /* extern "C" */
