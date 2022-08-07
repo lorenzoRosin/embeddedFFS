@@ -47,7 +47,7 @@ typedef struct t_prv_paramOrgPageParam
  * @param prmPage Readed data (s_prv_paramOrgPageParam)
  * @return e_paramOrgResult result
  */
-e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
+e_paramOrgResult getPagePrmFromRamBuff(uint32_t pageSize, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
 
 /**
  * Set s_prv_paramOrgPageParam in a page already loaded in RAM
@@ -56,7 +56,7 @@ e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page
  * @param prmPage To set data (s_prv_paramOrgPageParam)
  * @return e_paramOrgResult result
  */
-e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
+e_paramOrgResult setPagePrmInRamBuff(uint32_t pageSize, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
 
 /**
  * Set CRC in a page already loaded in RAM
@@ -65,7 +65,7 @@ e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBu
  * @param crcToSet CRC we need to set
  * @return e_paramOrgResult result
  */
-e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, uint32_t crcToSet);
+e_paramOrgResult setCrcInPagePrmRamBuff(uint32_t pageSize, uint8_t* pageBuff, uint32_t crcToSet);
 
 /**
  * Calculate the CRC of an already loaded Page in RAM, excluding the CRC itself from the calc
@@ -74,7 +74,7 @@ e_paramOrgResult setCrcInPagePrmRamBuff(s_paramOrgContext* prmCntx, uint8_t* pag
  * @param crcCalculated CRC calculated
  * @return e_paramOrgResult result
  */
-e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff, uint32_t* crcCalculated);
+e_paramOrgResult calcPagePrmCrcInRamBuff(uint32_t pageSize, cb_calculateCrc32 pToCrcFunc, uint8_t* pageBuff, uint32_t* crcCalculated);
 
 /**
  * Set s_prv_paramOrgPageParam in a page already loaded in RAM, and set a fresh n' recalculated CRC
@@ -83,7 +83,7 @@ e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pa
  * @param prmPage To set data (s_prv_paramOrgPageParam)
  * @return e_paramOrgResult result
  */
-e_paramOrgResult setPagePrmInRamBuffNCrcUp(s_paramOrgContext* prmCntx, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
+e_paramOrgResult setPagePrmInRamBuffNCrcUp(uint32_t pageSize, cb_calculateCrc32 pToCrcFunc, uint8_t* pageBuff, s_prv_paramOrgPageParam* prmPage);
 
 /**
  * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value
@@ -91,7 +91,7 @@ e_paramOrgResult setPagePrmInRamBuffNCrcUp(s_paramOrgContext* prmCntx, uint8_t* 
  * @param page Pointer of a page loaded in RAM
  * @return e_paramOrgResult result
  */
-e_paramOrgResult isValidDataInPageRamBuff(s_paramOrgContext* prmCntx, uint8_t* pageBuff);
+e_paramOrgResult isValidDataInPageRamBuff(uint32_t pageSize, cb_calculateCrc32 pToCrcFunc, e_paramOrgPageType organizationType, uint8_t* pageBuff);
 
 /**
  * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value

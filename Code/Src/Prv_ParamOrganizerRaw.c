@@ -62,7 +62,7 @@ e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
             }
             else
             {
-                returnValintermedie = isValidDataInPageRamBuff(prmCntx, prmCntx->memPoolPointer);
+                returnValintermedie = isValidDataInPageRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->organizationType, prmCntx->memPoolPointer);
 
                 if( PARAMRES_NOTVALIDPAGE == returnValintermedie )
                 {
@@ -78,7 +78,7 @@ e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
                 {
                     if( true == allAlignmentAreok )
                     {
-                        getPagePrmFromRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                        getPagePrmFromRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &prmPage);
                         if( 0u == iterator )
                         {
                             aligmenentNumberFound = prmPage.allPageAlignmentNumber;

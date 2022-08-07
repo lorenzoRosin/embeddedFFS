@@ -171,7 +171,7 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
                     returnVal = PARAMRES_ERRORREAD;
                 }
 
-                returnValValidPage = isValidDataInPageRamBuff(prmCntx, prmCntx->memPoolPointer);
+                returnValValidPage = isValidDataInPageRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->organizationType, prmCntx->memPoolPointer);
                 switch(returnValValidPage)
                 {
                     case(PARAMRES_ALLOK):
@@ -190,14 +190,14 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
                         prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
                         prmPage.pageCrc = 0u;
 
-                        returnVal = setPagePrmInRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                        returnVal = setPagePrmInRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &prmPage);
 
                         if( PARAMRES_ALLOK == returnVal)
                         {
-                            returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                            returnVal = calcPagePrmCrcInRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->memPoolPointer, &crcCalculated);
                             if( PARAMRES_ALLOK == returnVal)
                             {
-                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, crcCalculated);
+                                setCrcInPagePrmRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, crcCalculated);
                                 if( PARAMRES_ALLOK == returnVal)
                                 {
                                     if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
@@ -354,7 +354,7 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
                     returnVal = PARAMRES_ERRORREAD;
                 }
 
-                returnValValidPage = isValidDataInPageRamBuff(prmCntx, prmCntx->memPoolPointer);
+                returnValValidPage = isValidDataInPageRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->organizationType, prmCntx->memPoolPointer);
                 switch(returnValValidPage)
                 {
                     case(PARAMRES_ALLOK):
@@ -373,14 +373,14 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
                         prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
                         prmPage.pageCrc = 0u;
 
-                        returnVal = setPagePrmInRamBuff(prmCntx, prmCntx->memPoolPointer, &prmPage);
+                        returnVal = setPagePrmInRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &prmPage);
 
                         if( PARAMRES_ALLOK == returnVal)
                         {
-                            returnVal = calcPagePrmCrcInRamBuff(prmCntx, prmCntx->memPoolPointer, &crcCalculated);
+                            returnVal = calcPagePrmCrcInRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->memPoolPointer, &crcCalculated);
                             if( PARAMRES_ALLOK == returnVal)
                             {
-                                setCrcInPagePrmRamBuff(prmCntx, prmCntx->memPoolPointer, crcCalculated);
+                                setCrcInPagePrmRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, crcCalculated);
                                 if( PARAMRES_ALLOK == returnVal)
                                 {
                                     if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
