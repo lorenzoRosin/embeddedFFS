@@ -71,7 +71,7 @@ typedef enum t_paramOrgResult
 typedef bool_t (*cb_readPage)      ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToRead );
 typedef bool_t (*cb_writePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToWrite );
 typedef bool_t (*cb_erasePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize );
-typedef bool_t (*cb_calculateCrc32)( uint32_t* calculatedCrc, const uint32_t calcSize, const uint32_t seed );
+typedef bool_t (*cb_calculateCrc32)( uint32_t* calculatedCrc, uint8_t* dataBuffer, const uint32_t calcSize, const uint32_t seed );
 
 
 typedef enum t_paramOrgPageType
@@ -88,6 +88,9 @@ typedef struct t_paramOrgInitParameter
     uint32_t pageSize;
     uint32_t nOfPages;
     uint32_t pageId;
+    uint16_t logVersion;
+    uint16_t rawPageVersion;
+    uint8_t* parameterDefaultValue;
 
     /* Param Handler behaviour */
     uint32_t paramHandlerFlag;
@@ -110,6 +113,9 @@ typedef struct t_paramOrgContext
     uint32_t pageSize;
     uint32_t nOfPages;
     uint32_t pageId;
+    uint16_t logVersion;
+    uint16_t rawPageVersion;
+    uint8_t* parameterDefaultValue;
 
     /* Param Handler behaviour */
     uint32_t paramHandlerFlag;

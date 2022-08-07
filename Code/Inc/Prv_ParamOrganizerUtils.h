@@ -27,7 +27,9 @@ extern "C" {
 typedef struct t_prv_paramOrgPageParam
 {
     uint32_t    pageTimeSetted;
-    uint32_t    pageType;
+    uint8_t     pageType;
+    uint8_t     allPageAlignmentNumber;
+    uint16_t    pageVersion;
     uint32_t    pageMagicNumber;
     uint32_t    pageCrc;
 }s_prv_paramOrgPageParam;
@@ -57,6 +59,15 @@ e_paramOrgResult getPagePrmFromRamBuff(s_paramOrgContext* prmCntx, uint8_t* page
 e_paramOrgResult setPagePrmInRamBuff(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
 
 /**
+ * Set s_prv_paramOrgPageParam in a page already loaded in RAM, and set a fresh n' recalculated CRC
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param prmPage To set data (s_prv_paramOrgPageParam)
+ * @return e_paramOrgResult result
+ */
+e_paramOrgResult setPagePrmInRamBuffNCrcUp(s_paramOrgContext* prmCntx, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
+
+/**
  * Set CRC in a page already loaded in RAM
  * @param prmCntx Context of the module
  * @param page Pointer of a page loaded in RAM
@@ -82,7 +93,14 @@ e_paramOrgResult calcPagePrmCrcInRamBuff(s_paramOrgContext* prmCntx, uint8_t* pa
  */
 e_paramOrgResult isValidDataInPageRam(s_paramOrgContext* prmCntx, uint8_t* page);
 
-
+/**
+ * Erase and write a page passed, but before automatically calculate the crc to write in the s_prv_paramOrgPageParam
+ * @param prmCntx Context of the module
+ * @param page Pointer of a page loaded in RAM
+ * @param prmPage To set data (s_prv_paramOrgPageParam)
+ * @return e_paramOrgResult result
+ */
+e_paramOrgResult writePageFlashNUpdateCrc(s_paramOrgContext* prmCntx, const uint32_t pageOffset, uint8_t* page, s_prv_paramOrgPageParam* prmPage);
 
 #ifdef __cplusplus
 } /* extern "C" */

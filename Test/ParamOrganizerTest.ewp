@@ -2105,6 +2105,9 @@
             <name>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\Code\Inc\Prv_ParamOrganizerRaw.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\Code\Inc\Prv_ParamOrganizerUtils.h</name>
         </file>
     </group>
@@ -2112,6 +2115,9 @@
         <name>Src</name>
         <file>
             <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\Code\Src\Prv_ParamOrganizerRaw.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\Code\Src\Prv_ParamOrganizerUtils.c</name>
