@@ -100,6 +100,53 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         }
     }
 
+    /***************************************************************************************************** Test set 3 */
+    if( true == retValue )
+    {
+        s_prv_pagePrm paramToWrite;
+        s_prv_pagePrm paramToRead;
+        uint32_t crcToSet = 0xFFFF;
+        memset(buffer1, 0u, sizeof(buffer1));
+        memset(buffer2, 0u, sizeof(buffer2));
+
+        paramToWrite.pageTimeSetted = 0x10u;
+        paramToWrite.pageType = 0x12u;
+        paramToWrite.allPageAlignmentNumber = 0x34;
+        paramToWrite.pageVersion = 0x8796u;
+        paramToWrite.pageMagicNumber = 0x83626;
+        paramToWrite.pageCrc = 0xABCDEF;
+
+
+        if( EFSS_RES_OK == setPagePrmInBuff(sizeof(buffer1), buffer1, &paramToWrite) )
+        {
+            if( EFSS_RES_OK == setCrcInPagePrmBuff(sizeof(buffer1), buffer1, crcToSet) )
+            {
+                if( EFSS_RES_OK == getPagePrmFromBuff(sizeof(buffer1), buffer1, &paramToRead) )
+                {
+                    if( 0xFFFF == paramToRead.pageCrc )
+                    {
+                        retValue = true;
+                    }
+                    else
+                    {
+                        retValue = false;
+                    }
+                }
+                else
+                {
+                    retValue = false;
+                }
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
 	return retValue;
 }
 

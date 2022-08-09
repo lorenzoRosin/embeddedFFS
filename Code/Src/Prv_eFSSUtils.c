@@ -105,7 +105,7 @@ e_eFSS_Res setCrcInPagePrmBuff(uint32_t pageSize, uint8_t* pageBuff, uint32_t cr
     {
         /* Copy CRC passed in to the ram buffer */
         uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
-        (void)memcpy( &pageBuff[offset6], (uint8_t*)crcToSet, sizeof(uint32_t) );
+        (void)memcpy( &pageBuff[offset6], (uint8_t*)&crcToSet, sizeof(uint32_t) );
         returnVal = EFSS_RES_OK;
     }
 
