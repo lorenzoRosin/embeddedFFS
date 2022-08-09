@@ -4,9 +4,9 @@ int main(void);
 
 int main(void)
 {
-    s_paramOrgContext prmCntx;
-    s_paramOrgInitParameter prmInitVal;
-    e_paramOrgResult result;
+    s_eFSS_Ctx prmCntx;
+    s_eFSS_InitParam prmInitVal;
+    e_eFSS_Res result;
     result = initParamSettings(&prmCntx, &prmInitVal);
     return 0;
 }
