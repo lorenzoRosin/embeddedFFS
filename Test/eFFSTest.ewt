@@ -2842,28 +2842,28 @@
     <group>
         <name>Inc</name>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\ParamOrganizer.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\eFFS.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\ParamOrganizerType.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\eFFSType.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\Prv_ParamOrganizerRaw.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\Prv_eFFSRaw.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\Prv_ParamOrganizerUtils.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\Prv_eFFSUtils.h</name>
         </file>
     </group>
     <group>
         <name>Src</name>
         <file>
-            <name>$PROJ_DIR$\..\Code\Src\ParamOrganizer.c</name>
+            <name>$PROJ_DIR$\..\Code\Src\eFFS.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Src\Prv_ParamOrganizerRaw.c</name>
+            <name>$PROJ_DIR$\..\Code\Src\Prv_eFFSRaw.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Src\Prv_ParamOrganizerUtils.c</name>
+            <name>$PROJ_DIR$\..\Code\Src\Prv_eFFSUtils.c</name>
         </file>
     </group>
     <file>

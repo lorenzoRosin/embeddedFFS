@@ -1,5 +1,5 @@
 /**
- * @file Prv_ParamOrganizerRaw.h
+ * @file Prv_eFFSRaw.h
  *
  */
 
@@ -17,8 +17,8 @@ extern "C" {
 /***********************************************************************************************************************
  *      INCLUDES
  **********************************************************************************************************************/
-#include "ParamOrganizerType.h"
-#include "Prv_ParamOrganizerUtils.h"
+#include "eFFSType.h"
+#include "Prv_eFFSUtils.h"
 
 
 

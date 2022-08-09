@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\ParamOrganizer\Test\settings\ParamOrganizerTest.Debug.general.xcl" --backend -f "C:\Project\ParamOrganizer\Test\settings\ParamOrganizerTest.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\eFSS\Test\settings\eFFSTest.Debug.general.xcl" --backend -f "C:\Project\eFSS\Test\settings\eFFSTest.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\ParamOrganizer\Test\settings\ParamOrganizerTest.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Project\ParamOrganizer\Test\settings\ParamOrganizerTest.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\eFSS\Test\settings\eFFSTest.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Project\eFSS\Test\settings\eFFSTest.Debug.driver.xcl" 
 }

@@ -1,5 +1,5 @@
 /**
- * @file ParamOrganizerType.h
+ * @file eFFSType.h
  *
  */
 
