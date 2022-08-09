@@ -3,8 +3,8 @@
  *
  */
 
-#ifndef PRVPARAMORGANIZERRAW_H
-#define PRVPARAMORGANIZERRAW_H
+#ifndef PRVEFSSRAW_H
+#define PRVEFSSRAW_H
 
 
 
@@ -39,4 +39,4 @@ e_eFSS_Res initParamMemoryRaw(s_eFSS_Ctx* prmCntx);
 
 
 
-#endif /* PRVPARAMORGANIZERRAW_H */
+#endif /* PRVEFSSRAW_H */

@@ -3,8 +3,8 @@
  *
  */
 
-#ifndef PARAMORGANIZER_H
-#define PARAMORGANIZER_H
+#ifndef EFSS_H
+#define EFSS_H
 
 
 
@@ -105,4 +105,4 @@ e_eFSS_Res readRawParamFromMemory();
 
 
 
-#endif /* PARAMORGANIZER_H */
+#endif /* EFSS_H */

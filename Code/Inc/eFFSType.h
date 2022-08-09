@@ -3,8 +3,8 @@
  *
  */
 
-#ifndef PARAMORGANIZER_TYPE_H
-#define PARAMORGANIZER_TYPE_H
+#ifndef EFSS_TYPE_H
+#define EFSS_TYPE_H
 
 
 
@@ -168,4 +168,4 @@ typedef struct t_eFSS_SinglePrmType
 
 
 
-#endif /* PARAMORGANIZER_TYPE_H */
+#endif /* EFSS_TYPE_H */

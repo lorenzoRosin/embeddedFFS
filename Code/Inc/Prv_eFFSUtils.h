@@ -3,8 +3,8 @@
  *
  */
 
-#ifndef PRVPARAMORGANIZERUTILS_H
-#define PRVPARAMORGANIZERUTILS_H
+#ifndef PRVEFSSUTILS_H
+#define PRVEFSSUTILS_H
 
 
 
@@ -126,4 +126,4 @@ e_eFSS_Res readPageNPrm(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pag
 
 
 
-#endif /* PRVPARAMORGANIZERUTILS_H */
+#endif /* PRVEFSSUTILS_H */
