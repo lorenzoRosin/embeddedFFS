@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\eFSS\Test\settings\eFSSTest.Debug.general.xcl" --backend -f "C:\Project\eFSS\Test\settings\eFSSTest.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\eFSS\Test\TestProject\settings\eFSSTest.Debug.general.xcl" --backend -f "C:\Project\eFSS\Test\TestProject\settings\eFSSTest.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\eFSS\Test\settings\eFSSTest.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Project\eFSS\Test\settings\eFSSTest.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Project\eFSS\Test\TestProject\settings\eFSSTest.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Project\eFSS\Test\TestProject\settings\eFSSTest.Debug.driver.xcl" 
 }
