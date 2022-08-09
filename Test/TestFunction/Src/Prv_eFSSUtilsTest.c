@@ -15,6 +15,91 @@
  **********************************************************************************************************************/
 bool_t Prv_eFSSUtilsTestFunc(void)
 {
-	return true;
+    /* Local variable */
+    bool_t retValue = true;
+    uint8_t buffer1[256u];
+    uint8_t buffer2[256u];
+
+    /* Test value */
+    uint32_t vale32 = 0x11111111u;
+    uint16_t vale16 = 0x2222u;
+    uint8_t  vale8  = 0x33u;
+    uint32_t offset1 = sizeof(buffer1) - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint32_t) );
+    uint32_t offset2 = sizeof(buffer1) - ( sizeof(uint64_t) + sizeof(uint32_t) );
+    uint32_t offset3 = sizeof(buffer1) - ( sizeof(uint64_t) + sizeof(uint16_t) + sizeof(uint8_t) );
+    uint32_t offset4 = sizeof(buffer1) - ( sizeof(uint64_t) + sizeof(uint16_t) );
+    uint32_t offset5 = sizeof(buffer1) - ( sizeof(uint64_t) );
+    uint32_t offset6 = sizeof(buffer1) - ( sizeof(uint32_t) );
+
+    /***************************************************************************************************** Test set 1 */
+    {
+        s_prv_pagePrm param;
+        memset(buffer1, 0u, sizeof(buffer1));
+        (void)memcpy( &buffer1[offset1], (uint8_t*)&vale32,  sizeof(uint32_t) );
+        (void)memcpy( &buffer1[offset2], (uint8_t*)&vale8,   sizeof(uint8_t)  );
+        (void)memcpy( &buffer1[offset3], (uint8_t*)&vale8,   sizeof(uint8_t)  );
+        (void)memcpy( &buffer1[offset4], (uint8_t*)&vale16,  sizeof(uint16_t) );
+        (void)memcpy( &buffer1[offset5], (uint8_t*)&vale32,  sizeof(uint32_t) );
+        (void)memcpy( &buffer1[offset6], (uint8_t*)&vale32,  sizeof(uint32_t) );
+
+        if( EFSS_RES_OK == getPagePrmFromBuff(sizeof(buffer1), buffer1, &param) )
+        {
+            if( (vale32 == param.pageTimeSetted) && (vale8 == param.pageType) && (vale16 == param.pageVersion) )
+            {
+                retValue = true;
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
+
+    /***************************************************************************************************** Test set 2 */
+    if( true == retValue )
+    {
+        s_prv_pagePrm paramToWrite;
+        s_prv_pagePrm paramToRead;
+
+        memset(buffer1, 0u, sizeof(buffer1));
+        memset(buffer2, 0u, sizeof(buffer2));
+
+        paramToWrite.pageTimeSetted = 0x10u;
+        paramToWrite.pageType = 0x12u;
+        paramToWrite.allPageAlignmentNumber = 0x34;
+        paramToWrite.pageVersion = 0x8796u;
+        paramToWrite.pageMagicNumber = 0x83626;
+        paramToWrite.pageCrc = 0xABCDEF;
+
+
+        if( EFSS_RES_OK == setPagePrmInBuff(sizeof(buffer1), buffer1, &paramToWrite) )
+        {
+            if( EFSS_RES_OK == getPagePrmFromBuff(sizeof(buffer1), buffer1, &paramToRead) )
+            {
+                if( 0 == memcmp(&paramToWrite, &paramToRead, sizeof(paramToRead)) )
+                {
+                    retValue = true;
+                }
+                else
+                {
+                    retValue = false;
+                }
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
+
+	return retValue;
 }
 

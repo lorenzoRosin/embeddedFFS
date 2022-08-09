@@ -43,7 +43,7 @@ typedef struct t_prv_pagePrm
 /**
  * Get s_prv_pagePrm from a page already loaded in a Buffer
  * @param pageSize Size of the page loaded in the buffer
- * @param pageBuff Pointer to a page readed in a buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
  * @param pagePrm Pointer to a s_prv_pagePrm where we will copy the data readed from the buffer
  * @return e_eFSS_Res result
  */
@@ -52,7 +52,7 @@ e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, 
 /**
  * Set s_prv_pagePrm in a page already loaded in in a Buffer
  * @param pageSize Size of the page loaded in the buffer
- * @param pageBuff Pointer to a page readed in a buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
  * @param pagePrm Pointer to s_prv_pagePrm that must be copied in the buffer
  * @return e_eFSS_Res result
  */

@@ -15,40 +15,40 @@
  **********************************************************************************************************************/
 e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, s_prv_pagePrm* const prmPage)
 {
-  /* Local variable */
-  e_eFSS_Res returnVal;
+    /* Local variable */
+    e_eFSS_Res returnVal;
 
-  /* Check for NULL pointer */
-  if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
-  {
-    returnVal = EFSS_RES_BADPOINTER;
-  }
-  else
-  {
-    if( pageSize < EFSS_MIN_PAGE_SIZE_BYTE )
+    /* Check for NULL pointer */
+    if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
     {
-      returnVal = EFSS_RES_BADPARAM;
+        returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-      /* Copy data in ram buffer in to the structure */
-      uint32_t offset1 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint32_t) );
-      uint32_t offset2 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) );
-      uint32_t offset3 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) + sizeof(uint8_t) );
-      uint32_t offset4 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) );
-      uint32_t offset5 = pageSize - ( sizeof(uint64_t) );
-      uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
+        if( pageSize < EFSS_MIN_PAGE_SIZE_BYTE )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Copy data in ram buffer in to the structure */
+            uint32_t offset1 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint32_t) );
+            uint32_t offset2 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) );
+            uint32_t offset3 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) + sizeof(uint8_t) );
+            uint32_t offset4 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) );
+            uint32_t offset5 = pageSize - ( sizeof(uint64_t) );
+            uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
 
-      (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,         &pageBuff[offset1], sizeof(uint32_t) );
-      (void)memcpy( (uint8_t*)&prmPage->pageType,               &pageBuff[offset2], sizeof(uint8_t)  );
-      (void)memcpy( (uint8_t*)&prmPage->allPageAlignmentNumber, &pageBuff[offset3], sizeof(uint8_t)  );
-      (void)memcpy( (uint8_t*)&prmPage->pageVersion,            &pageBuff[offset4], sizeof(uint16_t) );
-      (void)memcpy( (uint8_t*)&prmPage->pageMagicNumber,        &pageBuff[offset5], sizeof(uint32_t) );
-      (void)memcpy( (uint8_t*)&prmPage->pageCrc,                &pageBuff[offset6], sizeof(uint32_t) );
-      returnVal = EFSS_RES_OK;
+            (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,         &pageBuff[offset1], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&prmPage->pageType,               &pageBuff[offset2], sizeof(uint8_t)  );
+            (void)memcpy( (uint8_t*)&prmPage->allPageAlignmentNumber, &pageBuff[offset3], sizeof(uint8_t)  );
+            (void)memcpy( (uint8_t*)&prmPage->pageVersion,            &pageBuff[offset4], sizeof(uint16_t) );
+            (void)memcpy( (uint8_t*)&prmPage->pageMagicNumber,        &pageBuff[offset5], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&prmPage->pageCrc,                &pageBuff[offset6], sizeof(uint32_t) );
+            returnVal = EFSS_RES_OK;
+        }
     }
-  }
-  return returnVal;
+    return returnVal;
 }
 
 e_eFSS_Res setPagePrmInBuff(uint32_t pageSize, uint8_t* const pageBuff, const s_prv_pagePrm* prmPage)
