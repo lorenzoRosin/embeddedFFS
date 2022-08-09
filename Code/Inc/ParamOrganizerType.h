@@ -34,12 +34,12 @@ extern "C" {
   #define bool_t          bool
 #endif
 
-#define PARAMORGAN_BKPPAGE_EN                       ( (1u) << (0u) )
+#define EFSS_BKPPAGE_EN                       ( (1u) << (0u) )
 
-#define PARAMORGAN_DIVISOR_PAGE_BACKUP             (2u)
-#define PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE          (16u)
-#define PARAMORGAN_MIN_PAGE_SIZE_BYTE              (256u)
-#define PARAMORGAN_MAX_PAGE_SIZE_BYTE              (16384u)
+#define EFSS_DIVISOR_PAGE_BACKUP                (2u)
+#define EFSS_DIVISOR_PAGE_SIZE_BYTE             (16u)
+#define EFSS_MIN_PAGE_SIZE_BYTE                 (256u)
+#define EFSS_MAX_PAGE_SIZE_BYTE                 (16384u)
 
 #define CRC_BASE_SEED                               ( 0xffffffffu )
 
@@ -50,39 +50,47 @@ extern "C" {
 /***********************************************************************************************************************
  *      TYPEDEFS
  **********************************************************************************************************************/
-typedef enum t_paramOrgResult
+typedef enum t_eFSS_Res
 {
-    PARAMRES_ALLOK = 0,
-    PARAMRES_ALLOK_BKP_RCVRD,
-    PARAMRES_ALLOK_NEWVER_UPDT,
-    PARAMRES_ALLOK_FIRSTINIT,
-    PARAMRES_ALLOK_BUTNOTFIRSTINIT,
-    PARAMRES_NOTVALIDPAGE,
-    PARAMRES_BADPARAM,
-    PARAMRES_BADPOINTER,
-    PARAMRES_BADTYPE,
-    PARAMRES_NOT_INIT,
-    PARAMRES_ERRORREAD,
-    PARAMRES_ERRORWRITE,
-    PARAMRES_ERRORERASE,
-}e_paramOrgResult;
+    EFSS_RES_OK = 0,
+    EFSS_RES_OK_BKP_RCVRD,
+    EFSS_RES_OK_NEWVER_UPDT,
+    EFSS_RES_OK_FIRSTINIT,
+    EFSS_RES_OK_BUTNOTFIRSTINIT,
+    EFSS_RES_NOTVALIDPAGE,
+    EFSS_RES_BADPARAM,
+    EFSS_RES_BADPOINTER,
+    EFSS_RES_BADTYPE,
+    EFSS_RES_NOT_INIT,
+    EFSS_RES_ERRORREAD,
+    EFSS_RES_ERRORWRITE,
+    EFSS_RES_ERRORERASE,
+}e_eFSS_Res;
 
 
 typedef bool_t (*cb_readPage)      ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToRead );
 typedef bool_t (*cb_writePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* dataToWrite );
 typedef bool_t (*cb_erasePage)     ( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize );
-typedef bool_t (*cb_calculateCrc32)( uint32_t* calculatedCrc, uint8_t* dataBuffer, const uint32_t calcSize, const uint32_t seed );
+typedef bool_t (*cb_crc32)         ( uint32_t* calculatedCrc, uint8_t* dataBuffer, const uint32_t calcSize, const uint32_t seed );
 
 
-typedef enum t_paramOrgPageType
+typedef enum t_eFSS_PageType
 {
-    PARAMRES_PAGETYPE_PARAM = 0,
-    PARAMRES_PAGETYPE_LOG,
-    PARAMRES_PAGETYPE_RAW,
-}e_paramOrgPageType;
+    EFSS_PAGETYPE_PARAM = 0,
+    EFSS_PAGETYPE_LOG,
+    EFSS_PAGETYPE_RAW,
+}e_eFSS_PageType;
 
+typedef struct t_eFSS_Cb
+{
+    /* CallBack Pointer */
+    cb_readPage  pReadPg;
+    cb_writePage pWritePg;
+    cb_erasePage pErasePg;
+    cb_crc32     pCrc32;
+}s_eFSS_Cb;
 
-typedef struct t_paramOrgInitParameter
+typedef struct t_eFSS_InitParam
 {
     /* Page information */
     uint32_t pageSize;
@@ -94,20 +102,17 @@ typedef struct t_paramOrgInitParameter
 
     /* Param Handler behaviour */
     uint32_t paramHandlerFlag;
-    e_paramOrgPageType organizationType;
+    e_eFSS_PageType pageType;
 
     /* CallBack Pointer */
-    cb_readPage pToReadFunc;
-    cb_writePage pToWriteFunc;
-    cb_erasePage pToEraseFunc;
-    cb_calculateCrc32 pToCrcFunc;
+    s_eFSS_Cb    cbHolder;
 
     /* MemPool information */
     uint8_t* memPoolPointer;
     uint32_t memPoolSize;
-}s_paramOrgInitParameter;
+}s_eFSS_InitParam;
 
-typedef struct t_paramOrgContext
+typedef struct t_eFSS_Ctx
 {
     /* Page information */
     uint32_t pageSize;
@@ -119,13 +124,10 @@ typedef struct t_paramOrgContext
 
     /* Param Handler behaviour */
     uint32_t paramHandlerFlag;
-    e_paramOrgPageType organizationType;
+    e_eFSS_PageType pageType;
 
     /* CallBack Pointer */
-    cb_readPage pToReadFunc;
-    cb_writePage pToWriteFunc;
-    cb_erasePage pToEraseFunc;
-    cb_calculateCrc32 pToCrcFunc;
+    s_eFSS_Cb    cbHolder;
 
     /* MemPool information */
     uint8_t* memPoolPointer;
@@ -134,21 +136,21 @@ typedef struct t_paramOrgContext
     /* Init information */
     bool_t isInitializedParams;
     bool_t isInitializedMemory;
-}s_paramOrgContext;
+}s_eFSS_Ctx;
 
-typedef enum t_paramOrgType
+typedef enum t_eFSS_PrmType
 {
-    PARAMTYPE_INT8 = 0,
-    PARAMTYPE_UINT8,
-    PARAMTYPE_INT16,
-    PARAMTYPE_UINT16,
-    PARAMTYPE_INT32,
-    PARAMTYPE_UINT32,
-    PARAMTYPE_FLOAT,
-    PARAMTYPE_UINT64
-}e_paramOrgType;
+    EFSS_RESPARAMTYPE_INT8 = 0,
+    EFSS_RESPARAMTYPE_UINT8,
+    EFSS_RESPARAMTYPE_INT16,
+    EFSS_RESPARAMTYPE_UINT16,
+    EFSS_RESPARAMTYPE_INT32,
+    EFSS_RESPARAMTYPE_UINT32,
+    EFSS_RESPARAMTYPE_FLOAT,
+    EFSS_RESPARAMTYPE_UINT64
+}e_eFSS_PrmType;
 
-typedef struct t_paramOrgSingleParam
+typedef struct t_eFSS_SinglePrmType
 {
     uint64_t    parameter;
     uint16_t    parameterID;
@@ -156,7 +158,7 @@ typedef struct t_paramOrgSingleParam
     uint16_t    parameterTimeSetted;
     uint8_t     parameterMagicNumber;
     uint16_t    parameterVersion;
-}s_paramOrgSingleParam;
+}s_eFSS_SinglePrmType;
 
 
 

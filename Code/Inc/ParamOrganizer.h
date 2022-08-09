@@ -43,7 +43,7 @@ extern "C" {
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgInitParameter* prmInitVal);
+e_eFSS_Res initParamSettings(s_eFSS_Ctx* prmCntx, const s_eFSS_InitParam* prmInitVal);
 
 
 
@@ -55,7 +55,7 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult initializeParamMemory();
+e_eFSS_Res initializeParamMemory();
 
 
 
@@ -66,7 +66,7 @@ e_paramOrgResult initializeParamMemory();
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult saveParamInMemory();
+e_eFSS_Res saveParamInMemory();
 
 
 /**
@@ -75,7 +75,7 @@ e_paramOrgResult saveParamInMemory();
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult readParamFromMemory();
+e_eFSS_Res readParamFromMemory();
 
 /**
  * Return with a pointer to the active screen
@@ -83,7 +83,7 @@ e_paramOrgResult readParamFromMemory();
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult saveRawParamInMemory();
+e_eFSS_Res saveRawParamInMemory();
 
 
 /**
@@ -92,7 +92,7 @@ e_paramOrgResult saveRawParamInMemory();
  * screen)
  * @return pointer to the active screen object (loaded by 'lv_scr_load()')
  */
-e_paramOrgResult readRawParamFromMemory();
+e_eFSS_Res readRawParamFromMemory();
 
 
 

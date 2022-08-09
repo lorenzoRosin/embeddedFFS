@@ -29,9 +29,9 @@ extern "C" {
 /**
  * Init memory layer, check version value, recover backup, re-init corrupt page
  * @param prmCntx Context of the module
- * @return e_paramOrgResult result
+ * @return e_eFSS_Res result
  */
-e_paramOrgResult initParamMemoryRaw(s_paramOrgContext* prmCntx);
+e_eFSS_Res initParamMemoryRaw(s_eFSS_Ctx* prmCntx);
 
 #ifdef __cplusplus
 } /* extern "C" */

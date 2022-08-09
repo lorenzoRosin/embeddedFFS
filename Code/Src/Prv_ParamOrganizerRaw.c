@@ -13,17 +13,17 @@
 /***********************************************************************************************************************
  *   PRIVATE FUNCTIONS DECLARATION
  **********************************************************************************************************************/
-e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx);
-e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx);
+e_eFSS_Res integrityCreatorRawNoBkp(s_eFSS_Ctx* prmCntx);
+e_eFSS_Res integrityCreatorRawNoBkp(s_eFSS_Ctx* prmCntx);
 
 
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
-e_paramOrgResult initParamMemoryRaw(s_paramOrgContext* prmCntx)
+e_eFSS_Res initParamMemoryRaw(s_eFSS_Ctx* prmCntx)
 {
     /* Local variable */
-    e_paramOrgResult returnVal;
+    e_eFSS_Res returnVal;
 
 
     return returnVal;
@@ -34,42 +34,42 @@ e_paramOrgResult initParamMemoryRaw(s_paramOrgContext* prmCntx)
 /***********************************************************************************************************************
  *   PRIVATE FUNCTIONS
  **********************************************************************************************************************/
-e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
+e_eFSS_Res integrityCreatorRawNoBkp(s_eFSS_Ctx* prmCntx)
 {
     /* Local variable */
-    e_paramOrgResult returnVal = PARAMRES_ALLOK;
-    e_paramOrgResult returnValintermedie;
+    e_eFSS_Res returnVal = EFSS_RES_OK;
+    e_eFSS_Res returnValintermedie;
     uint32_t iterator = 0;
     uint32_t firstInitCounter = 0;
     bool_t allAlignmentAreok = true;
     uint8_t aligmenentNumberFound = 0;
-    s_prv_paramOrgPageParam prmPage;
+    s_prv_pagePrm pagePrm;
 
     /* Check for NULL pointer */
     if( NULL == prmCntx )
     {
-        returnVal = PARAMRES_BADPOINTER;
+        returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
         /* Check if it is first init */
-        while( (iterator < prmCntx->nOfPages) && ( PARAMRES_ALLOK == returnVal) )
+        while( (iterator < prmCntx->nOfPages) && ( EFSS_RES_OK == returnVal) )
         {
             /* Read a page from memory */
-            if( false == (*(prmCntx->pToReadFunc))(prmCntx->pageId, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
+            if( false == (*(prmCntx->cbHolder.pReadPg))(prmCntx->pageId, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
             {
-                returnVal = PARAMRES_ERRORREAD;
+                returnVal = EFSS_RES_ERRORREAD;
             }
             else
             {
-                returnValintermedie = isValidDataInPageRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->organizationType, prmCntx->memPoolPointer);
+                returnValintermedie = isValidPageInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->cbHolder, prmCntx->pageType);
 
-                if( PARAMRES_NOTVALIDPAGE == returnValintermedie )
+                if( EFSS_RES_NOTVALIDPAGE == returnValintermedie )
                 {
                     firstInitCounter++;
                     allAlignmentAreok = false;
                 }
-                else if( PARAMRES_ALLOK != returnValintermedie )
+                else if( EFSS_RES_OK != returnValintermedie )
                 {
                     returnVal = returnValintermedie;
                     allAlignmentAreok = false;
@@ -78,13 +78,13 @@ e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
                 {
                     if( true == allAlignmentAreok )
                     {
-                        getPagePrmFromRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &prmPage);
+                        getPagePrmFromBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &pagePrm);
                         if( 0u == iterator )
                         {
-                            aligmenentNumberFound = prmPage.allPageAlignmentNumber;
+                            aligmenentNumberFound = pagePrm.allPageAlignmentNumber;
                         }
 
-                        if(prmPage.allPageAlignmentNumber != aligmenentNumberFound)
+                        if(pagePrm.allPageAlignmentNumber != aligmenentNumberFound)
                         {
                             allAlignmentAreok = false;
                         }
@@ -94,38 +94,38 @@ e_paramOrgResult integrityCreatorRawNoBkp(s_paramOrgContext* prmCntx)
             iterator++;
         }
 
-        if( PARAMRES_ALLOK == returnVal)
+        if( EFSS_RES_OK == returnVal)
         {
             if( (prmCntx->nOfPages == firstInitCounter) && (0u != firstInitCounter))
             {
                 if(prmCntx->nOfPages == firstInitCounter)
                 {
                     /* First time initializing this section */
-                    returnVal = PARAMRES_ALLOK_FIRSTINIT;
+                    returnVal = EFSS_RES_OK_FIRSTINIT;
                 }
                 else
                 {
                     /* Some page initialized and other not, reinit everything */
-                    returnVal = PARAMRES_ALLOK_BUTNOTFIRSTINIT;
+                    returnVal = EFSS_RES_OK_BUTNOTFIRSTINIT;
                 }
 
                 /* Set all memory to zero */
                 memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
                 /* Set page footer */
-                prmPage.pageTimeSetted = 1u;
-                prmPage.pageType = PARAMRES_PAGETYPE_RAW;
-                prmPage.allPageAlignmentNumber = 1u;
-                prmPage.pageVersion = prmCntx->rawPageVersion;
-                prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+                pagePrm.pageTimeSetted = 1u;
+                pagePrm.pageType = EFSS_PAGETYPE_RAW;
+                pagePrm.allPageAlignmentNumber = 1u;
+                pagePrm.pageVersion = prmCntx->rawPageVersion;
+                pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
 
                 iterator = 0;
-                while( (iterator < prmCntx->nOfPages) && ( PARAMRES_ALLOK_FIRSTINIT == returnVal) )
+                while( (iterator < prmCntx->nOfPages) && ( EFSS_RES_OK_FIRSTINIT == returnVal) )
                 {
                     /* Write a page in memory */
-                    if( false == writePageNPrmNUpdateCrc(prmCntx, iterator, prmCntx->memPoolPointer, &prmPage ) )
+                  if( false == writePageNPrmNUpdateCrc(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->pageId, iterator, &pagePrm, prmCntx->cbHolder ) )
                     {
-                        returnVal = PARAMRES_ERRORREAD;
+                        returnVal = EFSS_RES_ERRORREAD;
                     }
 
                     iterator++;

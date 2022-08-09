@@ -20,10 +20,10 @@
 /***********************************************************************************************************************
  *   PRIVATE STATIC FUNCTIONS PROTOTYPES
  **********************/
-e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId);
-e_paramOrgResult verifyAndGeneratePageIntegrityBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId);
+e_eFSS_Res verifyAndGeneratePageIntegrityNoBkup(s_eFSS_Ctx* prmCntx, uint32_t pageOffsetFromId);
+e_eFSS_Res verifyAndGeneratePageIntegrityBkup(s_eFSS_Ctx* prmCntx, uint32_t pageOffsetFromId);
 
-e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx);
+e_eFSS_Res verifyAndGenerateAllPageIntegrityRaw(s_eFSS_Ctx* prmCntx);
 
 /***********************************************************************************************************************
  *  STATIC VARIABLES
@@ -37,79 +37,79 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
 
-e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgInitParameter* prmInitVal)
+e_eFSS_Res initParamSettings(s_eFSS_Ctx* prmCntx, const s_eFSS_InitParam* prmInitVal)
 {
-    e_paramOrgResult returnVal = PARAMRES_ALLOK;
+    e_eFSS_Res returnVal = EFSS_RES_OK;
 
     if( ( NULL == prmCntx ) || ( NULL == prmInitVal ) )
     {
-        returnVal = PARAMRES_BADPOINTER;
+        returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
         if( true == prmCntx->isInitializedParams )
         {
-            returnVal = PARAMRES_BADPARAM;
+            returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
-            if( ( prmInitVal->pageSize < PARAMORGAN_MIN_PAGE_SIZE_BYTE ) ||
-                ( prmInitVal->pageSize > PARAMORGAN_MAX_PAGE_SIZE_BYTE ) || ( 0u == prmInitVal->nOfPages ) )
+            if( ( prmInitVal->pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) ||
+                ( prmInitVal->pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) || ( 0u == prmInitVal->nOfPages ) )
             {
-                returnVal = PARAMRES_BADPARAM;
+                returnVal = EFSS_RES_BADPARAM;
                 prmCntx->isInitializedParams = false;
             }
 
-            if( PARAMRES_ALLOK == returnVal )
+            if( EFSS_RES_OK == returnVal )
             {
-                if( 0u != ( prmInitVal->pageSize % PARAMORGAN_DIVISOR_PAGE_SIZE_BYTE )  )
+                if( 0u != ( prmInitVal->pageSize % EFSS_DIVISOR_PAGE_SIZE_BYTE )  )
                 {
-                    returnVal = PARAMRES_BADPARAM;
+                    returnVal = EFSS_RES_BADPARAM;
                     prmCntx->isInitializedParams = false;
                 }
             }
 
-            // if( PARAMRES_ALLOK == returnVal )
+            // if( EFSS_RES_OK == returnVal )
             // {
-            //     if( 0u != ( prmInitVal->paramHandlerFlag & ( PARAMORGAN_BKPPAGE_EN | PARAMORGAN_RAW_MODE ) )  )
+            //     if( 0u != ( prmInitVal->paramHandlerFlag & ( EFSS_BKPPAGE_EN | EFSS_RAW_MODE ) )  )
             //     {
-            //         returnVal = PARAMRES_BADPARAM;
+            //         returnVal = EFSS_RES_BADPARAM;
             //         prmCntx->isInitializedParams = false;
             //     }
             // }
 
-            if( PARAMRES_ALLOK == returnVal )
+            if( EFSS_RES_OK == returnVal )
             {
-                if( PARAMORGAN_BKPPAGE_EN == ( prmInitVal->paramHandlerFlag & PARAMORGAN_BKPPAGE_EN )  )
+                if( EFSS_BKPPAGE_EN == ( prmInitVal->paramHandlerFlag & EFSS_BKPPAGE_EN )  )
                 {
-                    if( 0u != ( prmInitVal->nOfPages % PARAMORGAN_DIVISOR_PAGE_BACKUP ) )
+                    if( 0u != ( prmInitVal->nOfPages % EFSS_DIVISOR_PAGE_BACKUP ) )
                     {
-                        returnVal = PARAMRES_BADPARAM;
+                        returnVal = EFSS_RES_BADPARAM;
                         prmCntx->isInitializedParams = false;
                     }
                 }
             }
 
-            if( PARAMRES_ALLOK == returnVal )
+            if( EFSS_RES_OK == returnVal )
             {
-                if( ( NULL == prmInitVal->pToReadFunc  ) || ( NULL == prmInitVal->pToWriteFunc ) ||
-                    ( NULL == prmInitVal->pToEraseFunc ) || ( NULL == prmInitVal->pToCrcFunc   ) )
+                if( ( NULL == prmInitVal->cbHolder.pReadPg  ) || ( NULL == prmInitVal->cbHolder.pWritePg ) ||
+                    ( NULL == prmInitVal->cbHolder.pErasePg ) || ( NULL == prmInitVal->cbHolder.pCrc32   ) )
                 {
-                    returnVal = PARAMRES_BADPARAM;
+                    returnVal = EFSS_RES_BADPARAM;
                     prmCntx->isInitializedParams = false;
                 }
             }
 
-            if( PARAMRES_ALLOK == returnVal )
+            if( EFSS_RES_OK == returnVal )
             {
                 if( ( NULL == prmInitVal->memPoolPointer  ) || ( prmInitVal->memPoolSize < prmInitVal->pageSize ) )
                 {
-                    returnVal = PARAMRES_BADPARAM;
+                    returnVal = EFSS_RES_BADPARAM;
                     prmCntx->isInitializedParams = false;
                 }
             }
 
-            if( PARAMRES_ALLOK == returnVal )
+            if( EFSS_RES_OK == returnVal )
             {
                 prmCntx->pageSize = prmInitVal->pageSize;
                 prmCntx->nOfPages = prmInitVal->nOfPages;
@@ -117,10 +117,10 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
 
                 prmCntx->paramHandlerFlag = prmInitVal->paramHandlerFlag;
 
-                prmCntx->pToReadFunc = prmInitVal->pToReadFunc;
-                prmCntx->pToWriteFunc = prmInitVal->pToWriteFunc;
-                prmCntx->pToEraseFunc = prmInitVal->pToEraseFunc;
-                prmCntx->pToCrcFunc = prmInitVal->pToCrcFunc;
+                prmCntx->cbHolder.pReadPg  = prmInitVal->cbHolder.pReadPg;
+                prmCntx->cbHolder.pWritePg = prmInitVal->cbHolder.pWritePg;
+                prmCntx->cbHolder.pErasePg = prmInitVal->cbHolder.pErasePg;
+                prmCntx->cbHolder.pCrc32   = prmInitVal->cbHolder.pCrc32;
 
                 prmCntx->memPoolPointer = prmInitVal->memPoolPointer;
                 prmCntx->memPoolSize = prmInitVal->memPoolSize;
@@ -140,11 +140,11 @@ e_paramOrgResult initParamSettings(s_paramOrgContext* prmCntx, const s_paramOrgI
 /***********************************************************************************************************************
  *   PRIVATE STATIC FUNCTIONS
  **********************************************************************************************************************/
-e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
+e_eFSS_Res verifyAndGeneratePageIntegrityNoBkup(s_eFSS_Ctx* prmCntx, uint32_t pageOffsetFromId)
 {
-    e_paramOrgResult returnVal;
-    e_paramOrgResult returnValValidPage;
-    s_prv_paramOrgPageParam prmPage;
+    e_eFSS_Res returnVal;
+    e_eFSS_Res returnValValidPage;
+    s_prv_pagePrm pagePrm;
 
     uint32_t iterator = 0u;
     uint32_t howManyReInit = 0u;
@@ -154,61 +154,61 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
 
     if( NULL == prmCntx )
     {
-        returnVal = PARAMRES_BADPOINTER;
+        returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
         if( false == prmCntx->isInitializedParams )
         {
-            returnVal = PARAMRES_NOT_INIT;
+            returnVal = EFSS_RES_NOT_INIT;
         }
         else
         {
             while( ( iterator < prmCntx->nOfPages ) && ( true == canContinueToIterate ) )
             {
-                if( false == (*(prmCntx->pToReadFunc))(prmCntx->pageId, pageOffsetFromId, prmCntx->pageSize, prmCntx->memPoolPointer) )
+                if( false == (*(prmCntx->cbHolder.pReadPg))(prmCntx->pageId, pageOffsetFromId, prmCntx->pageSize, prmCntx->memPoolPointer) )
                 {
-                    returnVal = PARAMRES_ERRORREAD;
+                    returnVal = EFSS_RES_ERRORREAD;
                 }
 
-                returnValValidPage = isValidDataInPageRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->organizationType, prmCntx->memPoolPointer);
+                returnValValidPage = isValidPageInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->cbHolder, prmCntx->pageType);
                 switch(returnValValidPage)
                 {
-                    case(PARAMRES_ALLOK):
+                    case(EFSS_RES_OK):
                     {
                         canContinueToIterate = true;
                     }break;
 
-                    case(PARAMRES_NOTVALIDPAGE):
+                    case(EFSS_RES_NOTVALIDPAGE):
                     {
                         howManyReInit++;
 
                         memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
-                        prmPage.pageTimeSetted = 1u;
-                        prmPage.pageType = PARAMRES_PAGETYPE_RAW;
-                        prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
-                        prmPage.pageCrc = 0u;
+                        pagePrm.pageTimeSetted = 1u;
+                        pagePrm.pageType = EFSS_PAGETYPE_RAW;
+                        pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+                        pagePrm.pageCrc = 0u;
 
-                        returnVal = setPagePrmInRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &prmPage);
+                        returnVal = setPagePrmInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &pagePrm);
 
-                        if( PARAMRES_ALLOK == returnVal)
+                        if( EFSS_RES_OK == returnVal)
                         {
-                            returnVal = calcPagePrmCrcInRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->memPoolPointer, &crcCalculated);
-                            if( PARAMRES_ALLOK == returnVal)
+                            returnVal = calcPagePrmCrcInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->cbHolder, &crcCalculated);
+                            if( EFSS_RES_OK == returnVal)
                             {
-                                setCrcInPagePrmRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, crcCalculated);
-                                if( PARAMRES_ALLOK == returnVal)
+                                setCrcInPagePrmBuff(prmCntx->pageSize, prmCntx->memPoolPointer, crcCalculated);
+                                if( EFSS_RES_OK == returnVal)
                                 {
-                                    if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
+                                    if( false == (*(prmCntx->cbHolder.pWritePg))(prmCntx->pageId, iterator,
                                                                             prmCntx->pageSize, prmCntx->memPoolPointer) )
                                     {
-                                        returnVal = PARAMRES_ERRORREAD;
+                                        returnVal = EFSS_RES_ERRORREAD;
                                         canContinueToIterate = true;
                                     }
                                     else
                                     {
-                                        returnVal = PARAMRES_ALLOK;
+                                        returnVal = EFSS_RES_OK;
                                     }
                                 }
                                 else
@@ -242,7 +242,7 @@ e_paramOrgResult verifyAndGeneratePageIntegrityNoBkup(s_paramOrgContext* prmCntx
 }
 
 
-e_paramOrgResult verifyAndGeneratePageIntegrityBkup(s_paramOrgContext* prmCntx, uint32_t pageOffsetFromId)
+e_eFSS_Res verifyAndGeneratePageIntegrityBkup(s_eFSS_Ctx* prmCntx, uint32_t pageOffsetFromId)
 {
 
 
@@ -323,11 +323,11 @@ e_paramOrgResult verifyAndGeneratePageIntegrityBkup(s_paramOrgContext* prmCntx, 
 
 
 
-e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx)
+e_eFSS_Res verifyAndGenerateAllPageIntegrityRaw(s_eFSS_Ctx* prmCntx)
 {
-    e_paramOrgResult returnVal;
-    e_paramOrgResult returnValValidPage;
-    s_prv_paramOrgPageParam prmPage;
+    e_eFSS_Res returnVal;
+    e_eFSS_Res returnValValidPage;
+    s_prv_pagePrm pagePrm;
 
     uint32_t iterator = 0u;
     uint32_t howManyReInit = 0u;
@@ -337,61 +337,61 @@ e_paramOrgResult verifyAndGenerateAllPageIntegrityRaw(s_paramOrgContext* prmCntx
 
     if( NULL == prmCntx )
     {
-        returnVal = PARAMRES_BADPOINTER;
+        returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
         if( false == prmCntx->isInitializedParams )
         {
-            returnVal = PARAMRES_NOT_INIT;
+            returnVal = EFSS_RES_NOT_INIT;
         }
         else
         {
             while( ( iterator < prmCntx->nOfPages ) && ( true == canContinueToIterate ) )
             {
-                if( false == (*(prmCntx->pToReadFunc))(prmCntx->pageId, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
+                if( false == (*(prmCntx->cbHolder.pReadPg))(prmCntx->pageId, iterator, prmCntx->pageSize, prmCntx->memPoolPointer) )
                 {
-                    returnVal = PARAMRES_ERRORREAD;
+                    returnVal = EFSS_RES_ERRORREAD;
                 }
 
-                returnValValidPage = isValidDataInPageRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->organizationType, prmCntx->memPoolPointer);
+                returnValValidPage = isValidPageInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->cbHolder, prmCntx->pageType);
                 switch(returnValValidPage)
                 {
-                    case(PARAMRES_ALLOK):
+                    case(EFSS_RES_OK):
                     {
                         canContinueToIterate = true;
                     }break;
 
-                    case(PARAMRES_NOTVALIDPAGE):
+                    case(EFSS_RES_NOTVALIDPAGE):
                     {
                         howManyReInit++;
 
                         memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
-                        prmPage.pageTimeSetted = 1u;
-                        prmPage.pageType = PARAMRES_PAGETYPE_RAW;
-                        prmPage.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
-                        prmPage.pageCrc = 0u;
+                        pagePrm.pageTimeSetted = 1u;
+                        pagePrm.pageType = EFSS_PAGETYPE_RAW;
+                        pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+                        pagePrm.pageCrc = 0u;
 
-                        returnVal = setPagePrmInRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &prmPage);
+                        returnVal = setPagePrmInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &pagePrm);
 
-                        if( PARAMRES_ALLOK == returnVal)
+                        if( EFSS_RES_OK == returnVal)
                         {
-                            returnVal = calcPagePrmCrcInRamBuff(prmCntx->pageSize, prmCntx->pToCrcFunc, prmCntx->memPoolPointer, &crcCalculated);
-                            if( PARAMRES_ALLOK == returnVal)
+                            returnVal = calcPagePrmCrcInBuff(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->cbHolder, &crcCalculated);
+                            if( EFSS_RES_OK == returnVal)
                             {
-                                setCrcInPagePrmRamBuff(prmCntx->pageSize, prmCntx->memPoolPointer, crcCalculated);
-                                if( PARAMRES_ALLOK == returnVal)
+                                setCrcInPagePrmBuff(prmCntx->pageSize, prmCntx->memPoolPointer, crcCalculated);
+                                if( EFSS_RES_OK == returnVal)
                                 {
-                                    if( false == (*(prmCntx->pToWriteFunc))(prmCntx->pageId, iterator,
+                                    if( false == (*(prmCntx->cbHolder.pWritePg))(prmCntx->pageId, iterator,
                                                                             prmCntx->pageSize, prmCntx->memPoolPointer) )
                                     {
-                                        returnVal = PARAMRES_ERRORREAD;
+                                        returnVal = EFSS_RES_ERRORREAD;
                                         canContinueToIterate = true;
                                     }
                                     else
                                     {
-                                        returnVal = PARAMRES_ALLOK;
+                                        returnVal = EFSS_RES_OK;
                                     }
                                 }
                                 else
