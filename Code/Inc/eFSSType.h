@@ -1,5 +1,5 @@
 /**
- * @file eFFSType.h
+ * @file eFSSType.h
  *
  */
 

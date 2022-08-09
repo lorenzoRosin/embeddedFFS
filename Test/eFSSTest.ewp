@@ -634,7 +634,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>eFFSTest.srec</state>
+                    <state>eFSSTest.srec</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -978,7 +978,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>eFFSTest_import_lib.o</state>
+                    <state>eFSSTest_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -2099,28 +2099,28 @@
     <group>
         <name>Inc</name>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\eFFS.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\eFSS.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\eFFSType.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\eFSSType.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\Prv_eFFSRaw.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\Prv_eFSSRaw.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Inc\Prv_eFFSUtils.h</name>
+            <name>$PROJ_DIR$\..\Code\Inc\Prv_eFSSUtils.h</name>
         </file>
     </group>
     <group>
         <name>Src</name>
         <file>
-            <name>$PROJ_DIR$\..\Code\Src\eFFS.c</name>
+            <name>$PROJ_DIR$\..\Code\Src\eFSS.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Src\Prv_eFFSRaw.c</name>
+            <name>$PROJ_DIR$\..\Code\Src\Prv_eFSSRaw.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\Code\Src\Prv_eFFSUtils.c</name>
+            <name>$PROJ_DIR$\..\Code\Src\Prv_eFSSUtils.c</name>
         </file>
     </group>
     <file>

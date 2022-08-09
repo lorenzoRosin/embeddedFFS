@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspace>
     <project>
-        <path>$WS_DIR$\eFFSTest.ewp</path>
+        <path>$WS_DIR$\eFSSTest.ewp</path>
     </project>
     <batchBuild>
         <batchDefinition>
             <name>DEBUG</name>
             <member>
-                <project>eFFSTest</project>
+                <project>eFSSTest</project>
                 <configuration>Debug</configuration>
             </member>
         </batchDefinition>
