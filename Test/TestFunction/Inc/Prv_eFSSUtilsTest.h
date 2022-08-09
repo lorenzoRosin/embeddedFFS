@@ -24,15 +24,6 @@ extern "C" {
 /***********************************************************************************************************************
  *      PRIVATE TYPEDEFS
  **********************************************************************************************************************/
-typedef struct t_prv_pagePrm
-{
-    uint32_t    pageTimeSetted;
-    uint8_t     pageType;
-    uint8_t     allPageAlignmentNumber;
-    uint16_t    pageVersion;
-    uint32_t    pageMagicNumber;
-    uint32_t    pageCrc;
-}s_prv_pagePrm;
 
 
 

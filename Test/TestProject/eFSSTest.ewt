@@ -2840,33 +2840,51 @@
         </settings>
     </configuration>
     <group>
-        <name>Inc</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\Code\Inc\eFSS.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\Code\Inc\eFSSType.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSRaw.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSUtils.h</name>
-        </file>
+        <name>eFSS</name>
+        <group>
+            <name>Inc</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\eFSS.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\eFSSType.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSRaw.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSUtils.h</name>
+            </file>
+        </group>
+        <group>
+            <name>Src</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Src\eFSS.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSRaw.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSUtils.c</name>
+            </file>
+        </group>
     </group>
     <group>
-        <name>Src</name>
+        <name>Test</name>
+        <group>
+            <name>Inc</name>
+            <file>
+                <name>$PROJ_DIR$\..\TestFunction\Inc\Prv_eFSSUtilsTest.h</name>
+            </file>
+        </group>
+        <group>
+            <name>Src</name>
+            <file>
+                <name>$PROJ_DIR$\..\TestFunction\Src\Prv_eFSSUtilsTest.c</name>
+            </file>
+        </group>
         <file>
-            <name>$PROJ_DIR$\..\..\Code\Src\eFSS.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSRaw.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSUtils.c</name>
+            <name>$PROJ_DIR$\main.c</name>
         </file>
     </group>
-    <file>
-        <name>$PROJ_DIR$\main.c</name>
-    </file>
 </project>
