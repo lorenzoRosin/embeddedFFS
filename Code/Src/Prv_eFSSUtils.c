@@ -13,13 +13,13 @@
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
-e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, s_prv_pagePrm* const prmPage)
+e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, s_prv_pagePrm* const pagePrm)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
+    if( ( NULL == pageBuff ) || ( NULL == pagePrm ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
@@ -41,25 +41,25 @@ e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, 
             uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
 
             /* fill the parameter using the passed buffer */
-            (void)memcpy( (uint8_t*)&prmPage->pageTimeSetted,         &pageBuff[offset1], sizeof(uint32_t) );
-            (void)memcpy( (uint8_t*)&prmPage->pageType,               &pageBuff[offset2], sizeof(uint8_t)  );
-            (void)memcpy( (uint8_t*)&prmPage->allPageAlignmentNumber, &pageBuff[offset3], sizeof(uint8_t)  );
-            (void)memcpy( (uint8_t*)&prmPage->pageVersion,            &pageBuff[offset4], sizeof(uint16_t) );
-            (void)memcpy( (uint8_t*)&prmPage->pageMagicNumber,        &pageBuff[offset5], sizeof(uint32_t) );
-            (void)memcpy( (uint8_t*)&prmPage->pageCrc,                &pageBuff[offset6], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageTimeSetted,         &pageBuff[offset1], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageType,               &pageBuff[offset2], sizeof(uint8_t)  );
+            (void)memcpy( (uint8_t*)&pagePrm->allPageAlignmentNumber, &pageBuff[offset3], sizeof(uint8_t)  );
+            (void)memcpy( (uint8_t*)&pagePrm->pageVersion,            &pageBuff[offset4], sizeof(uint16_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageMagicNumber,        &pageBuff[offset5], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageCrc,                &pageBuff[offset6], sizeof(uint32_t) );
             returnVal = EFSS_RES_OK;
         }
     }
     return returnVal;
 }
 
-e_eFSS_Res setPagePrmInBuff(uint32_t pageSize, uint8_t* const pageBuff, const s_prv_pagePrm* prmPage)
+e_eFSS_Res setPagePrmInBuff(const uint32_t pageSize, uint8_t* const pageBuff, const s_prv_pagePrm* pagePrm)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
+    if( ( NULL == pageBuff ) || ( NULL == pagePrm ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
@@ -81,12 +81,12 @@ e_eFSS_Res setPagePrmInBuff(uint32_t pageSize, uint8_t* const pageBuff, const s_
             uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
 
             /* fill the paramebuffer using the passed parameter */
-            (void)memcpy( &pageBuff[offset1], (uint8_t*)&prmPage->pageTimeSetted,           sizeof(uint32_t) );
-            (void)memcpy( &pageBuff[offset2], (uint8_t*)&prmPage->pageType,                 sizeof(uint8_t)  );
-            (void)memcpy( &pageBuff[offset3], (uint8_t*)&prmPage->allPageAlignmentNumber,   sizeof(uint8_t)  );
-            (void)memcpy( &pageBuff[offset4], (uint8_t*)&prmPage->pageVersion,              sizeof(uint16_t) );
-            (void)memcpy( &pageBuff[offset5], (uint8_t*)&prmPage->pageMagicNumber,          sizeof(uint32_t) );
-            (void)memcpy( &pageBuff[offset6], (uint8_t*)&prmPage->pageCrc,                  sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset1], (const uint8_t*)&pagePrm->pageTimeSetted,           sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset2], (const uint8_t*)&pagePrm->pageType,                 sizeof(uint8_t)  );
+            (void)memcpy( &pageBuff[offset3], (const uint8_t*)&pagePrm->allPageAlignmentNumber,   sizeof(uint8_t)  );
+            (void)memcpy( &pageBuff[offset4], (const uint8_t*)&pagePrm->pageVersion,              sizeof(uint16_t) );
+            (void)memcpy( &pageBuff[offset5], (const uint8_t*)&pagePrm->pageMagicNumber,          sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset6], (const uint8_t*)&pagePrm->pageCrc,                  sizeof(uint32_t) );
 
             returnVal = EFSS_RES_OK;
         }
@@ -107,12 +107,20 @@ e_eFSS_Res setCrcInPagePrmBuff(const uint32_t pageSize, uint8_t* const pageBuff,
     }
     else
     {
-        /* Calculating offset */
-        uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
+        /* Check for parameter validity */
+        if( ( pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Calculating offset */
+            uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
 
-        /* Copy CRC passed in to the ram buffer */
-        (void)memcpy( &pageBuff[offset6], (uint8_t*)&crcToSet, sizeof(uint32_t) );
-        returnVal = EFSS_RES_OK;
+            /* Copy CRC passed in to the ram buffer */
+            (void)memcpy( &pageBuff[offset6], (const uint8_t*)&crcToSet, sizeof(uint32_t) );
+            returnVal = EFSS_RES_OK;
+        }
     }
 
     return returnVal;
@@ -308,7 +316,6 @@ e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageB
                 }
             }
         }
-        returnVal = EFSS_RES_OK;
     }
 
     return returnVal;
