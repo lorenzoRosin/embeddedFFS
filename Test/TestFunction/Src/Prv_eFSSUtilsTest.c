@@ -147,6 +147,36 @@ bool_t Prv_eFSSUtilsTestFunc(void)
             retValue = false;
         }
     }
+
+    /***************************************************************************************************** Test set 4 */
+    if( true == retValue )
+    {
+        uint32_t crcTocalc = 0xFFFF;
+        s_eFSS_Cb cbHld;
+
+        memset(buffer1, 0u, sizeof(buffer1));
+
+
+        if( EFSS_RES_OK == calcPagePrmCrcInBuff(sizeof(buffer1), buffer1, cbHld, &crcTocalc) )
+        {
+            if( 0xFFFF == crcTocalc )
+            {
+                retValue = true;
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
+
+
+
+
 	return retValue;
 }
 

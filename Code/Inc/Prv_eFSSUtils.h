@@ -71,10 +71,12 @@ e_eFSS_Res setCrcInPagePrmBuff(const uint32_t pageSize, uint8_t* const pageBuff,
  * Calculate the CRC of an already loaded Page in a buffer, excluding the CRC itself from the calc
  * @param pageSize Size of the page loaded in the buffer
  * @param pageBuff Pointer to a page loaded in a buffer
- * @param crcCalc CRC calculated
+ * @param cbHld    Struct containing all callback reference
+ * @param crcCalc  CRC calculated
  * @return e_eFSS_Res result
  */
-e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff, const s_eFSS_Cb cbHld, uint32_t* const crcCalc);
+e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff, const s_eFSS_Cb cbHld,
+                                uint32_t* const crcCalc);
 
 /**
  * Set s_prv_pagePrm in a page already loaded in RAM, and set a fresh n' recalculated CRC

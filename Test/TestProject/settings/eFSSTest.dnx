@@ -29,26 +29,6 @@
     <CallStack>
         <ShowArgs>0</ShowArgs>
     </CallStack>
-    <struct_types>
-        <Fmt0>s_prv_pagePrm-allPageAlignmentNumber	4	0</Fmt0>
-        <Fmt1>s_prv_pagePrm-pageCrc	4	0</Fmt1>
-        <Fmt2>s_prv_pagePrm-pageMagicNumber	4	0</Fmt2>
-        <Fmt3>s_prv_pagePrm-pageTimeSetted	4	0</Fmt3>
-        <Fmt4>s_prv_pagePrm-pageType	4	0</Fmt4>
-        <Fmt5>s_prv_pagePrm-pageVersion	4	0</Fmt5>
-    </struct_types>
-    <DriverProfiling>
-        <Enabled>0</Enabled>
-        <Mode>1</Mode>
-        <Graph>0</Graph>
-        <Symbiont>0</Symbiont>
-    </DriverProfiling>
-    <CallStackLog>
-        <Enabled>0</Enabled>
-    </CallStackLog>
-    <CallStackStripe>
-        <ShowTiming>1</ShowTiming>
-    </CallStackStripe>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -58,6 +38,17 @@
         <LogFile>_ ""</LogFile>
         <Category>_ 0</Category>
     </LogFile>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <struct_types>
+        <Fmt0>s_prv_pagePrm-allPageAlignmentNumber	4	0</Fmt0>
+        <Fmt1>s_prv_pagePrm-pageCrc	4	0</Fmt1>
+        <Fmt2>s_prv_pagePrm-pageMagicNumber	4	0</Fmt2>
+        <Fmt3>s_prv_pagePrm-pageTimeSetted	4	0</Fmt3>
+        <Fmt4>s_prv_pagePrm-pageType	4	0</Fmt4>
+        <Fmt5>s_prv_pagePrm-pageVersion	4	0</Fmt5>
+    </struct_types>
     <InterruptLog>
         <GraphEnabled>0</GraphEnabled>
         <LogEnabled>0</LogEnabled>
@@ -73,12 +64,12 @@
         <SumEnabled>0</SumEnabled>
         <ShowTimeSum>1</ShowTimeSum>
     </DataLog>
-    <DisassembleMode>
-        <mode>0</mode>
-    </DisassembleMode>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
     <Breakpoints2>
-        <Bp0>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\TestFunction\Src\Prv_eFSSUtilsTest.c}.122.13" 0 0 1 "" 0 ""</Bp0>
-        <Count>1</Count>
+        <Count>0</Count>
     </Breakpoints2>
     <Interrupts>
         <Enabled>1</Enabled>
@@ -90,10 +81,18 @@
         <TypeViol>0</TypeViol>
         <Stop>1</Stop>
     </MemConfig>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
+    <DriverProfiling>
+        <Enabled>0</Enabled>
+        <Mode>1</Mode>
+        <Graph>0</Graph>
+        <Symbiont>0</Symbiont>
+    </DriverProfiling>
+    <CallStackLog>
+        <Enabled>0</Enabled>
+    </CallStackLog>
+    <CallStackStripe>
+        <ShowTiming>1</ShowTiming>
+    </CallStackStripe>
     <Simulator>
         <Freq>10000000</Freq>
         <FreqHi>0</FreqHi>
