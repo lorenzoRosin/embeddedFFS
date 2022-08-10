@@ -14,7 +14,9 @@
  *   PRIVATE FUNCTIONS
  **********************************************************************************************************************/
 bool_t crcSum ( uint32_t* const calculatedCrc, const uint8_t* dataBuffer, const uint32_t calcSize, const uint32_t seed );
-
+bool_t readPage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* const dataToRead );
+bool_t writePage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, const uint8_t* dataToWrite );
+bool_t erasePage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize );
 
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
@@ -186,7 +188,130 @@ bool_t Prv_eFSSUtilsTestFunc(void)
     }
 
 
+    /***************************************************************************************************** Test set 5 */
+    if( true == retValue )
+    {
+        s_prv_pagePrm paramToReadWrite;
+        uint32_t crcTocalc = 0xFFFF;
+        s_eFSS_Cb cbHld;
+        cbHld.pCrc32 = crcSum;
 
+        memset(buffer1, 0u, sizeof(buffer1));
+
+        paramToReadWrite.pageTimeSetted = 1u;
+        paramToReadWrite.pageType = 1u;
+        paramToReadWrite.allPageAlignmentNumber = 0u;
+        paramToReadWrite.pageVersion = 1u;
+        paramToReadWrite.pageMagicNumber = 1u;
+        paramToReadWrite.pageCrc = 0xABCDEF;
+
+        if( EFSS_RES_OK == setPagePrmInBuffNCrcUp(sizeof(buffer1), buffer1, cbHld, &paramToReadWrite) )
+        {
+            if( EFSS_RES_OK == getPagePrmFromBuff(sizeof(buffer1), buffer1, &paramToReadWrite) )
+            {
+                if( (4u + CRC_BASE_SEED) == paramToReadWrite.pageCrc )
+                {
+                    retValue = true;
+                }
+                else
+                {
+                    retValue = false;
+                }
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
+
+    /***************************************************************************************************** Test set 6 */
+    if( true == retValue )
+    {
+        s_prv_pagePrm paramToReadWrite;
+        uint32_t crcTocalc = 0xFFFF;
+        s_eFSS_Cb cbHld;
+        cbHld.pCrc32 = crcSum;
+
+        memset(buffer1, 0u, sizeof(buffer1));
+        memset(buffer2, 0u, sizeof(buffer2));
+
+        paramToReadWrite.pageTimeSetted = 1u;
+        paramToReadWrite.pageType = 1u;
+        paramToReadWrite.allPageAlignmentNumber = 0u;
+        paramToReadWrite.pageVersion = 1u;
+        paramToReadWrite.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+        paramToReadWrite.pageCrc = 0xABCDEF;
+
+        if( EFSS_RES_OK == setPagePrmInBuffNCrcUp(sizeof(buffer1), buffer1, cbHld, &paramToReadWrite) )
+        {
+            if( EFSS_RES_OK == isValidPageInBuff(sizeof(buffer1), buffer1, cbHld, 1u) )
+            {
+                if( EFSS_RES_OK == isValidPageInBuff(sizeof(buffer2), buffer2, cbHld, 0u) )
+                {
+                    retValue = false;
+                }
+                else
+                {
+                    retValue = true;
+                }
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
+
+    /***************************************************************************************************** Test set 7 */
+    if( true == retValue )
+    {
+        s_prv_pagePrm paramToReadWrite;
+        uint32_t crcTocalc = 0xFFFF;
+        s_eFSS_Cb cbHld;
+        cbHld.pCrc32 = crcSum;
+
+        memset(buffer1, 0u, sizeof(buffer1));
+        memset(buffer2, 0u, sizeof(buffer2));
+
+        paramToReadWrite.pageTimeSetted = 1u;
+        paramToReadWrite.pageType = 1u;
+        paramToReadWrite.allPageAlignmentNumber = 0u;
+        paramToReadWrite.pageVersion = 1u;
+        paramToReadWrite.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+        paramToReadWrite.pageCrc = 0xABCDEF;
+
+        if( EFSS_RES_OK == setPagePrmInBuffNCrcUp(sizeof(buffer1), buffer1, cbHld, &paramToReadWrite) )
+        {
+            if( EFSS_RES_OK == isValidPageInBuff(sizeof(buffer1), buffer1, cbHld, 1u) )
+            {
+                if( EFSS_RES_OK == isValidPageInBuff(sizeof(buffer2), buffer2, cbHld, 0u) )
+                {
+                    retValue = false;
+                }
+                else
+                {
+                    retValue = true;
+                }
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
 
 	return retValue;
 }
@@ -208,5 +333,26 @@ bool_t crcSum ( uint32_t* const calculatedCrc, const uint8_t* dataBuffer, const 
     calculatedSumCrc += seed;
 
     *calculatedCrc = calculatedSumCrc;
+    return true;
+}
+
+static uint8_t fakePageMemory[256u];
+
+bool_t readPage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* const dataToRead )
+{
+    memcpy(dataToRead, fakePageMemory, pageSize);
+    return true;
+}
+
+bool_t writePage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, const uint8_t* dataToWrite )
+{
+    memcpy(fakePageMemory, dataToWrite, pageSize);
+    return true;
+}
+
+
+bool_t erasePage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize )
+{
+    memset(fakePageMemory, 0u, pageSize);
     return true;
 }

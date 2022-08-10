@@ -90,20 +90,30 @@ e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBu
                                   const s_prv_pagePrm* pagePrm);
 
 /**
- * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
+ * Verify if the data present in a buffer page has CRC, magic number, and page type coherent with all the calculated
+ * value
+ * @param pageSize Size of the page loaded in the buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
+ * @param cbHld    Struct containing all callback reference
+ * @param e_eFSS_PageType    PageType we are aspecting
  * @return e_eFSS_Res result
  */
-e_eFSS_Res isValidPageInBuff(uint32_t pageSize,  uint8_t* pageBuff, s_eFSS_Cb cbHld, e_eFSS_PageType pageType);
+e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, const s_eFSS_Cb cbHld,
+                             const e_eFSS_PageType pageType);
 
 /**
- * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
+ * Verify if the data present in a page has CRC, magic number, and page type coherent with all the calculated
+ * value
+ * @param pageSize Size of the page loaded in the buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
+ * @param pageId   Id associated with the first page of the context
+ * @param pageOffset   Offset from the start page indicated from the pageId
+ * @param cbHld    Struct containing all callback reference
+ * @param e_eFSS_PageType    PageType we are aspecting
  * @return e_eFSS_Res result
  */
-e_eFSS_Res isValidPage( uint32_t pageSize, uint8_t* pageBuff, const uint32_t pageId, const uint32_t pageOffset, s_eFSS_Cb cbHld, e_eFSS_PageType pageType);
+e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                        const uint32_t pageOffset, const s_eFSS_Cb cbHld, const e_eFSS_PageType pageType);
 
 /**
  * Erase and write a page passed, but before automatically calculate the crc to write in the s_prv_pagePrm

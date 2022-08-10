@@ -247,7 +247,7 @@
                     <item>offset4</item>
                     <item>offset5</item>
                     <item>offset6</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

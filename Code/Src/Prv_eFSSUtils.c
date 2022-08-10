@@ -165,7 +165,6 @@ e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBu
 {
     /* Local variable */
     e_eFSS_Res returnVal;
-    uint32_t pageCrcSizeToCalc;
     uint32_t crcCalc;
 
     /* Check for NULL pointer */
@@ -180,6 +179,7 @@ e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBu
 
         if( EFSS_RES_OK == returnVal)
         {
+            /* Calc crc value of the page */
             returnVal = calcPagePrmCrcInBuff(pageSize, pageBuff, cbHld, &crcCalc);
 
             if( EFSS_RES_OK == returnVal)
@@ -195,7 +195,8 @@ e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBu
 
 
 
-e_eFSS_Res isValidPageInBuff(uint32_t pageSize,  uint8_t* pageBuff, s_eFSS_Cb cbHld, e_eFSS_PageType pageType)
+e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, const s_eFSS_Cb cbHld,
+                             const e_eFSS_PageType pageType)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -244,22 +245,29 @@ e_eFSS_Res isValidPageInBuff(uint32_t pageSize,  uint8_t* pageBuff, s_eFSS_Cb cb
     return returnVal;
 }
 
-e_eFSS_Res isValidPage(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pageId, const uint32_t pageOffset, s_eFSS_Cb cbHld, e_eFSS_PageType pageType)
+e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                        const uint32_t pageOffset, const s_eFSS_Cb cbHld, const e_eFSS_PageType pageType)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
-    s_prv_pagePrm prmPage;
-    uint32_t crcCalc;
 
-    /* Get pageBuff */
-    if( false == (*(cbHld.pReadPg))(pageId, pageOffset, pageSize, pageBuff) )
+    /* Check for NULL pointer */
+    if( ( NULL == pageBuff ) || ( NULL == cbHld.pReadPg ) )
     {
-        returnVal = EFSS_RES_ERRORREAD;
+        returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-        /* now verify */
-        returnVal = isValidPageInBuff(pageSize, pageBuff, cbHld, pageType);
+        /* Get pageBuff */
+        if( false == (*(cbHld.pReadPg))(pageId, pageOffset, pageSize, pageBuff) )
+        {
+            returnVal = EFSS_RES_ERRORREAD;
+        }
+        else
+        {
+            /* now verify the page loaded in the buffer */
+            returnVal = isValidPageInBuff(pageSize, pageBuff, cbHld, pageType);
+        }
     }
 
     return returnVal;
