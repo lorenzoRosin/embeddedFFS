@@ -338,6 +338,58 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         }
     }
 
+    /***************************************************************************************************** Test set 9 */
+    if( true == retValue )
+    {
+        s_eFSS_Cb cbHld;
+        cbHld.pCrc32 = crcSum;
+        cbHld.pErasePg = erasePage;
+        cbHld.pWritePg = writePage;
+        cbHld.pReadPg = readPage;
+
+        memset(buffer1, 0u, sizeof(buffer1));
+        memset(buffer2, 0u, sizeof(buffer2));
+
+        s_prv_pagePrm paramToWrite;
+        s_prv_pagePrm paramToRead;
+
+        paramToWrite.pageTimeSetted = 1u;
+        paramToWrite.pageType = 1u;
+        paramToWrite.allPageAlignmentNumber = 1u;
+        paramToWrite.pageVersion = 1u;
+        paramToWrite.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
+        paramToWrite.pageCrc = 1u;
+
+        if( EFSS_RES_OK == writePageNPrmNUpdateCrc(sizeof(buffer1), buffer1, 1u, 0u, &paramToWrite ,cbHld) )
+        {
+            if( EFSS_RES_OK == readPageNPrm(sizeof(buffer2), buffer2, 1u, 0u, cbHld , &paramToRead) )
+            {
+                if( EFSS_RES_OK == isValidPage(sizeof(buffer1), buffer1, 1u, 0u, cbHld , 1u) )
+                {
+                    if( 0 == memcmp(buffer1, buffer2, sizeof(buffer2)) )
+                    {
+                        retValue = true;
+                    }
+                    else
+                    {
+                        retValue = false;
+                    }
+                }
+                else
+                {
+                    retValue = false;
+                }
+            }
+            else
+            {
+                retValue = false;
+            }
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
 	return retValue;
 }
 
