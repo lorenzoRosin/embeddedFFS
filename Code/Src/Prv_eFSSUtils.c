@@ -91,7 +91,7 @@ e_eFSS_Res setPagePrmInBuff(uint32_t pageSize, uint8_t* const pageBuff, const s_
     return returnVal;
 }
 
-e_eFSS_Res setCrcInPagePrmBuff(uint32_t pageSize, uint8_t* pageBuff, uint32_t crcToSet)
+e_eFSS_Res setCrcInPagePrmBuff(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t crcToSet)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -113,7 +113,7 @@ e_eFSS_Res setCrcInPagePrmBuff(uint32_t pageSize, uint8_t* pageBuff, uint32_t cr
 }
 
 
-e_eFSS_Res calcPagePrmCrcInBuff(uint32_t pageSize, uint8_t* pageBuff, s_eFSS_Cb cbHld, uint32_t* crcCalc)
+e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff, const s_eFSS_Cb cbHld, uint32_t* const crcCalc)
 {
     /* Local variable */
     e_eFSS_Res returnVal;

@@ -50,7 +50,7 @@ typedef struct t_prv_pagePrm
 e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, s_prv_pagePrm* const pagePrm);
 
 /**
- * Set s_prv_pagePrm in a page already loaded in in a Buffer
+ * Set s_prv_pagePrm in a page already loaded in a Buffer
  * @param pageSize Size of the page loaded in the buffer
  * @param pageBuff Pointer to a page loaded in a buffer
  * @param pagePrm Pointer to s_prv_pagePrm that must be copied in the buffer
@@ -59,22 +59,22 @@ e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, 
 e_eFSS_Res setPagePrmInBuff(const uint32_t pageSize, uint8_t* const pageBuff, const s_prv_pagePrm* pagePrm);
 
 /**
- * Set CRC in a page already loaded in RAM
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
+ * Set CRC in a page already loaded in a buffer
+ * @param pageSize Size of the page loaded in the buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
  * @param crcToSet CRC we need to set
  * @return e_eFSS_Res result
  */
-e_eFSS_Res setCrcInPagePrmBuff(uint32_t pageSize, uint8_t* pageBuff, uint32_t crcToSet);
+e_eFSS_Res setCrcInPagePrmBuff(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t crcToSet);
 
 /**
- * Calculate the CRC of an already loaded Page in RAM, excluding the CRC itself from the calc
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
+ * Calculate the CRC of an already loaded Page in a buffer, excluding the CRC itself from the calc
+ * @param pageSize Size of the page loaded in the buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
  * @param crcCalc CRC calculated
  * @return e_eFSS_Res result
  */
-e_eFSS_Res calcPagePrmCrcInBuff(uint32_t pageSize, uint8_t* pageBuff, s_eFSS_Cb cbHld, uint32_t* crcCalc);
+e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff, const s_eFSS_Cb cbHld, uint32_t* const crcCalc);
 
 /**
  * Set s_prv_pagePrm in a page already loaded in RAM, and set a fresh n' recalculated CRC

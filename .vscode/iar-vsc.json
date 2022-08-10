@@ -1,5 +1,5 @@
 {
     "ewp": "c:\\Project\\eFSS\\Test\\TestProject\\eFSSTest.ewp",
     "configuration": "Debug",
-    "toolchain": "C:\\\\Program Files\\\\IAR Systems\\\\Embedded Workbench 9.0"
+    "toolchain": "c:\\Program Files\\IAR Systems\\Embedded Workbench 9.0"
 }

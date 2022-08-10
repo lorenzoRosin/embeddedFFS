@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "type": "iar",
+            "command": "build",
+            "project": "${command:iar-config.project-file}",
+            "config": "${command:iar-config.project-configuration}",
+            "builder": "${command:iar-config.toolchain}/common/bin/iarbuild.exe",
+            "label": "iar: Build Project",
+            "problemMatcher": [
+                "$iar-cc",
+                "$iar-linker"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
