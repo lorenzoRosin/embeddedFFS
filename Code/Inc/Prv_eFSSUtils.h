@@ -105,7 +105,7 @@ e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, 
  * Verify if the data present in a page has CRC, magic number, and page type coherent with all the calculated
  * value
  * @param pageSize Size of the page loaded in the buffer
- * @param pageBuff Pointer to a page loaded in a buffer
+ * @param pageBuff Pointer to a buffer used for calculation
  * @param pageId   Id associated with the first page of the context
  * @param pageOffset   Offset from the start page indicated from the pageId
  * @param cbHld    Struct containing all callback reference
@@ -116,22 +116,30 @@ e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const 
                         const uint32_t pageOffset, const s_eFSS_Cb cbHld, const e_eFSS_PageType pageType);
 
 /**
- * Erase and write a page passed, but before automatically calculate the crc to write in the s_prv_pagePrm
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
- * @param pagePrm To set data (s_prv_pagePrm)
+ * Erase and write a page with the param passed, and automatically update the CRC of the page
+ * @param pageSize Size of the page
+ * @param pageBuff Pointer to a buffer containing the data that we want to write in the page
+ * @param pageId   Id associated with the first page of the context
+ * @param pageOffset   Offset from the start page indicated from the pageId
+ * @param prmPage   Param that we want to write in the page
+ * @param cbHld    Struct containing all callback reference
  * @return e_eFSS_Res result
  */
-e_eFSS_Res writePageNPrmNUpdateCrc(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pageId, const uint32_t pageOffset, s_prv_pagePrm* prmPage, s_eFSS_Cb cbHld);
+e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                                   const uint32_t pageOffset, s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld);
 
 /**
- * Read a page, but before automatically calculate the crc to write in the s_prv_pagePrm
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
- * @param pagePrm To set data (s_prv_pagePrm)
+ * Read a page, and copy data param in pagePrm
+ * @param pageSize Size of the page
+ * @param pageBuff Pointer to a buffer that will be filled with data from the page
+ * @param pageId   Id associated with the first page of the context
+ * @param pageOffset   Offset from the start page indicated from the pageId
+ * @param cbHld    Struct containing all callback reference
+ * @param pagePrm   Param that we want to read
  * @return e_eFSS_Res result
  */
-e_eFSS_Res readPageNPrm(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pageId, s_eFSS_Ctx* prmCntx, const uint32_t pageOffset, s_eFSS_Cb cbHld, s_prv_pagePrm* pagePrm);
+e_eFSS_Res readPageNPrm(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                        const uint32_t pageOffset, const s_eFSS_Cb cbHld, s_prv_pagePrm* const pagePrm);
 
 
 #ifdef __cplusplus

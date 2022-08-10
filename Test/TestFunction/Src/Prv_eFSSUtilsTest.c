@@ -17,6 +17,7 @@ bool_t crcSum ( uint32_t* const calculatedCrc, const uint8_t* dataBuffer, const 
 bool_t readPage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* const dataToRead );
 bool_t writePage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, const uint8_t* dataToWrite );
 bool_t erasePage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize );
+static uint8_t fakePageMemory[256u];
 
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
@@ -313,6 +314,30 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         }
     }
 
+
+    /***************************************************************************************************** Test set 8 */
+    if( true == retValue )
+    {
+        memcpy(fakePageMemory, buffer1, sizeof(buffer1));
+
+        s_eFSS_Cb cbHld;
+        cbHld.pCrc32 = crcSum;
+        cbHld.pErasePg = erasePage;
+        cbHld.pWritePg = writePage;
+        cbHld.pReadPg = readPage;
+
+        memset(buffer1, 0u, sizeof(buffer1));
+
+        if( EFSS_RES_OK == isValidPage(sizeof(buffer1), buffer1, 1u, 0u, cbHld , 1u) )
+        {
+            retValue = true;
+        }
+        else
+        {
+            retValue = false;
+        }
+    }
+
 	return retValue;
 }
 
@@ -336,7 +361,6 @@ bool_t crcSum ( uint32_t* const calculatedCrc, const uint8_t* dataBuffer, const 
     return true;
 }
 
-static uint8_t fakePageMemory[256u];
 
 bool_t readPage( const uint32_t startPageId, const uint32_t pageOffset, const uint32_t pageSize, uint8_t* const dataToRead )
 {

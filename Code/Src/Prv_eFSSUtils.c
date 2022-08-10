@@ -273,31 +273,31 @@ e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const 
     return returnVal;
 }
 
-e_eFSS_Res writePageNPrmNUpdateCrc(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pageId, const uint32_t pageOffset, s_prv_pagePrm* prmPage, s_eFSS_Cb cbHld)
+e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                                   const uint32_t pageOffset, s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
-    uint32_t pageCrcSizeToCalc;
-    uint32_t crcCalc;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
+    if( ( NULL == pageBuff ) || ( NULL == prmPage ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
+        /* Set the page param and CRC in the page buffer */
         returnVal = setPagePrmInBuffNCrcUp(pageSize, pageBuff, cbHld, prmPage);
         if( EFSS_RES_OK == returnVal )
         {
-            /* Erase the pageBuff */
+            /* Erase physical page */
             if( false == (*(cbHld.pErasePg))(pageId, pageOffset, pageSize) )
             {
                 returnVal = EFSS_RES_ERRORREAD;
             }
             else
             {
-                /* Write a pageBuff in memory */
+                /* Write the pageBuff in the physical page */
                 if( false == (*(cbHld.pWritePg))(pageId, pageOffset, pageSize, pageBuff) )
                 {
                     returnVal = EFSS_RES_ERRORREAD;
@@ -315,15 +315,14 @@ e_eFSS_Res writePageNPrmNUpdateCrc(uint32_t pageSize, uint8_t* pageBuff, const u
 }
 
 
-e_eFSS_Res readPageNPrm(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pageId, s_eFSS_Ctx* prmCntx, const uint32_t pageOffset, s_eFSS_Cb cbHld, s_prv_pagePrm* prmPage)
+e_eFSS_Res readPageNPrm(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                        const uint32_t pageOffset, const s_eFSS_Cb cbHld, s_prv_pagePrm* const pagePrm)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
-    uint32_t pageCrcSizeToCalc;
-    uint32_t crcCalc;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
+    if( ( NULL == pageBuff ) || ( NULL == pagePrm ) || ( NULL == cbHld.pReadPg ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
@@ -336,8 +335,8 @@ e_eFSS_Res readPageNPrm(uint32_t pageSize, uint8_t* pageBuff, const uint32_t pag
         }
         else
         {
-            /* now verify */
-            returnVal = getPagePrmFromBuff(pageSize, pageBuff, prmPage);
+            /* Fill even param only for comodity */
+            returnVal = getPagePrmFromBuff(pageSize, pageBuff, pagePrm);
         }
 
     }
