@@ -2109,6 +2109,12 @@
                 <name>$PROJ_DIR$\..\..\Code\Inc\eFSSType.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSLog.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSParam.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSRaw.h</name>
             </file>
             <file>
@@ -2119,6 +2125,12 @@
             <name>Src</name>
             <file>
                 <name>$PROJ_DIR$\..\..\Code\Src\eFSS.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSLog.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSParam.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSRaw.c</name>
