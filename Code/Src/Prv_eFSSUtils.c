@@ -282,7 +282,7 @@ e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const 
 }
 
 e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
-                                   const uint32_t pageOffset, s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld)
+                                   const uint32_t pageOffset, const s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -301,14 +301,14 @@ e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageB
             /* Erase physical page */
             if( false == (*(cbHld.pErasePg))(pageId, pageOffset, pageSize) )
             {
-                returnVal = EFSS_RES_ERRORREAD;
+                returnVal = EFSS_RES_ERRORERASE;
             }
             else
             {
                 /* Write the pageBuff in the physical page */
                 if( false == (*(cbHld.pWritePg))(pageId, pageOffset, pageSize, pageBuff) )
                 {
-                    returnVal = EFSS_RES_ERRORREAD;
+                    returnVal = EFSS_RES_ERRORWRITE;
                 }
                 else
                 {
@@ -321,6 +321,33 @@ e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageB
     return returnVal;
 }
 
+e_eFSS_Res writeNPageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                                    const uint32_t nOfPageToWrite, const uint32_t startOffset,
+                                    const s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld)
+{
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t iterator;
+
+    /* Check for NULL pointer */
+    if( ( NULL == pageBuff ) || ( NULL == prmPage ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        returnVal = EFSS_RES_OK;
+        iterator = 0;
+        while( ( iterator < nOfPageToWrite ) && ( EFSS_RES_OK == returnVal ) )
+        {
+            /* Write a page in memory */
+            returnVal = writePageNPrmNUpdateCrc( pageSize, pageBuff, pageId, iterator + startOffset, prmPage, cbHld );
+            iterator++;
+        }
+    }
+
+    return returnVal;
+}
 
 e_eFSS_Res readPageNPrm(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
                         const uint32_t pageOffset, const s_eFSS_Cb cbHld, s_prv_pagePrm* const pagePrm)

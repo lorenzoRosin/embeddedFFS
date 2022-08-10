@@ -126,7 +126,22 @@ e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const 
  * @return e_eFSS_Res result
  */
 e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
-                                   const uint32_t pageOffset, s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld);
+                                   const uint32_t pageOffset, const s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld);
+
+/**
+ * Erase and write Tot numbers of page with the param passed, and automatically update the CRC of the page
+ * @param pageSize Size of the page
+ * @param pageBuff Pointer to a buffer containing the data that we want to write in the page
+ * @param pageId   Id associated with the first page of the context
+ * @param nOfPageToWrite Number of page to write
+ * @param startOffset start page offset for the write process
+ * @param prmPage Param that we want to write in the page
+ * @param cbHld Struct containing all callback reference
+ * @return e_eFSS_Res result
+ */
+e_eFSS_Res writeNPageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                                    const uint32_t nOfPageToWrite, const uint32_t startOffset,
+                                    const s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld);
 
 /**
  * Read a page, and copy data param in pagePrm
