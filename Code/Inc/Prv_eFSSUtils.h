@@ -79,13 +79,15 @@ e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff
                                 uint32_t* const crcCalc);
 
 /**
- * Set s_prv_pagePrm in a page already loaded in RAM, and set a fresh n' recalculated CRC
- * @param prmCntx Context of the module
- * @param page Pointer of a page loaded in RAM
- * @param pagePrm To set data (s_prv_pagePrm)
+ * Set s_prv_pagePrm in a page already loaded in a buffer, and set a fresh n' recalculated CRC
+ * @param pageSize Size of the page loaded in the buffer
+ * @param pageBuff Pointer to a page loaded in a buffer
+ * @param cbHld    Struct containing all callback reference
+ * @param pagePrm  To set data (s_prv_pagePrm)
  * @return e_eFSS_Res result
  */
-e_eFSS_Res setPagePrmInBuffNCrcUp(uint32_t pageSize, uint8_t* pageBuff, s_eFSS_Cb cbHld, s_prv_pagePrm* pagePrm);
+e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBuff, const s_eFSS_Cb cbHld,
+                                  const s_prv_pagePrm* pagePrm);
 
 /**
  * Verify if the data present in a loaded RAM page has CRC magic and type numbers coherent with all the calculated value

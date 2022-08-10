@@ -11,6 +11,12 @@
 
 
 /***********************************************************************************************************************
+ *   PRIVATE FUNCTIONS
+ **********************************************************************************************************************/
+bool_t crcSum ( uint32_t* const calculatedCrc, const uint8_t* dataBuffer, const uint32_t calcSize, const uint32_t seed );
+
+
+/***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
 bool_t Prv_eFSSUtilsTestFunc(void)
@@ -153,13 +159,18 @@ bool_t Prv_eFSSUtilsTestFunc(void)
     {
         uint32_t crcTocalc = 0xFFFF;
         s_eFSS_Cb cbHld;
+        cbHld.pCrc32 = crcSum;
 
         memset(buffer1, 0u, sizeof(buffer1));
 
+        buffer1[0]   = 1u;
+        buffer1[50]  = 1u;
+        buffer1[70]  = 1u;
+        buffer1[200] = 1u;
 
         if( EFSS_RES_OK == calcPagePrmCrcInBuff(sizeof(buffer1), buffer1, cbHld, &crcTocalc) )
         {
-            if( 0xFFFF == crcTocalc )
+            if( (4u + CRC_BASE_SEED) == crcTocalc )
             {
                 retValue = true;
             }
@@ -180,3 +191,22 @@ bool_t Prv_eFSSUtilsTestFunc(void)
 	return retValue;
 }
 
+
+
+/***********************************************************************************************************************
+ *   PRIVATE FUNCTIONS
+ **********************************************************************************************************************/
+bool_t crcSum ( uint32_t* const calculatedCrc, const uint8_t* dataBuffer, const uint32_t calcSize, const uint32_t seed )
+{
+    uint32_t calculatedSumCrc = 0;
+
+    for(uint32_t i=0; i<calcSize; i++ )
+    {
+        calculatedSumCrc +=  dataBuffer[i];
+    }
+
+    calculatedSumCrc += seed;
+
+    *calculatedCrc = calculatedSumCrc;
+    return true;
+}
