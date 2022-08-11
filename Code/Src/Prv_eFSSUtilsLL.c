@@ -3,6 +3,8 @@
  *
  */
 
+
+
 /***********************************************************************************************************************
  *      INCLUDES
  **********************************************************************************************************************/
@@ -13,88 +15,233 @@
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
-e_eFSS_Res erasePage( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx )
+e_eFSS_Res erasePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx )
 {
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t retryDone;
+    bool_t operationResult;
+
+    /* Check for NULL pointer */
+    if( NULL == cb.pErasePg )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        /* Check for parameter validity */
+        if( pageIndx >=  pginfo.nOfPages )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
             /* Erase physical page */
-            if( false == (*(cbHld.pErasePg))(pageId, pageOffset, pageSize) )
+            retryDone = 0u;
+            operationResult = false;
+
+            while( ( false == operationResult ) && ( retryDone < cb.operationRetry ) )
+            {
+                operationResult = (*(cb.pErasePg))(pginfo.areaId, pageIndx, pginfo.pageSize);
+                retryDone++;
+            }
+
+            if( false == operationResult )
             {
                 returnVal = EFSS_RES_ERRORERASE;
             }
             else
             {
-                /* Write the pageBuff in the physical page */
-                if( false == (*(cbHld.pWritePg))(pageId, pageOffset, pageSize, pageBuff) )
-                {
-                    returnVal = EFSS_RES_ERRORWRITE;
-                }
-                else
-                {
-                    returnVal = EFSS_RES_OK;
-                }
+                returnVal = EFSS_RES_OK;
             }
+        }
+    }
+    return returnVal;
 }
 
-
-e_eFSS_Res writePage( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx, const uint8_t* dataW)
+e_eFSS_Res writePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx, const uint8_t* dataW,
+                      uint8_t* const supportMemory )
 {
-                /* Write the pageBuff in the physical page */
-                if( false == (*(cbHld.pWritePg))(pageId, pageOffset, pageSize, pageBuff) )
-                {
-                    returnVal = EFSS_RES_ERRORWRITE;
-                }
-                else
-                {
-                    returnVal = EFSS_RES_OK;
-                }
-}
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t retryDone;
+    bool_t operationResult;
 
-
-
-e_eFSS_Res readPage( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx, uint8_t* const dataR )
-{
-        /* Get pageBuff */
-        if( false == (*(cbHld.pReadPg))(pageId, pageOffset, pageSize, pageBuff) )
+    /* Check for NULL pointer */
+    if( ( NULL == cb.pWritePg ) || ( NULL == cb.pReadPg ) || ( NULL == dataW ) || ( NULL == supportMemory ) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        /* Check for parameter validity */
+        if( pageIndx >= pginfo.nOfPages )
         {
-            returnVal = EFSS_RES_ERRORREAD;
+            returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
-            /* Fill even param only for comodity */
-            returnVal = getPagePrmFromBuff(pageSize, pageBuff, pagePrm);
-        }
-}
+            /* Write physical page */
+            retryDone = 0;
+            operationResult = false;
 
-
-
-e_eFSS_Res calcCrc(const s_eFSS_Cb cb, uint32_t* const crc, const uint8_t* data, const uint32_t dataLen)
-{
-            /* Calculate CRC */
-            if( false == (*(cbHld.pCrc32))(crcCalc, pageBuff, pageCrcSizeToCalc, CRC_BASE_SEED) )
+            while( ( false == operationResult ) && ( retryDone < cb.operationRetry ) )
             {
-                /* Generic CRC calculation Fail */
-                returnVal = EFSS_RES_BADPARAM;
+                operationResult = (*(cb.pWritePg))(pginfo.areaId, pageIndx, pginfo.pageSize, dataW);
+
+                if( ( true == cb.enableWriteCheck ) && ( true == operationResult ) )
+                {
+                    /* Read the page and verify if it'is writted corretly */
+                    operationResult = (*(cb.pReadPg))(pginfo.areaId, pageIndx, pginfo.pageSize, supportMemory);
+
+                    if( true == operationResult )
+                    {
+                        if( 0 == memcmp(dataW,supportMemory, pginfo.pageSize) )
+                        {
+                            operationResult = true;
+                        }
+                        else
+                        {
+                            operationResult = false;
+                        }
+                    }
+                }
+
+                retryDone++;
+            }
+
+            if( false == operationResult )
+            {
+                returnVal = EFSS_RES_ERRORREAD;
             }
             else
             {
                 returnVal = EFSS_RES_OK;
             }
+        }
+    }
+    return returnVal;
+}
+
+e_eFSS_Res readPageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx, uint8_t* const dataR )
+{
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t retryDone;
+    bool_t operationResult;
+
+    /* Check for NULL pointer */
+    if( ( NULL == cb.pReadPg ) || ( NULL == dataR ) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        /* Check for parameter validity */
+        if( pageIndx >=  pginfo.nOfPages )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Read physical page */
+            retryDone = 0;
+            operationResult = false;
+
+            while( ( false == operationResult ) && ( retryDone < cb.operationRetry ) )
+            {
+                operationResult = (*(cb.pReadPg))(pginfo.areaId, pageIndx, pginfo.pageSize, dataR);
+                retryDone++;
+            }
+
+            if( false == operationResult )
+            {
+                returnVal = EFSS_RES_ERRORREAD;
+            }
+            else
+            {
+                returnVal = EFSS_RES_OK;
+            }
+        }
+    }
+    return returnVal;
+}
+
+e_eFSS_Res calcCrcLL(const s_eFSS_Cb cb, uint32_t* const crc, const uint8_t* data, const uint32_t dataLen)
+{
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t retryDone;
+    bool_t operationResult;
+
+    /* Check for NULL pointer */
+    if( ( NULL == cb.pCrc32 ) || ( NULL == crc) || ( NULL == data) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        /* Crc Func */
+        retryDone = 0u;
+        operationResult = false;
+
+        while( ( false == operationResult ) && ( retryDone < cb.operationRetry ) )
+        {
+            operationResult = (*(cb.pCrc32))(crc, data, dataLen, CRC_BASE_SEED);
+            retryDone++;
+        }
+
+        if( false == operationResult )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            returnVal = EFSS_RES_OK;
+        }
+    }
+
+    return returnVal;
 }
 
 
 
 
-e_eFSS_Res calcCrcSeed(const s_eFSS_Cb cb, uint32_t* const crc, const uint8_t* data, const uint32_t dataLen,
+e_eFSS_Res calcCrcSeedLL(const s_eFSS_Cb cb, uint32_t* const crc, const uint8_t* data, const uint32_t dataLen,
                        const uint32_t seed )
 {
-            /* Calculate CRC */
-            if( false == (*(cbHld.pCrc32))(crcCalc, pageBuff, pageCrcSizeToCalc, seed) )
-            {
-                /* Generic CRC calculation Fail */
-                returnVal = EFSS_RES_BADPARAM;
-            }
-            else
-            {
-                returnVal = EFSS_RES_OK;
-            }
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t retryDone;
+    bool_t operationResult;
+
+    /* Check for NULL pointer */
+    if( ( NULL == cb.pCrc32 ) || ( NULL == crc) || ( NULL == data) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        /* Crc Func */
+        retryDone = 0u;
+        operationResult = false;
+
+        while( ( false == operationResult ) && ( retryDone < cb.operationRetry ) )
+        {
+            operationResult = (*(cb.pCrc32))(crc, data, dataLen, seed);
+            retryDone++;
+        }
+
+        if( false == operationResult )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            returnVal = EFSS_RES_OK;
+        }
+    }
+
+    return returnVal;
 }
 
