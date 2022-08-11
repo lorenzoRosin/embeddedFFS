@@ -257,7 +257,8 @@ e_eFSS_Res isValidPage(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_
         else
         {
             /* Get the page to check in the support ram buffer */
-            if( EFSS_RES_OK == readPageLL( pginfo, cbHld, pageIndx, suppBuff ) )
+            returnVal = readPageLL( pginfo, cbHld, pageIndx, suppBuff );
+            if( EFSS_RES_OK == returnVal )
             {
                 /* now verify the page loaded in the buffer */
                 returnVal = isValidPageInBuff(pginfo, cbHld, suppBuff);
@@ -425,7 +426,7 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                     if( ( EFSS_RES_OK == readRetValOr ) && ( EFSS_RES_OK == readRetValBk ) )
                     {
                         /* Two pages are equal, are they identical? */
-                        if( 0u == memcmp(pageOrig, pageBkup, pginfo.pageSize ) )
+                        if( 0 == memcmp(pageOrig, pageBkup, pginfo.pageSize ) )
                         {
                             /* Page are equals*/
                             returnVal = EFSS_RES_OK;
@@ -486,33 +487,29 @@ e_eFSS_Res cloneAPage(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t
     e_eFSS_Res returnVal;
 
     /* Check for NULL pointer */
-    if( ( NULL == supportBuff ) || ( NULL == cbHld.pReadPg ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    if( ( NULL == pageBuff )|| ( NULL == suppBuff ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-        if( false == (*(cbHld.pReadPg))(pageId, toCloneOffset, pageSize, supportBuff) )
+        /* Check for parameter validity */
+        if( ( origIndx >= pginfo.nOfPages ) || ( destIndx >= pginfo.nOfPages )  || ( origIndx == destIndx ) )
         {
-            returnVal = EFSS_RES_ERRORREAD;
+            returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
-            /* Erase physical page */
-            if( false == (*(cbHld.pErasePg))(pageId, destinationOffset, pageSize) )
+            /* Read the page that need to be cloned */
+            returnVal = readPageLL( pginfo, cbHld, origIndx, pageBuff );
+
+            if( EFSS_RES_OK == returnVal )
             {
-                returnVal = EFSS_RES_ERRORERASE;
-            }
-            else
-            {
-                /* Write the pageBuff in the physical page */
-                if( false == (*(cbHld.pWritePg))(pageId, destinationOffset, pageSize, supportBuff) )
+                /* Write the clone page in destination */
+                returnVal = writePageLL(pginfo, cbHld, destIndx, pageBuff, suppBuff );
+                if( EFSS_RES_OK == returnVal )
                 {
-                    returnVal = EFSS_RES_ERRORWRITE;
-                }
-                else
-                {
-                    returnVal = EFSS_RES_OK;
+                    returnVal = EFSS_RES_OK_BKP_RCVRD;
                 }
             }
         }

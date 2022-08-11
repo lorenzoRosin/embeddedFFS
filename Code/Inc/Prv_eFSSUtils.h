@@ -223,6 +223,8 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
 e_eFSS_Res cloneAPage(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageBuff,
                       uint8_t* const suppBuff, const uint32_t origIndx, const uint32_t destIndx);
 
+
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

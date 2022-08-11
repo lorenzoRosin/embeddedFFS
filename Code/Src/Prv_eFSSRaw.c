@@ -33,7 +33,7 @@ e_eFSS_Res initParamMemoryRaw(const s_eFSS_Ctx* prmCntx)
     }
     else
     {
-        if( EFSS_BKPPAGE_EN == ( prmCntx->paramHandlerFlag & EFSS_BKPPAGE_EN) )
+        if( true == prmCntx->pageInfo.pageBkp )
         {
             /* Back up page init */
             returnVal = integrityCreatorRawWithBkp(prmCntx);
@@ -80,10 +80,9 @@ e_eFSS_Res integrityCreatorRawNoBkp(const s_eFSS_Ctx* prmCntx)
         returnVal = EFSS_RES_OK;
         allAlignmentAreok = true;
 
-        while( ( iterator < prmCntx->nOfPages ) && ( EFSS_RES_OK == returnVal ) )
+        while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
         {
-            returnVal = isValidPage( prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->pageId,
-                                               iterator, prmCntx->cbHolder, prmCntx->pageType);
+            returnVal = isValidPage( prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, iterator);
 
             if( EFSS_RES_NOTVALIDPAGE == returnVal)
             {
@@ -95,7 +94,8 @@ e_eFSS_Res integrityCreatorRawNoBkp(const s_eFSS_Ctx* prmCntx)
                 /* Page is Ok, check if alignment is still ok*/
                 if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
                 {
-                    returnVal = getPagePrmFromBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &pagePrm);
+                    returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
+
                     if( EFSS_RES_OK == returnVal )
                     {
                         /* Save first alignment number */
@@ -120,24 +120,24 @@ e_eFSS_Res integrityCreatorRawNoBkp(const s_eFSS_Ctx* prmCntx)
         if( EFSS_RES_OK == returnVal)
         {
             /* no major error found */
-            if( ( prmCntx->nOfPages == nonValidPageCounter ) || ( 0u != nonValidPageCounter ) ||
+            if( ( prmCntx->pageInfo.nOfPages == nonValidPageCounter ) || ( 0u != nonValidPageCounter ) ||
                 ( false == allAlignmentAreok ) )
             {
                 /* Set all memory to zero */
-                memset(prmCntx->memPoolPointer, 0u, prmCntx->pageSize);
+                memset(prmCntx->memPoolPointer, 0u, prmCntx->pageInfo.pageSize);
 
                 /* Set page parameter */
                 pagePrm.pageType = EFSS_PAGETYPE_RAW;
                 pagePrm.allPageAlignmentNumber = 1u;
-                pagePrm.pageVersion = prmCntx->rawPageVersion;
+                pagePrm.pageVersion = prmCntx->pageLogVer.rawPageVersion;
                 pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
 
                 /* Write all pages */
-                returnVal =  writeNPageNPrmNUpdateCrc(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->pageId,
-                                                      prmCntx->nOfPages, 0u, &pagePrm, prmCntx->cbHolder);
+                returnVal =  writeNPageNPrmNUpdateCrc(prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, prmCntx->memPoolPointer,
+                                                      prmCntx->pageInfo.nOfPages, 0u, &pagePrm);
                 if( EFSS_RES_OK == returnVal )
                 {
-                    if( prmCntx->nOfPages == nonValidPageCounter )
+                    if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
                     {
                         /* All pages are corrupted, this is first init  */
                         returnVal = EFSS_RES_OK_FIRSTINIT;
@@ -192,10 +192,9 @@ e_eFSS_Res integrityCreatorRawWithBkp(const s_eFSS_Ctx* prmCntx)
         returnVal = EFSS_RES_OK;
         allAlignmentAreok = true;
 
-        while( ( iterator < prmCntx->nOfPages ) && ( EFSS_RES_OK == returnVal ) )
+        while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
         {
-            returnVal = isValidPage( prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->pageId,
-                                               iterator, prmCntx->cbHolder, prmCntx->pageType);
+            returnVal = isValidPage( prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, iterator);
 
             if( EFSS_RES_NOTVALIDPAGE == returnVal)
             {
@@ -207,7 +206,7 @@ e_eFSS_Res integrityCreatorRawWithBkp(const s_eFSS_Ctx* prmCntx)
                 /* Page is Ok, check if alignment is still ok*/
                 if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
                 {
-                    returnVal = getPagePrmFromBuff(prmCntx->pageSize, prmCntx->memPoolPointer, &pagePrm);
+                    returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
                     if( EFSS_RES_OK == returnVal )
                     {
                         /* Save first alignment number */
@@ -232,24 +231,24 @@ e_eFSS_Res integrityCreatorRawWithBkp(const s_eFSS_Ctx* prmCntx)
         if( EFSS_RES_OK == returnVal)
         {
             /* no major error found */
-            if( ( prmCntx->nOfPages == nonValidPageCounter ) || ( 0u != nonValidPageCounter ) ||
+            if( ( prmCntx->pageInfo.nOfPages == nonValidPageCounter ) || ( 0u != nonValidPageCounter ) ||
                 ( false == allAlignmentAreok ) )
             {
                 /* Set all memory to zero */
-                memset(prmCntx->memPoolPointer, 0u, prmCntx->pageSize);
+                memset(prmCntx->memPoolPointer, 0u, prmCntx->pageInfo.pageSize);
 
                 /* Set page parameter */
                 pagePrm.pageType = EFSS_PAGETYPE_RAW;
                 pagePrm.allPageAlignmentNumber = 1u;
-                pagePrm.pageVersion = prmCntx->rawPageVersion;
+                pagePrm.pageVersion = prmCntx->pageLogVer.rawPageVersion;
                 pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
 
                 /* Write all pages */
-                returnVal =  writeNPageNPrmNUpdateCrc(prmCntx->pageSize, prmCntx->memPoolPointer, prmCntx->pageId,
-                                                      prmCntx->nOfPages, 0u, &pagePrm, prmCntx->cbHolder);
+                returnVal =  writeNPageNPrmNUpdateCrc(prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, prmCntx->memPoolPointer,
+                                                      prmCntx->pageInfo.nOfPages, 0u, &pagePrm);
                 if( EFSS_RES_OK == returnVal )
                 {
-                    if( prmCntx->nOfPages == nonValidPageCounter )
+                    if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
                     {
                         /* All pages are corrupted, this is first init  */
                         returnVal = EFSS_RES_OK_FIRSTINIT;
