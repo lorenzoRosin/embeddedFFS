@@ -30,7 +30,7 @@ e_eFSS_Res erasePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const ui
     else
     {
         /* Check for parameter validity */
-        if( pageIndx >=  pginfo.nOfPages )
+        if( pageIndx >= pginfo.nOfPages )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
@@ -60,7 +60,7 @@ e_eFSS_Res erasePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const ui
 }
 
 e_eFSS_Res writePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uint32_t pageIndx, const uint8_t* dataW,
-                      uint8_t* const supportMemory )
+                        uint8_t* const supportMemory )
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -96,7 +96,7 @@ e_eFSS_Res writePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const ui
 
                     if( true == operationResult )
                     {
-                        if( 0 == memcmp(dataW,supportMemory, pginfo.pageSize) )
+                        if( 0 == memcmp(dataW, supportMemory, pginfo.pageSize) )
                         {
                             operationResult = true;
                         }
@@ -112,7 +112,7 @@ e_eFSS_Res writePageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const ui
 
             if( false == operationResult )
             {
-                returnVal = EFSS_RES_ERRORREAD;
+                returnVal = EFSS_RES_ERRORWRITE;
             }
             else
             {
@@ -138,7 +138,7 @@ e_eFSS_Res readPageLL( const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cb, const uin
     else
     {
         /* Check for parameter validity */
-        if( pageIndx >=  pginfo.nOfPages )
+        if( pageIndx >= pginfo.nOfPages )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
@@ -208,7 +208,7 @@ e_eFSS_Res calcCrcLL(const s_eFSS_Cb cb, uint32_t* const crc, const uint8_t* dat
 
 
 e_eFSS_Res calcCrcSeedLL(const s_eFSS_Cb cb, uint32_t* const crc, const uint8_t* data, const uint32_t dataLen,
-                       const uint32_t seed )
+                         const uint32_t seed )
 {
     /* Local variable */
     e_eFSS_Res returnVal;
