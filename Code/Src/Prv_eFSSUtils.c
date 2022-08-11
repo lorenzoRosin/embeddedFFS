@@ -7,7 +7,7 @@
  *      INCLUDES
  **********************************************************************************************************************/
 #include "Prv_eFSSUtils.h"
-
+#include "Prv_eFSSUtilsLL.h"
 
 
 /***********************************************************************************************************************
@@ -236,102 +236,68 @@ e_eFSS_Res isValidPageInBuff(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, 
     return returnVal;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
-                        const uint32_t pageOffset, const s_eFSS_Cb cbHld, const e_eFSS_PageType pageType)
+e_eFSS_Res isValidPage(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const suppBuff,
+                       const uint32_t pageIndx)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == cbHld.pReadPg ) )
+    if( NULL == suppBuff )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-        /* Get pageBuff */
-        if( false == (*(cbHld.pReadPg))(pageId, pageOffset, pageSize, pageBuff) )
+        /* Check for parameter validity */
+        if( pageIndx >= pginfo.nOfPages )
         {
-            returnVal = EFSS_RES_ERRORREAD;
+            returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
-            /* now verify the page loaded in the buffer */
-            returnVal = isValidPageInBuff(pageSize, pageBuff, cbHld, pageType);
+            /* Get the page to check in the support ram buffer */
+            if( EFSS_RES_OK == readPageLL( pginfo, cbHld, pageIndx, suppBuff ) )
+            {
+                /* now verify the page loaded in the buffer */
+                returnVal = isValidPageInBuff(pginfo, cbHld, suppBuff);
+            }
         }
     }
 
     return returnVal;
 }
 
-e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
-                                   const uint32_t pageOffset, const s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld)
+e_eFSS_Res writePageNPrmNUpdateCrc(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageBuff,
+                                   uint8_t* const suppBuff, const uint32_t pageIndx, const s_prv_pagePrm* prmPage)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == prmPage ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    if( ( NULL == pageBuff ) || ( NULL == prmPage ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-        /* Set the page param and CRC in the page buffer */
-        returnVal = setPagePrmInBuffNCrcUp(pageSize, pageBuff, cbHld, prmPage);
-        if( EFSS_RES_OK == returnVal )
+        /* Check for parameter validity */
+        if( pageIndx >= pginfo.nOfPages )
         {
-            /* Erase physical page */
-            if( false == (*(cbHld.pErasePg))(pageId, pageOffset, pageSize) )
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Set the page param and CRC in the page buffer */
+            returnVal = setPagePrmInBuffNCrcUp(pginfo, cbHld, pageBuff, prmPage);
+            if( EFSS_RES_OK == returnVal )
             {
-                returnVal = EFSS_RES_ERRORERASE;
-            }
-            else
-            {
-                /* Write the pageBuff in the physical page */
-                if( false == (*(cbHld.pWritePg))(pageId, pageOffset, pageSize, pageBuff) )
+                /* Erase physical page */
+                returnVal = erasePageLL(pginfo, cbHld, pageIndx);
+                if( EFSS_RES_OK == returnVal )
                 {
-                    returnVal = EFSS_RES_ERRORWRITE;
-                }
-                else
-                {
-                    returnVal = EFSS_RES_OK;
+                    /* Write the pageBuff in the physical page */
+                    returnVal = writePageLL(pginfo, cbHld, pageIndx, pageBuff, suppBuff );
                 }
             }
         }
@@ -340,53 +306,121 @@ e_eFSS_Res writePageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageB
     return returnVal;
 }
 
-e_eFSS_Res writeNPageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
-                                    const uint32_t nOfPageToWrite, const uint32_t startOffset,
-                                    const s_prv_pagePrm* prmPage, const s_eFSS_Cb cbHld)
+e_eFSS_Res writeNPageNPrmNUpdateCrc(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageBuff,
+                                    uint8_t* const suppBuff, const uint32_t nPageToWrite, const uint32_t startPageIndx,
+                                    const s_prv_pagePrm* prmPage)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
     uint32_t iterator;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == prmPage ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    if( ( NULL == pageBuff )|| ( NULL == suppBuff ) || ( NULL == prmPage ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-        /* Set the page param and CRC in the page buffer */
-        returnVal = setPagePrmInBuffNCrcUp(pageSize, pageBuff, cbHld, prmPage);
-        if( EFSS_RES_OK == returnVal )
+        /* Check for parameter validity */
+        if( ( 0u == nPageToWrite ) || ( startPageIndx >= pginfo.nOfPages ) ||
+          ( ( startPageIndx + nPageToWrite - 1u ) >= pginfo.nOfPages ) )
         {
-            iterator = 0;
-            while( ( iterator < nOfPageToWrite ) && ( EFSS_RES_OK == returnVal ) )
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Set the page param and CRC in the page buffer */
+            returnVal = setPagePrmInBuffNCrcUp(pginfo, cbHld, pageBuff, prmPage);
+            if( EFSS_RES_OK == returnVal )
             {
-                /* Erase physical page */
-                if( false == (*(cbHld.pErasePg))(pageId, iterator, pageSize) )
+                iterator = 0u;
+                while( ( iterator < nPageToWrite ) && ( EFSS_RES_OK == returnVal ) )
                 {
-                    returnVal = EFSS_RES_ERRORERASE;
-                }
-                else
-                {
-                    /* Write the pageBuff in the physical page */
-                    if( false == (*(cbHld.pWritePg))(pageId, iterator, pageSize, pageBuff) )
+                    /* Erase physical page */
+                    returnVal = erasePageLL(pginfo, cbHld, ( startPageIndx + iterator ) );
+                    if( EFSS_RES_OK == returnVal )
                     {
-                        returnVal = EFSS_RES_ERRORWRITE;
+                        /* Write the pageBuff in the physical page */
+                        returnVal = writePageLL(pginfo, cbHld, ( startPageIndx + iterator ), pageBuff, suppBuff );
                     }
-                    else
-                    {
-                        returnVal = EFSS_RES_OK;
-                    }
+
+                    iterator++;
                 }
-                iterator++;
             }
         }
-
     }
 
     return returnVal;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 e_eFSS_Res readPageNPrm(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
                         const uint32_t pageOffset, const s_eFSS_Cb cbHld, s_prv_pagePrm* const pagePrm)
