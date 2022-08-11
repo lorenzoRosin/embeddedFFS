@@ -26,10 +26,9 @@ extern "C" {
  **********************************************************************************************************************/
 typedef struct
 {
-    uint32_t    pageTimeSetted;
-    uint8_t     pageType;
-    uint8_t     allPageAlignmentNumber;
-    uint16_t    pageVersion;
+    uint16_t    pageType;
+    uint16_t    allPageAlignmentNumber;
+    uint32_t    pageVersion;
     uint32_t    pageMagicNumber;
     uint32_t    pageCrc;
 }s_prv_pagePrm;
@@ -156,6 +155,34 @@ e_eFSS_Res writeNPageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const page
 e_eFSS_Res readPageNPrm(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
                         const uint32_t pageOffset, const s_eFSS_Cb cbHld, s_prv_pagePrm* const pagePrm);
 
+
+/**
+ * Erase and write Tot numbers of page with the param passed, and automatically update the CRC of the page
+ * @param pageSize Size of the page
+ * @param supportBuff Pointer to a buffer that we will use as a support during the cloning procedure
+ * @param pageId   Id associated with the first page of the context
+ * @param toCloneOffset page to clone offset
+ * @param destinationOffset destination offset
+ * @param cbHld Struct containing all callback reference
+ * @return e_eFSS_Res result
+ */
+e_eFSS_Res cloneAPage(const uint32_t pageSize, uint8_t* const supportBuff, const uint32_t pageId,
+                                    const uint32_t toCloneOffset, const uint32_t destinationOffset,
+                                    const s_eFSS_Cb cbHld);
+
+/**
+ * Erase and write Tot numbers of page with the param passed, and automatically update the CRC of the page
+ * @param pageSize Size of the page
+ * @param pageBuff Pointer to a buffer containing the data that we want to write in the page
+ * @param pageId   Id associated with the first page of the context
+ * @param nOfPageToWrite Number of page to write
+ * @param startOffset start page offset for the write process
+ * @param prmPage Param that we want to write in the page
+ * @param cbHld Struct containing all callback reference
+ * @return e_eFSS_Res result
+ */
+e_eFSS_Res verifyAndRipristinateBkup(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                                    const uint32_t origPage, const uint32_t backupPage, const s_eFSS_Cb cbHld);
 
 #ifdef __cplusplus
 } /* extern "C" */

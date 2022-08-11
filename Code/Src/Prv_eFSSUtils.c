@@ -336,14 +336,34 @@ e_eFSS_Res writeNPageNPrmNUpdateCrc(const uint32_t pageSize, uint8_t* const page
     }
     else
     {
-        returnVal = EFSS_RES_OK;
-        iterator = 0;
-        while( ( iterator < nOfPageToWrite ) && ( EFSS_RES_OK == returnVal ) )
+        /* Set the page param and CRC in the page buffer */
+        returnVal = setPagePrmInBuffNCrcUp(pageSize, pageBuff, cbHld, prmPage);
+        if( EFSS_RES_OK == returnVal )
         {
-            /* Write a page in memory */
-            returnVal = writePageNPrmNUpdateCrc( pageSize, pageBuff, pageId, iterator + startOffset, prmPage, cbHld );
-            iterator++;
+            iterator = 0;
+            while( ( iterator < nOfPageToWrite ) && ( EFSS_RES_OK == returnVal ) )
+            {
+                /* Erase physical page */
+                if( false == (*(cbHld.pErasePg))(pageId, iterator, pageSize) )
+                {
+                    returnVal = EFSS_RES_ERRORERASE;
+                }
+                else
+                {
+                    /* Write the pageBuff in the physical page */
+                    if( false == (*(cbHld.pWritePg))(pageId, iterator, pageSize, pageBuff) )
+                    {
+                        returnVal = EFSS_RES_ERRORWRITE;
+                    }
+                    else
+                    {
+                        returnVal = EFSS_RES_OK;
+                    }
+                }
+                iterator++;
+            }
         }
+
     }
 
     return returnVal;
@@ -373,6 +393,69 @@ e_eFSS_Res readPageNPrm(const uint32_t pageSize, uint8_t* const pageBuff, const 
             returnVal = getPagePrmFromBuff(pageSize, pageBuff, pagePrm);
         }
 
+    }
+
+    return returnVal;
+}
+
+e_eFSS_Res cloneAPage(const uint32_t pageSize, uint8_t* const supportBuff, const uint32_t pageId,
+                                    const uint32_t toCloneOffset, const uint32_t destinationOffset,
+                                    const s_eFSS_Cb cbHld)
+{
+    /* Local variable */
+    e_eFSS_Res returnVal;
+
+    /* Check for NULL pointer */
+    if( ( NULL == supportBuff ) || ( NULL == cbHld.pReadPg ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        if( false == (*(cbHld.pReadPg))(pageId, toCloneOffset, pageSize, supportBuff) )
+        {
+            returnVal = EFSS_RES_ERRORREAD;
+        }
+        else
+        {
+            /* Erase physical page */
+            if( false == (*(cbHld.pErasePg))(pageId, destinationOffset, pageSize) )
+            {
+                returnVal = EFSS_RES_ERRORERASE;
+            }
+            else
+            {
+                /* Write the pageBuff in the physical page */
+                if( false == (*(cbHld.pWritePg))(pageId, destinationOffset, pageSize, supportBuff) )
+                {
+                    returnVal = EFSS_RES_ERRORWRITE;
+                }
+                else
+                {
+                    returnVal = EFSS_RES_OK;
+                }
+            }
+        }
+    }
+
+    return returnVal;
+}
+
+e_eFSS_Res verifyAndRipristinateBkup(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
+                                    const uint32_t origPage, const uint32_t backupPage, const s_eFSS_Cb cbHld)
+{
+    /* Local variable */
+    e_eFSS_Res returnVal;
+    uint32_t iterator;
+
+    /* Check for NULL pointer */
+    if( ( NULL == pageBuff ) || ( NULL == cbHld.pReadPg ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    {
+        returnVal = EFSS_RES_BADPOINTER;
+    }
+    else
+    {
+        returnVal = EFSS_RES_OK;
     }
 
     return returnVal;
