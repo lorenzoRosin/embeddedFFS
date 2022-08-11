@@ -127,7 +127,6 @@ e_eFSS_Res integrityCreatorRawNoBkp(const s_eFSS_Ctx* prmCntx)
                 memset(prmCntx->memPoolPointer, 0u, prmCntx->pageSize);
 
                 /* Set page parameter */
-                pagePrm.pageTimeSetted = 1u;
                 pagePrm.pageType = EFSS_PAGETYPE_RAW;
                 pagePrm.allPageAlignmentNumber = 1u;
                 pagePrm.pageVersion = prmCntx->rawPageVersion;
@@ -240,7 +239,6 @@ e_eFSS_Res integrityCreatorRawWithBkp(const s_eFSS_Ctx* prmCntx)
                 memset(prmCntx->memPoolPointer, 0u, prmCntx->pageSize);
 
                 /* Set page parameter */
-                pagePrm.pageTimeSetted = 1u;
                 pagePrm.pageType = EFSS_PAGETYPE_RAW;
                 pagePrm.allPageAlignmentNumber = 1u;
                 pagePrm.pageVersion = prmCntx->rawPageVersion;

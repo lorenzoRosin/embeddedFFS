@@ -88,7 +88,20 @@ typedef struct t_eFSS_Cb
     cb_writePage pWritePg;
     cb_erasePage pErasePg;
     cb_crc32     pCrc32;
+
+    /* Call back Options */
+    uint32_t operationRetry;
+    bool_t enableWriteCheck;
 }s_eFSS_Cb;
+
+
+typedef struct t_eFSS_PgInfo
+{
+    /* Page Info */
+    uint32_t pageSize;
+    uint32_t nOfPages;
+    uint32_t areaId;
+}s_eFSS_PgInfo;
 
 typedef struct t_eFSS_InitParam
 {

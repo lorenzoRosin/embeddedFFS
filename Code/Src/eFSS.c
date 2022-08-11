@@ -185,7 +185,6 @@ e_eFSS_Res verifyAndGeneratePageIntegrityNoBkup(s_eFSS_Ctx* prmCntx, uint32_t pa
 
                         memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
-                        pagePrm.pageTimeSetted = 1u;
                         pagePrm.pageType = EFSS_PAGETYPE_RAW;
                         pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
                         pagePrm.pageCrc = 0u;
@@ -368,7 +367,6 @@ e_eFSS_Res verifyAndGenerateAllPageIntegrityRaw(s_eFSS_Ctx* prmCntx)
 
                         memset(prmCntx->memPoolPointer, 0, prmCntx->pageSize);
 
-                        pagePrm.pageTimeSetted = 1u;
                         pagePrm.pageType = EFSS_PAGETYPE_RAW;
                         pagePrm.pageMagicNumber = PARAM_32_MAGIC_NUMBER;
                         pagePrm.pageCrc = 0u;

@@ -53,7 +53,7 @@ bool_t Prv_eFSSUtilsTestFunc(void)
 
         if( EFSS_RES_OK == getPagePrmFromBuff(sizeof(buffer1), buffer1, &param) )
         {
-            if( (vale32 == param.pageTimeSetted) && (vale8 == param.pageType) && (vale16 == param.pageVersion) )
+            if( (vale8 == param.pageType) && (vale16 == param.pageVersion) )
             {
                 retValue = true;
             }
@@ -77,7 +77,6 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         memset(buffer1, 0u, sizeof(buffer1));
         memset(buffer2, 0u, sizeof(buffer2));
 
-        paramToWrite.pageTimeSetted = 0x10u;
         paramToWrite.pageType = 0x12u;
         paramToWrite.allPageAlignmentNumber = 0x34;
         paramToWrite.pageVersion = 0x8796u;
@@ -118,7 +117,6 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         memset(buffer1, 0u, sizeof(buffer1));
         memset(buffer2, 0u, sizeof(buffer2));
 
-        paramToWrite.pageTimeSetted = 0x10u;
         paramToWrite.pageType = 0x12u;
         paramToWrite.allPageAlignmentNumber = 0x34;
         paramToWrite.pageVersion = 0x8796u;
@@ -199,7 +197,6 @@ bool_t Prv_eFSSUtilsTestFunc(void)
 
         memset(buffer1, 0u, sizeof(buffer1));
 
-        paramToReadWrite.pageTimeSetted = 1u;
         paramToReadWrite.pageType = 1u;
         paramToReadWrite.allPageAlignmentNumber = 0u;
         paramToReadWrite.pageVersion = 1u;
@@ -241,7 +238,6 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         memset(buffer1, 0u, sizeof(buffer1));
         memset(buffer2, 0u, sizeof(buffer2));
 
-        paramToReadWrite.pageTimeSetted = 1u;
         paramToReadWrite.pageType = 1u;
         paramToReadWrite.allPageAlignmentNumber = 0u;
         paramToReadWrite.pageVersion = 1u;
@@ -283,7 +279,6 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         memset(buffer1, 0u, sizeof(buffer1));
         memset(buffer2, 0u, sizeof(buffer2));
 
-        paramToReadWrite.pageTimeSetted = 1u;
         paramToReadWrite.pageType = 1u;
         paramToReadWrite.allPageAlignmentNumber = 0u;
         paramToReadWrite.pageVersion = 1u;
@@ -353,7 +348,6 @@ bool_t Prv_eFSSUtilsTestFunc(void)
         s_prv_pagePrm paramToWrite;
         s_prv_pagePrm paramToRead;
 
-        paramToWrite.pageTimeSetted = 1u;
         paramToWrite.pageType = 1u;
         paramToWrite.allPageAlignmentNumber = 1u;
         paramToWrite.pageVersion = 1u;

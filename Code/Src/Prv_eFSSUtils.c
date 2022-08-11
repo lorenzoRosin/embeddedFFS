@@ -41,7 +41,6 @@ e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, 
             uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
 
             /* fill the parameter using the passed buffer */
-            (void)memcpy( (uint8_t*)&pagePrm->pageTimeSetted,         &pageBuff[offset1], sizeof(uint32_t) );
             (void)memcpy( (uint8_t*)&pagePrm->pageType,               &pageBuff[offset2], sizeof(uint8_t)  );
             (void)memcpy( (uint8_t*)&pagePrm->allPageAlignmentNumber, &pageBuff[offset3], sizeof(uint8_t)  );
             (void)memcpy( (uint8_t*)&pagePrm->pageVersion,            &pageBuff[offset4], sizeof(uint16_t) );
@@ -81,7 +80,6 @@ e_eFSS_Res setPagePrmInBuff(const uint32_t pageSize, uint8_t* const pageBuff, co
             uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
 
             /* fill the paramebuffer using the passed parameter */
-            (void)memcpy( &pageBuff[offset1], (const uint8_t*)&pagePrm->pageTimeSetted,           sizeof(uint32_t) );
             (void)memcpy( &pageBuff[offset2], (const uint8_t*)&pagePrm->pageType,                 sizeof(uint8_t)  );
             (void)memcpy( &pageBuff[offset3], (const uint8_t*)&pagePrm->allPageAlignmentNumber,   sizeof(uint8_t)  );
             (void)memcpy( &pageBuff[offset4], (const uint8_t*)&pagePrm->pageVersion,              sizeof(uint16_t) );

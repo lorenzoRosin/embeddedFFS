@@ -2861,6 +2861,9 @@
             <file>
                 <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSUtils.h</name>
             </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Inc\Prv_eFSSUtilsLL.h</name>
+            </file>
         </group>
         <group>
             <name>Src</name>
@@ -2878,6 +2881,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSUtils.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\Code\Src\Prv_eFSSUtilsLL.c</name>
             </file>
         </group>
     </group>
