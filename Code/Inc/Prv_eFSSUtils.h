@@ -189,8 +189,8 @@ e_eFSS_Res readPageNPrm(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8
  * 4 - If origIndx and backupIndx are not valid we cann not do nothing
  * @param pginfo Information about memory and pages
  * @param cbHld Struct containing all callback reference
- * @param pageBuff Support buffer to do the calculation, must be atleast a page size
- * @param suppBuff Support buffer to do the calculation, must be atleast a page size
+ * @param pageOrig Support buffer to do the calculation, must be atleast a page size
+ * @param pageBkup Support buffer to do the calculation, must be atleast a page size
  * @param origIndx Index of the original page
  * @param backupIndx Index of the backup page
  * @return EFSS_RES_BADPOINTER in case of bad pointer
@@ -202,8 +202,8 @@ e_eFSS_Res readPageNPrm(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8
  *         EFSS_RES_OK_BKP_RCVRD operation ended successfully recovering a backup or an origin page
  *         EFSS_RES_OK operation ended successfully
  */
-e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageBuff,
-                                     uint8_t* const suppBuff, const uint32_t origIndx, const uint32_t backupIndx);
+e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageOrig,
+                                     uint8_t* const pageBkup, const uint32_t origIndx, const uint32_t backupIndx);
 
 /**
  * Clone a page from origIndx to destIndx

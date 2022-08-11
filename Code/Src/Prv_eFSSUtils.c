@@ -387,133 +387,100 @@ e_eFSS_Res readPageNPrm(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8
     return returnVal;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-e_eFSS_Res verifyAndRipristinateBkup(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
-                                    const uint32_t origPage, const uint32_t backupPage, const s_eFSS_Cb cbHld)
+e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageOrig,
+                                     uint8_t* const pageBkup, const uint32_t origIndx, const uint32_t backupIndx)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
-    uint32_t iterator;
+    e_eFSS_Res readRetValOr;
+    e_eFSS_Res readRetValBk;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == cbHld.pReadPg ) || ( NULL == cbHld.pErasePg ) || ( NULL == cbHld.pWritePg ) )
+    if( ( NULL == pageOrig )|| ( NULL == pageBkup ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
-        returnVal = EFSS_RES_OK;
+        /* Check for parameter validity */
+        if( ( origIndx >= pginfo.nOfPages ) || ( backupIndx >= pginfo.nOfPages )  || ( backupIndx == origIndx ) )
+        {
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Read all pages before start doing test */
+            readRetValOr = readPageLL( pginfo, cbHld, origIndx, pageOrig );
+            readRetValBk = readPageLL( pginfo, cbHld, backupIndx, pageBkup );
+
+            if( ( EFSS_RES_OK == readRetValOr ) && ( EFSS_RES_OK == readRetValBk ) )
+            {
+                /* Verify all pages integrity */
+                readRetValOr = isValidPageInBuff(pginfo, cbHld, pageOrig);
+                readRetValBk = isValidPageInBuff(pginfo, cbHld, pageBkup);
+
+                if( ( ( EFSS_RES_NOTVALIDPAGE == readRetValOr ) || ( EFSS_RES_OK == readRetValOr ) ) &&
+                    ( ( EFSS_RES_NOTVALIDPAGE == readRetValBk ) || ( EFSS_RES_OK == readRetValBk ) ) )
+                {
+                    if( ( EFSS_RES_OK == readRetValOr ) && ( EFSS_RES_OK == readRetValBk ) )
+                    {
+                        /* Two pages are equal, are they identical? */
+                        if( 0u == memcmp(pageOrig, pageBkup, pginfo.pageSize ) )
+                        {
+                            /* Page are equals*/
+                            returnVal = EFSS_RES_OK;
+                        }
+                        else
+                        {
+                            /* Page are not equals*/
+                            returnVal = writePageLL(pginfo, cbHld, backupIndx, pageBkup, pageOrig );
+                            if( EFSS_RES_OK == returnVal )
+                            {
+                                returnVal = EFSS_RES_OK_BKP_RCVRD;
+                            }
+                        }
+                    }
+                    else if( ( EFSS_RES_NOTVALIDPAGE == readRetValOr ) && ( EFSS_RES_OK == readRetValBk ) )
+                    {
+                        /* Origin is not valid, repristinate from backup */
+                        returnVal = writePageLL(pginfo, cbHld, origIndx, pageOrig, pageBkup );
+                        if( EFSS_RES_OK == returnVal )
+                        {
+                            returnVal = EFSS_RES_OK_BKP_RCVRD;
+                        }
+                    }
+                    else if( ( EFSS_RES_OK == readRetValOr ) && ( EFSS_RES_NOTVALIDPAGE == readRetValBk ) )
+                    {
+                        /* Backup is not valid, repristinate from origin */
+                        returnVal = writePageLL(pginfo, cbHld, backupIndx, pageBkup, pageOrig );
+                        if( EFSS_RES_OK == returnVal )
+                        {
+                            returnVal = EFSS_RES_OK_BKP_RCVRD;
+                        }
+                    }
+                    else
+                    {
+                        /* No a single valid pages found */
+                        returnVal = EFSS_RES_NOTVALIDPAGE;
+                    }
+                }
+                else
+                {
+                    returnVal = EFSS_RES_BADPARAM;
+                }
+            }
+            else
+            {
+                returnVal = EFSS_RES_ERRORREAD;
+            }
+        }
     }
 
     return returnVal;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-e_eFSS_Res cloneAPage(const uint32_t pageSize, uint8_t* const supportBuff, const uint32_t pageId,
-                                    const uint32_t toCloneOffset, const uint32_t destinationOffset,
-                                    const s_eFSS_Cb cbHld)
+e_eFSS_Res cloneAPage(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageBuff,
+                      uint8_t* const suppBuff, const uint32_t origIndx, const uint32_t destIndx)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
