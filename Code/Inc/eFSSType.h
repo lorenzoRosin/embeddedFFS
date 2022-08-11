@@ -34,8 +34,6 @@ extern "C" {
   #define bool_t          bool
 #endif
 
-#define EFSS_BKPPAGE_EN                       ( (1u) << (0u) )
-
 #define EFSS_DIVISOR_PAGE_BACKUP                (2u)
 #define EFSS_DIVISOR_PAGE_SIZE_BYTE             (16u)
 #define EFSS_MIN_PAGE_SIZE_BYTE                 (256u)
@@ -101,7 +99,17 @@ typedef struct t_eFSS_PgInfo
     uint32_t pageSize;
     uint32_t nOfPages;
     uint32_t areaId;
+    e_eFSS_PageType pageType;
+    bool_t pageBkp;
 }s_eFSS_PgInfo;
+
+typedef struct t_eFSS_PgLogVer
+{
+    /* Page Info */
+    uint16_t logVersion;
+    uint16_t rawPageVersion;
+    uint8_t* parameterDefaultValue;
+}s_eFSS_PgLogVer;
 
 typedef struct t_eFSS_InitParam
 {
@@ -128,16 +136,10 @@ typedef struct t_eFSS_InitParam
 typedef struct t_eFSS_Ctx
 {
     /* Page information */
-    uint32_t pageSize;
-    uint32_t nOfPages;
-    uint32_t pageId;
-    uint16_t logVersion;
-    uint16_t rawPageVersion;
-    uint8_t* parameterDefaultValue;
+    s_eFSS_PgInfo pageInfo;
 
-    /* Param Handler behaviour */
-    uint32_t paramHandlerFlag;
-    e_eFSS_PageType pageType;
+    /* Log Page version */
+    s_eFSS_PgLogVer pageLogVer;
 
     /* CallBack Pointer */
     s_eFSS_Cb    cbHolder;
@@ -147,8 +149,8 @@ typedef struct t_eFSS_Ctx
     uint32_t memPoolSize;
 
     /* Init information */
-    bool_t isInitializedParams;
-    bool_t isInitializedMemory;
+    bool_t isInitParams;
+    bool_t isInitMemory;
 }s_eFSS_Ctx;
 
 typedef enum t_eFSS_PrmType

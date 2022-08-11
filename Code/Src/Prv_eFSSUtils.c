@@ -13,7 +13,7 @@
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
-e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, s_prv_pagePrm* const pagePrm)
+e_eFSS_Res getPagePrmFromBuff(const s_eFSS_PgInfo pginfo, const uint8_t* pageBuff, s_prv_pagePrm* const pagePrm)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -26,33 +26,32 @@ e_eFSS_Res getPagePrmFromBuff(const uint32_t pageSize, const uint8_t* pageBuff, 
     else
     {
         /* Check for parameter validity */
-        if( ( pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
+        if( ( pginfo.pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pginfo.pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
             /* Calculating offset */
-            uint32_t offset1 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint32_t) );
-            uint32_t offset2 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) );
-            uint32_t offset3 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) + sizeof(uint8_t) );
-            uint32_t offset4 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) );
-            uint32_t offset5 = pageSize - ( sizeof(uint64_t) );
-            uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
+            uint32_t offset1 = pginfo.pageSize - ( sizeof(uint64_t) + sizeof(uint64_t) );
+            uint32_t offset2 = pginfo.pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint16_t) );
+            uint32_t offset3 = pginfo.pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) );
+            uint32_t offset4 = pginfo.pageSize - ( sizeof(uint32_t) + sizeof(uint32_t) );
+            uint32_t offset5 = pginfo.pageSize - ( sizeof(uint32_t) );
 
             /* fill the parameter using the passed buffer */
-            (void)memcpy( (uint8_t*)&pagePrm->pageType,               &pageBuff[offset2], sizeof(uint8_t)  );
-            (void)memcpy( (uint8_t*)&pagePrm->allPageAlignmentNumber, &pageBuff[offset3], sizeof(uint8_t)  );
-            (void)memcpy( (uint8_t*)&pagePrm->pageVersion,            &pageBuff[offset4], sizeof(uint16_t) );
-            (void)memcpy( (uint8_t*)&pagePrm->pageMagicNumber,        &pageBuff[offset5], sizeof(uint32_t) );
-            (void)memcpy( (uint8_t*)&pagePrm->pageCrc,                &pageBuff[offset6], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageType,               &pageBuff[offset1], sizeof(uint16_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->allPageAlignmentNumber, &pageBuff[offset2], sizeof(uint16_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageVersion,            &pageBuff[offset3], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageMagicNumber,        &pageBuff[offset4], sizeof(uint32_t) );
+            (void)memcpy( (uint8_t*)&pagePrm->pageCrc,                &pageBuff[offset5], sizeof(uint32_t) );
             returnVal = EFSS_RES_OK;
         }
     }
     return returnVal;
 }
 
-e_eFSS_Res setPagePrmInBuff(const uint32_t pageSize, uint8_t* const pageBuff, const s_prv_pagePrm* pagePrm)
+e_eFSS_Res setPagePrmInBuff(const s_eFSS_PgInfo pginfo, uint8_t* const pageBuff, const s_prv_pagePrm* pagePrm)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -65,26 +64,25 @@ e_eFSS_Res setPagePrmInBuff(const uint32_t pageSize, uint8_t* const pageBuff, co
     else
     {
         /* Check for parameter validity */
-        if( ( pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
+        if( ( pginfo.pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pginfo.pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
             /* Calculating offset */
-            uint32_t offset1 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint32_t) );
-            uint32_t offset2 = pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) );
-            uint32_t offset3 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) + sizeof(uint8_t) );
-            uint32_t offset4 = pageSize - ( sizeof(uint64_t) + sizeof(uint16_t) );
-            uint32_t offset5 = pageSize - ( sizeof(uint64_t) );
-            uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
+            uint32_t offset1 = pginfo.pageSize - ( sizeof(uint64_t) + sizeof(uint64_t) );
+            uint32_t offset2 = pginfo.pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) + sizeof(uint16_t) );
+            uint32_t offset3 = pginfo.pageSize - ( sizeof(uint64_t) + sizeof(uint32_t) );
+            uint32_t offset4 = pginfo.pageSize - ( sizeof(uint32_t) + sizeof(uint32_t) );
+            uint32_t offset5 = pginfo.pageSize - ( sizeof(uint32_t) );
 
             /* fill the paramebuffer using the passed parameter */
-            (void)memcpy( &pageBuff[offset2], (const uint8_t*)&pagePrm->pageType,                 sizeof(uint8_t)  );
-            (void)memcpy( &pageBuff[offset3], (const uint8_t*)&pagePrm->allPageAlignmentNumber,   sizeof(uint8_t)  );
-            (void)memcpy( &pageBuff[offset4], (const uint8_t*)&pagePrm->pageVersion,              sizeof(uint16_t) );
-            (void)memcpy( &pageBuff[offset5], (const uint8_t*)&pagePrm->pageMagicNumber,          sizeof(uint32_t) );
-            (void)memcpy( &pageBuff[offset6], (const uint8_t*)&pagePrm->pageCrc,                  sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset1], (const uint8_t*)&pagePrm->pageType,                 sizeof(uint16_t) );
+            (void)memcpy( &pageBuff[offset2], (const uint8_t*)&pagePrm->allPageAlignmentNumber,   sizeof(uint16_t) );
+            (void)memcpy( &pageBuff[offset3], (const uint8_t*)&pagePrm->pageVersion,              sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset4], (const uint8_t*)&pagePrm->pageMagicNumber,          sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset5], (const uint8_t*)&pagePrm->pageCrc,                  sizeof(uint32_t) );
 
             returnVal = EFSS_RES_OK;
         }
@@ -93,30 +91,30 @@ e_eFSS_Res setPagePrmInBuff(const uint32_t pageSize, uint8_t* const pageBuff, co
     return returnVal;
 }
 
-e_eFSS_Res setCrcInPagePrmBuff(const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t crcToSet)
+e_eFSS_Res setCrcInPagePrmBuff(const s_eFSS_PgInfo pginfo, uint8_t* const pageBuff, const uint32_t crcToSet)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == crcToSet ) )
+    if( NULL == pageBuff )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
         /* Check for parameter validity */
-        if( ( pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
+        if( ( pginfo.pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pginfo.pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
             /* Calculating offset */
-            uint32_t offset6 = pageSize - ( sizeof(uint32_t) );
+            uint32_t offset5 = pginfo.pageSize - ( sizeof(uint32_t) );
 
             /* Copy CRC passed in to the ram buffer */
-            (void)memcpy( &pageBuff[offset6], (const uint8_t*)&crcToSet, sizeof(uint32_t) );
+            (void)memcpy( &pageBuff[offset5], (const uint8_t*)&crcToSet, sizeof(uint32_t) );
             returnVal = EFSS_RES_OK;
         }
     }
@@ -124,8 +122,7 @@ e_eFSS_Res setCrcInPagePrmBuff(const uint32_t pageSize, uint8_t* const pageBuff,
     return returnVal;
 }
 
-
-e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff, const s_eFSS_Cb cbHld,
+e_eFSS_Res calcPagePrmCrcInBuff(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, const uint8_t* pageBuff,
                                 uint32_t* const crcCalc)
 {
     /* Local variable */
@@ -133,40 +130,31 @@ e_eFSS_Res calcPagePrmCrcInBuff(const uint32_t pageSize, const uint8_t* pageBuff
     uint32_t pageCrcSizeToCalc;
 
     /* Check for NULL pointer */
-    if( ( NULL == pageBuff ) || ( NULL == crcCalc ) || ( NULL == cbHld.pCrc32 ) )
+    if( ( NULL == pageBuff ) || ( NULL == crcCalc ) )
     {
         returnVal = EFSS_RES_BADPOINTER;
     }
     else
     {
         /* Check for parameter validity */
-        if( ( pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
+        if( ( pginfo.pageSize < EFSS_MIN_PAGE_SIZE_BYTE ) || ( pginfo.pageSize > EFSS_MAX_PAGE_SIZE_BYTE ) )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
         else
         {
             /* Esclude from the calculation the CRC, that is placed in the last 4 byte */
-            pageCrcSizeToCalc = pageSize - sizeof(uint32_t);
+            pageCrcSizeToCalc = pginfo.pageSize - sizeof(uint32_t);
 
             /* Calculate CRC */
-            if( false == (*(cbHld.pCrc32))(crcCalc, pageBuff, pageCrcSizeToCalc, CRC_BASE_SEED) )
-            {
-                /* Generic CRC calculation Fail */
-                returnVal = EFSS_RES_BADPARAM;
-            }
-            else
-            {
-                returnVal = EFSS_RES_OK;
-            }
+            returnVal = calcCrcLL(cbHld, crcCalc, pageBuff, pageCrcSizeToCalc);
         }
     }
 
     return returnVal;
 }
 
-
-e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBuff, const s_eFSS_Cb cbHld,
+e_eFSS_Res setPagePrmInBuffNCrcUp(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t* const pageBuff,
                                   const s_prv_pagePrm* pagePrm)
 {
     /* Local variable */
@@ -181,17 +169,17 @@ e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBu
     else
     {
         /* Set the parameter in the ram buffer */
-        returnVal = setPagePrmInBuff(pageSize, pageBuff, pagePrm);
+        returnVal = setPagePrmInBuff(pginfo, pageBuff, pagePrm);
 
         if( EFSS_RES_OK == returnVal)
         {
             /* Calc crc value of the page */
-            returnVal = calcPagePrmCrcInBuff(pageSize, pageBuff, cbHld, &crcCalc);
+            returnVal = calcPagePrmCrcInBuff(pginfo, cbHld, pageBuff, &crcCalc);
 
             if( EFSS_RES_OK == returnVal)
             {
                 /* Crc calculated, set it */
-                returnVal = setCrcInPagePrmBuff(pageSize, pageBuff, crcCalc);
+                returnVal = setCrcInPagePrmBuff(pginfo, pageBuff, crcCalc);
             }
         }
     }
@@ -199,10 +187,7 @@ e_eFSS_Res setPagePrmInBuffNCrcUp(const uint32_t pageSize, uint8_t* const pageBu
     return returnVal;
 }
 
-
-
-e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, const s_eFSS_Cb cbHld,
-                             const e_eFSS_PageType pageType)
+e_eFSS_Res isValidPageInBuff(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, const uint8_t* pageBuff)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -217,12 +202,12 @@ e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, 
     else
     {
         /* Get pageBuff param from the ram pageBuff */
-        returnVal = getPagePrmFromBuff(pageSize, pageBuff, &prmPage);
+        returnVal = getPagePrmFromBuff(pginfo, pageBuff, &prmPage);
 
         if( EFSS_RES_OK == returnVal )
         {
             /* Calculate the pageBuff param CRC */
-            returnVal = calcPagePrmCrcInBuff(pageSize, pageBuff, cbHld, &crcCalc);
+            returnVal = calcPagePrmCrcInBuff(pginfo, cbHld, pageBuff, &crcCalc);
 
             if( EFSS_RES_OK == returnVal )
             {
@@ -231,7 +216,7 @@ e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, 
                 if( (crcCalc == prmPage.pageCrc) && ( PARAM_32_MAGIC_NUMBER == prmPage.pageMagicNumber ) )
                 {
                     /* Verify if the pageBuff type is what we are aspecting */
-                    if( prmPage.pageType == ( (uint8_t)pageType ) )
+                    if( prmPage.pageType == ( (uint16_t)pginfo.pageType ) )
                     {
                         returnVal = EFSS_RES_OK;
                     }
@@ -250,6 +235,42 @@ e_eFSS_Res isValidPageInBuff(const uint32_t pageSize,  const uint8_t* pageBuff, 
 
     return returnVal;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 e_eFSS_Res isValidPage( const uint32_t pageSize, uint8_t* const pageBuff, const uint32_t pageId,
                         const uint32_t pageOffset, const s_eFSS_Cb cbHld, const e_eFSS_PageType pageType)
