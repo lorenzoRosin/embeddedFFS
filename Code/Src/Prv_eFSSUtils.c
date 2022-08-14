@@ -505,11 +505,12 @@ e_eFSS_Res cloneAPage(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb cbHld, uint8_t
 
             if( EFSS_RES_OK == returnVal )
             {
-                /* Write the clone page in destination */
-                returnVal = writePageLL(pginfo, cbHld, destIndx, pageBuff, suppBuff );
+                /* Erase physical page */
+                returnVal = erasePageLL(pginfo, cbHld, destIndx );
                 if( EFSS_RES_OK == returnVal )
                 {
-                    returnVal = EFSS_RES_OK_BKP_RCVRD;
+                    /* Write the pageBuff in the physical page */
+                    returnVal = writePageLL(pginfo, cbHld, destIndx, pageBuff, suppBuff );
                 }
             }
         }
