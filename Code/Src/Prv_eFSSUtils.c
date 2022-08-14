@@ -433,8 +433,8 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                         }
                         else
                         {
-                            /* Page are not equals*/
-                            returnVal = writePageLL(pginfo, cbHld, backupIndx, pageBkup, pageOrig );
+                            /* Page are not equals, copy origin to backup */
+                            returnVal = writePageLL(pginfo, cbHld, backupIndx, pageOrig, pageBkup );
                             if( EFSS_RES_OK == returnVal )
                             {
                                 returnVal = EFSS_RES_OK_BKP_RCVRD;
@@ -444,7 +444,7 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                     else if( ( EFSS_RES_NOTVALIDPAGE == readRetValOr ) && ( EFSS_RES_OK == readRetValBk ) )
                     {
                         /* Origin is not valid, repristinate from backup */
-                        returnVal = writePageLL(pginfo, cbHld, origIndx, pageOrig, pageBkup );
+                        returnVal = writePageLL(pginfo, cbHld, origIndx, pageBkup, pageOrig );
                         if( EFSS_RES_OK == returnVal )
                         {
                             returnVal = EFSS_RES_OK_BKP_RCVRD;
@@ -453,7 +453,7 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                     else if( ( EFSS_RES_OK == readRetValOr ) && ( EFSS_RES_NOTVALIDPAGE == readRetValBk ) )
                     {
                         /* Backup is not valid, repristinate from origin */
-                        returnVal = writePageLL(pginfo, cbHld, backupIndx, pageBkup, pageOrig );
+                        returnVal = writePageLL(pginfo, cbHld, backupIndx, pageOrig, pageBkup );
                         if( EFSS_RES_OK == returnVal )
                         {
                             returnVal = EFSS_RES_OK_BKP_RCVRD;
