@@ -21,7 +21,7 @@ static e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx);
 /***********************************************************************************************************************
  *   GLOBAL FUNCTIONS
  **********************************************************************************************************************/
-e_eFSS_Res initEFSSRaw(const s_eFSS_Ctx* prmCntx)
+e_eFSS_Res checkMemStatRaw(const s_eFSS_Ctx* prmCntx)
 {
     /* Local variable */
     e_eFSS_Res returnVal;
@@ -69,80 +69,89 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
     }
     else
     {
-        /* Check if it is first init: all page are corrupted  */
-        /* Check if it is all ok: No corruption and all pages has same allPageAlignmentNumber */
-        /* Check if there is something corrupted: all ok but some pages has different allPageAlignmentNumber, or
-         *                                        some pages are invalid */
-        iterator = 0u;
-        nonValidPageCounter = 0u;
-        aligmenentNumberFound = 0u;
-        returnVal = EFSS_RES_OK;
-        allAlignmentAreok = true;
-
-        while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
+        /* Check for parameter validity */
+        if( ( 0u == prmCntx->pageInfo.nOfPages ) || ( EFSS_PAGETYPE_RAW != prmCntx->pageInfo.pageType ) ||
+            ( NULL == memPoolPointer ) )
         {
-            returnVal = isValidPage( prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, iterator);
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Check if it is first init: all page are corrupted  */
+            /* Check if it is all ok: No corruption and all pages has same allPageAlignmentNumber */
+            /* Check if there is something corrupted: all ok but some pages has different allPageAlignmentNumber, or
+            *                                        some pages are invalid */
+            iterator = 0u;
+            nonValidPageCounter = 0u;
+            aligmenentNumberFound = 0u;
+            returnVal = EFSS_RES_OK;
+            allAlignmentAreok = true;
 
-            if( EFSS_RES_NOTVALIDPAGE == returnVal)
+            while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
             {
-                nonValidPageCounter++;
-                returnVal = EFSS_RES_OK;
-            }
-            else if( EFSS_RES_OK == returnVal )
-            {
-                /* Page is Ok, check if alignment is still ok */
-                if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
+                returnVal = isValidPage( prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, iterator);
+
+                if( EFSS_RES_NOTVALIDPAGE == returnVal)
                 {
-                    returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
-
-                    if( EFSS_RES_OK == returnVal )
+                    nonValidPageCounter++;
+                    returnVal = EFSS_RES_OK;
+                }
+                else if( EFSS_RES_OK == returnVal )
+                {
+                    /* Page is Ok, check if alignment is still ok */
+                    if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
                     {
-                        /* Save first alignment number */
-                        if( 0u == iterator )
-                        {
-                            aligmenentNumberFound = pagePrm.allPageAlignmentNumber;
-                        }
+                        returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
 
-                        /* Check if alignment number are always equals */
-                        if(pagePrm.allPageAlignmentNumber != aligmenentNumberFound)
+                        if( EFSS_RES_OK == returnVal )
                         {
-                            allAlignmentAreok = false;
+                            /* Save first alignment number */
+                            if( 0u == iterator )
+                            {
+                                aligmenentNumberFound = pagePrm.allPageAlignmentNumber;
+                            }
+
+                            /* Check if alignment number are always equals */
+                            if(pagePrm.allPageAlignmentNumber != aligmenentNumberFound)
+                            {
+                                allAlignmentAreok = false;
+                            }
                         }
                     }
                 }
+
+                iterator++;
             }
 
-            iterator++;
-        }
-
-        /* Information parsing procedure ended, analyze */
-        if( EFSS_RES_OK == returnVal)
-        {
-            if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
+            /* Information parsing procedure ended, analyze */
+            if( EFSS_RES_OK == returnVal)
             {
-                /* First init absolutly */
-                returnVal = EFSS_RES_NOTINITMEM;
-            }
-            else if( 0u != nonValidPageCounter )
-            {
-                /* Some pages are corrupted */
-                returnVal = EFSS_RES_CORRUPTMEM;
-            }
-            else if( false == allAlignmentAreok )
-            {
-                /* No pages corruption but alignment is not even, some corruption happened */
-                returnVal = EFSS_RES_CORRUPTMEM;
-            }
-            else
-            {
-                /* All pages are ok, no curruption etc check pages version and type  */
-                if( EFSS_PAGETYPE_RAW != pagePrm.pageType )
+                if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
                 {
+                    /* First init because not valid page found */
+                    returnVal = EFSS_RES_NOTINITMEM;
+                }
+                else if( 0u != nonValidPageCounter )
+                {
+                    /* Some pages are corrupted */
                     returnVal = EFSS_RES_CORRUPTMEM;
                 }
-                else if( prmCntx->pageLogVer.rawPageVersion != pagePrm.pageVersion )
+                else if( false == allAlignmentAreok )
                 {
-                    returnVal = EFSS_RES_NEWVERFOUND;
+                    /* No pages corruption but alignment is not even, some corruption happened */
+                    returnVal = EFSS_RES_CORRUPTMEM;
+                }
+                else
+                {
+                    /* All pages are ok, no curruption etc check pages version and type  */
+                    if( EFSS_PAGETYPE_RAW != pagePrm.pageType )
+                    {
+                        returnVal = EFSS_RES_CORRUPTMEM;
+                    }
+                    else if( prmCntx->pageLogVer.rawPageVersion != pagePrm.pageVersion )
+                    {
+                        returnVal = EFSS_RES_NEWVERFOUND;
+                    }
                 }
             }
         }
@@ -172,80 +181,89 @@ e_eFSS_Res checkMemStatRawWithBkp(const s_eFSS_Ctx* prmCntx)
     }
     else
     {
-        /* Check if it is first init: all page are corrupted  */
-        /* Check if it is all ok: No corruption and all pages has same allPageAlignmentNumber */
-        /* Check if there is something corrupted: all ok but some pages has different allPageAlignmentNumber, or
-         *                                        some pages are invalid */
-        iterator = 0u;
-        nonValidPageCounter = 0u;
-        aligmenentNumberFound = 0u;
-        returnVal = EFSS_RES_OK;
-        allAlignmentAreok = true;
-
-        while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
+        /* Check for parameter validity */
+        if( ( 0u == prmCntx->pageInfo.nOfPages ) || ( EFSS_PAGETYPE_RAW != prmCntx->pageInfo.pageType ) ||
+            ( NULL == memPoolPointer ) )
         {
-            returnVal = isValidPage( prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, iterator);
+            returnVal = EFSS_RES_BADPARAM;
+        }
+        else
+        {
+            /* Check if it is first init: all page are corrupted  */
+            /* Check if it is all ok: No corruption and all pages has same allPageAlignmentNumber */
+            /* Check if there is something corrupted: all ok but some pages has different allPageAlignmentNumber, or
+            *                                        some pages are invalid */
+            iterator = 0u;
+            nonValidPageCounter = 0u;
+            aligmenentNumberFound = 0u;
+            returnVal = EFSS_RES_OK;
+            allAlignmentAreok = true;
 
-            if( EFSS_RES_NOTVALIDPAGE == returnVal)
+            while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
             {
-                nonValidPageCounter++;
-                returnVal = EFSS_RES_OK;
-            }
-            else if( EFSS_RES_OK == returnVal )
-            {
-                /* Page is Ok, check if alignment is still ok */
-                if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
+                returnVal = isValidPage( prmCntx->pageInfo, prmCntx->cbHolder, prmCntx->memPoolPointer, iterator);
+
+                if( EFSS_RES_NOTVALIDPAGE == returnVal)
                 {
-                    returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
-
-                    if( EFSS_RES_OK == returnVal )
+                    nonValidPageCounter++;
+                    returnVal = EFSS_RES_OK;
+                }
+                else if( EFSS_RES_OK == returnVal )
+                {
+                    /* Page is Ok, check if alignment is still ok */
+                    if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
                     {
-                        /* Save first alignment number */
-                        if( 0u == iterator )
-                        {
-                            aligmenentNumberFound = pagePrm.allPageAlignmentNumber;
-                        }
+                        returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
 
-                        /* Check if alignment number are always equals */
-                        if(pagePrm.allPageAlignmentNumber != aligmenentNumberFound)
+                        if( EFSS_RES_OK == returnVal )
                         {
-                            allAlignmentAreok = false;
+                            /* Save first alignment number */
+                            if( 0u == iterator )
+                            {
+                                aligmenentNumberFound = pagePrm.allPageAlignmentNumber;
+                            }
+
+                            /* Check if alignment number are always equals */
+                            if(pagePrm.allPageAlignmentNumber != aligmenentNumberFound)
+                            {
+                                allAlignmentAreok = false;
+                            }
                         }
                     }
                 }
+
+                iterator++;
             }
 
-            iterator++;
-        }
-
-        /* Information parsing procedure ended, analyze */
-        if( EFSS_RES_OK == returnVal)
-        {
-            if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
+            /* Information parsing procedure ended, analyze */
+            if( EFSS_RES_OK == returnVal)
             {
-                /* First init absolutly */
-                returnVal = EFSS_RES_NOTINITMEM;
-            }
-            else if( 0u != nonValidPageCounter )
-            {
-                /* Some pages are corrupted */
-                returnVal = EFSS_RES_CORRUPTMEM;
-            }
-            else if( false == allAlignmentAreok )
-            {
-                /* No pages corruption but alignment is not even, some corruption happened */
-                returnVal = EFSS_RES_CORRUPTMEM;
-            }
-            else
-            {
-                /* All pages are ok, no curruption etc check pages version and type  */
-                if( EFSS_PAGETYPE_RAW != pagePrm.pageType )
+                if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
                 {
+                    /* First init because not valid page found */
+                    returnVal = EFSS_RES_NOTINITMEM;
+                }
+                else if( 0u != nonValidPageCounter )
+                {
+                    /* Some pages are corrupted */
                     returnVal = EFSS_RES_CORRUPTMEM;
                 }
-                else if( prmCntx->pageLogVer.rawPageVersion != pagePrm.pageVersion )
+                else if( false == allAlignmentAreok )
                 {
-                    returnVal = EFSS_RES_NEWVERFOUND;
+                    /* No pages corruption but alignment is not even, some corruption happened */
+                    returnVal = EFSS_RES_CORRUPTMEM;
+                }
+                else
+                {
+                    /* All pages are ok, no curruption etc check pages version and type  */
+                    if( EFSS_PAGETYPE_RAW != pagePrm.pageType )
+                    {
+                        returnVal = EFSS_RES_CORRUPTMEM;
+                    }
+                    else if( prmCntx->pageLogVer.rawPageVersion != pagePrm.pageVersion )
+                    {
+                        returnVal = EFSS_RES_NEWVERFOUND;
+                    }
                 }
             }
         }

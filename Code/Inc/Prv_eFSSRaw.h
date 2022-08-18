@@ -30,7 +30,7 @@ extern "C" {
  * @param prmCntx Context of the module
  * @return e_eFSS_Res result
  */
-e_eFSS_Res initEFSSRaw(const s_eFSS_Ctx* prmCntx);
+e_eFSS_Res checkMemStatRaw(const s_eFSS_Ctx* prmCntx);
 
 #ifdef __cplusplus
 } /* extern "C" */
