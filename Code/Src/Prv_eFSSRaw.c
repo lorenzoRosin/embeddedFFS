@@ -59,7 +59,6 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
     uint32_t iterator;
     uint32_t nonValidPageCounter;
     uint8_t aligmenentNumberFound;
-    bool_t allAlignmentAreok;
     s_prv_pagePrm pagePrm;
 
     /* Check for NULL pointer */
@@ -71,7 +70,7 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
     {
         /* Check for parameter validity */
         if( ( 0u == prmCntx->pageInfo.nOfPages ) || ( EFSS_PAGETYPE_RAW != prmCntx->pageInfo.pageType ) ||
-            ( NULL == memPoolPointer ) )
+            ( NULL == prmCntx->memPoolPointer ) )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
@@ -85,7 +84,6 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
             nonValidPageCounter = 0u;
             aligmenentNumberFound = 0u;
             returnVal = EFSS_RES_OK;
-            allAlignmentAreok = true;
 
             while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
             {
@@ -98,9 +96,16 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
                 }
                 else if( EFSS_RES_OK == returnVal )
                 {
-                    /* Page is Ok, check if alignment is still ok */
-                    if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
+                    /* Page is Ok, where previous page ok? */
+                    if( 0u != nonValidPageCounter )
                     {
+                        /* Previous page where invalid, this page is valid, we dont need to proceeed: this is not
+                         * the first init, and we have some corruption */
+                        returnVal = EFSS_RES_CORRUPTMEM;
+                    }
+                    else
+                    {
+                        /* Page till now were correct, check param validity */
                         returnVal = getPagePrmFromBuff( prmCntx->pageInfo, prmCntx->memPoolPointer, &pagePrm);
 
                         if( EFSS_RES_OK == returnVal )
@@ -114,7 +119,20 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
                             /* Check if alignment number are always equals */
                             if(pagePrm.allPageAlignmentNumber != aligmenentNumberFound)
                             {
-                                allAlignmentAreok = false;
+                                /* Page are not aligned, we have mem corruption */
+                                returnVal = EFSS_RES_CORRUPTMEM;
+                            }
+                            else
+                            {
+                                /* Check every page validity */
+                                if( EFSS_PAGETYPE_RAW != pagePrm.pageType )
+                                {
+                                    returnVal = EFSS_RES_CORRUPTMEM;
+                                }
+                                else if( prmCntx->pageLogVer.rawPageVersion != pagePrm.pageVersion )
+                                {
+                                    returnVal = EFSS_RES_NEWVERFOUND;
+                                }
                             }
                         }
                     }
@@ -123,7 +141,7 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
                 iterator++;
             }
 
-            /* Information parsing procedure ended, analyze */
+            /* Information parsing procedure ended */
             if( EFSS_RES_OK == returnVal)
             {
                 if( prmCntx->pageInfo.nOfPages == nonValidPageCounter )
@@ -135,23 +153,6 @@ e_eFSS_Res checkMemStatRawNoBkp(const s_eFSS_Ctx* prmCntx)
                 {
                     /* Some pages are corrupted */
                     returnVal = EFSS_RES_CORRUPTMEM;
-                }
-                else if( false == allAlignmentAreok )
-                {
-                    /* No pages corruption but alignment is not even, some corruption happened */
-                    returnVal = EFSS_RES_CORRUPTMEM;
-                }
-                else
-                {
-                    /* All pages are ok, no curruption etc check pages version and type  */
-                    if( EFSS_PAGETYPE_RAW != pagePrm.pageType )
-                    {
-                        returnVal = EFSS_RES_CORRUPTMEM;
-                    }
-                    else if( prmCntx->pageLogVer.rawPageVersion != pagePrm.pageVersion )
-                    {
-                        returnVal = EFSS_RES_NEWVERFOUND;
-                    }
                 }
             }
         }
@@ -170,10 +171,13 @@ e_eFSS_Res checkMemStatRawWithBkp(const s_eFSS_Ctx* prmCntx)
     e_eFSS_Res returnVal;
     uint32_t iterator;
     uint32_t nonValidPageCounter;
+    uint32_t rcvredBkupPageCounter;
     uint32_t backUpOffset;
     uint8_t aligmenentNumberFound;
     bool_t allAlignmentAreok;
     s_prv_pagePrm pagePrm;
+    uint8_t* buff1;
+    uint8_t* buff2;
 
     /* Check for NULL pointer */
     if( NULL == prmCntx )
@@ -184,7 +188,7 @@ e_eFSS_Res checkMemStatRawWithBkp(const s_eFSS_Ctx* prmCntx)
     {
         /* Check for parameter validity */
         if( ( prmCntx->pageInfo.nOfPages < 2u ) || ( EFSS_PAGETYPE_RAW != prmCntx->pageInfo.pageType ) ||
-            ( NULL == memPoolPointer ) || ( 0 != ( prmCntx->pageInfo.nOfPages % 2u ) ) )
+            ( NULL == prmCntx->memPoolPointer ) || ( 0 != ( prmCntx->pageInfo.nOfPages % 2u ) ) )
         {
             returnVal = EFSS_RES_BADPARAM;
         }
@@ -195,16 +199,19 @@ e_eFSS_Res checkMemStatRawWithBkp(const s_eFSS_Ctx* prmCntx)
             /* Check if there is something corrupted: all ok but some pages has different allPageAlignmentNumber, or
             *                                        some pages are invalid */
             iterator = 0u;
-            bkupOffset = prmCntx->pageInfo.nOfPages / 2u;
-            nonValidPageCounter = 0u;
+            backUpOffset = prmCntx->pageInfo.nOfPages / 2u;
+            nonValidPageCounter = 0u
+            rcvredBkupPageCounter = 0u;
             aligmenentNumberFound = 0u;
             returnVal = EFSS_RES_OK;
             allAlignmentAreok = true;
+            buff1 = &prmCntx->memPoolPointer[0u];
+            buff2 = &prmCntx->memPoolPointer[prmCntx->pageInfo.pageSize];
 
             while( ( iterator < prmCntx->pageInfo.nOfPages ) && ( EFSS_RES_OK == returnVal ) )
             {
-                returnVal = verifyAndRipristinateBkup( prmCntx->pageInfo, prmCntx->cbHolder, &prmCntx->memPoolPointer[0u],
-                                     &prmCntx->memPoolPointer[prmCntx->pageInfo.pageSize], iterator, ( iterator + bkupOffset) );
+                returnVal = verifyAndRipristinateBkup( prmCntx->pageInfo, prmCntx->cbHolder, buff1,
+                                                       buff2, iterator, ( iterator + backUpOffset) );
 
                 if( EFSS_RES_NOTVALIDPAGE == returnVal)
                 {
@@ -212,13 +219,14 @@ e_eFSS_Res checkMemStatRawWithBkp(const s_eFSS_Ctx* prmCntx)
                     nonValidPageCounter++;
                     returnVal = EFSS_RES_OK;
                 }
-                else if( EFSS_RES_OK_BKP_RCVRD == returnVal)
+                else if( ( EFSS_RES_OK == returnVal ) || (EFSS_RES_OKBKPRCVRD == returnVal ) )
                 {
-                    /* Recovered a page, but it's all ok */
-                    returnVal = EFSS_RES_OK;
-                }
-                else if( EFSS_RES_OK == returnVal )
-                {
+                    if( (EFSS_RES_OKBKPRCVRD == returnVal )
+                    {
+                        /* Recovered a page, but it's all ok */
+                        rcvredBkupPageCounter++;
+                        returnVal = EFSS_RES_OK;
+                    }
                     /* Origin and backup are aligned, check if alignment is still ok */
                     if( ( true == allAlignmentAreok ) && ( 0u == nonValidPageCounter ) )
                     {
