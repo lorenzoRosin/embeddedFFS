@@ -437,7 +437,7 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                             returnVal = writePageLL(pginfo, cbHld, backupIndx, pageOrig, pageBkup );
                             if( EFSS_RES_OK == returnVal )
                             {
-                                returnVal = EFSS_RES_OK_BKP_RCVRD;
+                                returnVal = EFSS_RES_OKBKPRCVRD;
                             }
                         }
                     }
@@ -447,7 +447,7 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                         returnVal = writePageLL(pginfo, cbHld, origIndx, pageBkup, pageOrig );
                         if( EFSS_RES_OK == returnVal )
                         {
-                            returnVal = EFSS_RES_OK_BKP_RCVRD;
+                            returnVal = EFSS_RES_OKBKPRCVRD;
                         }
                     }
                     else if( ( EFSS_RES_OK == readRetValOr ) && ( EFSS_RES_NOTVALIDPAGE == readRetValBk ) )
@@ -456,7 +456,7 @@ e_eFSS_Res verifyAndRipristinateBkup(const s_eFSS_PgInfo pginfo, const s_eFSS_Cb
                         returnVal = writePageLL(pginfo, cbHld, backupIndx, pageOrig, pageBkup );
                         if( EFSS_RES_OK == returnVal )
                         {
-                            returnVal = EFSS_RES_OK_BKP_RCVRD;
+                            returnVal = EFSS_RES_OKBKPRCVRD;
                         }
                     }
                     else
